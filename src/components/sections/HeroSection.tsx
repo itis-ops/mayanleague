@@ -9,7 +9,7 @@ export default function HeroSection() {
   const { t } = useLanguage()
 
   return (
-    <section className="bg-white pt-[72px] text-ink lg:pt-[124px]">
+    <section className="bg-white pt-[72px] text-ink xl:pt-[124px]">
       <div className="mx-auto max-w-[1728px] px-5 py-6 sm:px-8 lg:px-12 lg:py-10">
         <div className="mb-3 border-y border-cream-dark py-3 sm:mb-8">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-8">

@@ -28,7 +28,7 @@ export default function ContactContent() {
   return (
     <>
       <Navbar />
-      <main id="main-content" className="bg-white pt-[72px] text-ink lg:pt-[124px]">
+      <main id="main-content" className="bg-white pt-[72px] text-ink xl:pt-[124px]">
         <section className="mx-auto max-w-[1440px] px-4 py-12 sm:px-8 lg:py-20">
           <div className="mb-8 flex items-center justify-between border-y border-cream-dark py-3">
             <p className="type-kicker text-earth-red">

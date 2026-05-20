@@ -22,17 +22,21 @@ export default function ProgramPageShell({ activeHref, children }: ProgramPageSh
   const { hero, rest } = splitHeroContent(children)
 
   return (
-    <main id="main-content" className="bg-white pt-[72px] text-ink lg:pt-[124px]">
+    <main id="main-content" className="bg-white pt-[72px] text-ink xl:pt-[124px]">
+      {/* Hero: full-bleed identity zone — outside the sidebar grid */}
+      {hero}
+
+      {/* Secondary nav: compact bar below xl, between hero and content — outside <article> */}
+      <ProgramPageNav activeHref={activeHref} variant="compact" />
+
+      {/* Content grid: sidebar (xl+) + article body */}
       <section className="mx-auto max-w-[1440px] px-4 pb-10 sm:px-8 sm:pb-12 lg:pb-16">
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[0.26fr_1fr] lg:gap-14">
-          <aside className="hidden lg:block">
+        <div className="grid grid-cols-1 gap-6 xl:grid-cols-[0.26fr_1fr] xl:gap-14">
+          <aside className="hidden xl:block">
             <ProgramPageNav activeHref={activeHref} variant="desktop" />
           </aside>
 
           <article className="min-w-0 bg-white">
-            {hero}
-            <ProgramPageNav activeHref={activeHref} variant="mobile" />
-            <ProgramPageNav activeHref={activeHref} variant="tablet" />
             {rest}
           </article>
         </div>

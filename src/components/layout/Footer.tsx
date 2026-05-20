@@ -154,7 +154,7 @@ export default function Footer() {
                 </a>
               ))}
             </div>
-            <div className="mt-6 hidden lg:block">
+            <div className="mt-6">
               <LanguageToggle
                 className="border-white text-white"
                 activeClassName="bg-white text-earth-red"

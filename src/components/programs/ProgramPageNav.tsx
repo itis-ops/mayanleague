@@ -7,7 +7,7 @@ import { uiCopy } from '@/lib/siteContent'
 
 interface ProgramPageNavProps {
   activeHref: string
-  variant?: 'mobile' | 'tablet' | 'desktop'
+  variant?: 'mobile' | 'tablet' | 'compact' | 'desktop'
 }
 
 interface NavLinkItem {
@@ -58,17 +58,18 @@ function ProgramPageNavDesktop({ activeHref }: { activeHref: string }) {
   )
 }
 
-function ProgramPageNavTablet({ activeHref }: { activeHref: string }) {
+function ProgramPageNavCompact({ activeHref }: { activeHref: string }) {
   const { label, links, activeLink } = useProgramNavLinks(activeHref)
 
   return (
-    <div className="sticky top-[72px] z-20 hidden border-b border-cream-dark bg-white px-6 py-5 sm:px-10 md:block lg:hidden">
-      <div className="flex items-end justify-between gap-6">
-        <div className="min-w-0 flex-1">
-          <p className="type-kicker text-earth-red">{label}</p>
-          <p className="mt-2 truncate font-body text-sm font-semibold leading-5 text-earth-red">
+    <div className="sticky top-[72px] z-20 border-b border-cream-dark bg-white xl:hidden">
+      <div className="flex h-11 items-center justify-between gap-4 px-6 sm:px-10">
+        <div className="flex min-w-0 items-center gap-2 overflow-hidden">
+          <span className="type-kicker shrink-0 text-earth-red">{label}</span>
+          <span className="shrink-0 font-body text-xs font-black text-ink/25" aria-hidden="true">/</span>
+          <span className="truncate font-body text-xs font-black uppercase tracking-[0.08em] text-ink">
             {activeLink.label}
-          </p>
+          </span>
         </div>
         <ProgramPageNavSheet activeHref={activeHref} links={links} />
       </div>
@@ -76,31 +77,19 @@ function ProgramPageNavTablet({ activeHref }: { activeHref: string }) {
   )
 }
 
-function ProgramPageNavMobile({ activeHref }: { activeHref: string }) {
-  const { label, links, activeLink } = useProgramNavLinks(activeHref)
+/** @deprecated Use variant="compact" */
+function ProgramPageNavTablet({ activeHref }: { activeHref: string }) {
+  return <ProgramPageNavCompact activeHref={activeHref} />
+}
 
-  return (
-    <div className="sticky top-[72px] z-20 border-b border-cream-dark bg-white px-6 py-5 sm:px-10 md:hidden">
-      <div className="flex items-end justify-between gap-6">
-        <div className="min-w-0 flex-1">
-          <p className="type-kicker text-earth-red">{label}</p>
-          <p className="mt-2 truncate font-body text-sm font-semibold leading-5 text-earth-red">
-            {activeLink.label}
-          </p>
-        </div>
-        <ProgramPageNavSheet activeHref={activeHref} links={links} />
-      </div>
-    </div>
-  )
+/** @deprecated Use variant="compact" */
+function ProgramPageNavMobile({ activeHref }: { activeHref: string }) {
+  return <ProgramPageNavCompact activeHref={activeHref} />
 }
 
 export default function ProgramPageNav({ activeHref, variant }: ProgramPageNavProps) {
-  if (variant === 'mobile') {
-    return <ProgramPageNavMobile activeHref={activeHref} />
-  }
-
-  if (variant === 'tablet') {
-    return <ProgramPageNavTablet activeHref={activeHref} />
+  if (variant === 'compact' || variant === 'mobile' || variant === 'tablet') {
+    return <ProgramPageNavCompact activeHref={activeHref} />
   }
 
   if (variant === 'desktop') {
@@ -109,9 +98,8 @@ export default function ProgramPageNav({ activeHref, variant }: ProgramPageNavPr
 
   return (
     <>
-      <ProgramPageNavMobile activeHref={activeHref} />
-      <ProgramPageNavTablet activeHref={activeHref} />
-      <div className="hidden lg:block">
+      <ProgramPageNavCompact activeHref={activeHref} />
+      <div className="hidden xl:block">
         <ProgramPageNavDesktop activeHref={activeHref} />
       </div>
     </>

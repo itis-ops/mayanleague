@@ -18,28 +18,28 @@ interface AboutPageHeroProps {
 function EditorialBar({
   brand,
   details,
-  placement = 'top',
 }: {
   brand: string
   details: readonly string[]
-  placement?: 'top' | 'bottom'
 }) {
   return (
     <div
-      className={`px-6 py-3 sm:px-10 lg:px-14 ${
-        placement === 'top' ? 'border-y border-cream-dark' : 'border-t border-cream-dark'
-      }`}
+      className="border-t border-cream-dark px-6 py-3 sm:px-10 lg:px-14"
       aria-label={brand}
     >
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-8">
-        <p className="type-kicker text-earth-red">{brand}</p>
-        <ul className="flex flex-wrap items-center gap-x-4 gap-y-2 sm:justify-end">
+      <div className="flex items-center justify-between gap-6 overflow-hidden">
+        <p className="type-kicker shrink-0 text-earth-red">{brand}</p>
+        <ul className="flex items-center gap-5 overflow-hidden" aria-label="Page context">
           {details.map((point, index) => (
-            <li key={point} className="flex items-center gap-4">
-              {index > 0 ? (
-                <span className="hidden h-3 w-px shrink-0 bg-ink/20 sm:block" aria-hidden="true" />
-              ) : null}
-              <span className="type-kicker text-ink/52">{point}</span>
+            <li
+              key={point}
+              className={[
+                'flex shrink-0 items-center gap-5',
+                index === 0 ? 'hidden sm:flex' : index === 1 ? 'hidden md:flex' : 'hidden lg:flex',
+              ].join(' ')}
+            >
+              <span className="h-3 w-px shrink-0 bg-ink/20" aria-hidden="true" />
+              <span className="type-kicker whitespace-nowrap text-ink/52">{point}</span>
             </li>
           ))}
         </ul>
@@ -65,7 +65,7 @@ function HeroTitleBlock({
       <h1
         className={
           titleClassName ??
-          'type-display max-w-3xl text-[clamp(3.2rem,9vw,7.5rem)] text-ink'
+          'type-display max-w-[20ch] text-[clamp(3rem,5.8vw,5.75rem)] text-ink'
         }
       >
         {title}
@@ -116,8 +116,6 @@ export default function AboutPageHero({
 
   return (
     <section className="overflow-hidden bg-white">
-      <EditorialBar brand={brand} details={editorialDetails} placement="top" />
-
       {hasRightColumn ? (
         <div className="grid grid-cols-1 bg-white lg:grid-cols-[0.52fr_1fr] lg:items-start">
           {isTextAside && hasStructuredAside ? (
@@ -129,7 +127,7 @@ export default function AboutPageHero({
                   intro={intro}
                   titleClassName={
                     titleClassName ??
-                    'type-display max-w-[8ch] text-[clamp(3rem,5.5vw,5.75rem)] leading-[0.92] text-ink'
+                    'type-display text-[clamp(3rem,5.2vw,5.25rem)] text-ink'
                   }
                 />
               </div>
@@ -173,6 +171,8 @@ export default function AboutPageHero({
           <HeroTitleBlock label={label} title={title} intro={intro} titleClassName={titleClassName} />
         </div>
       )}
+
+      <EditorialBar brand={brand} details={editorialDetails} />
     </section>
   )
 }

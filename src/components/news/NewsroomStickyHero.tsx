@@ -115,7 +115,7 @@ export default function NewsroomStickyHero({ categories, dates, dispatchCount }:
 
       {/* Mobile: compact sticky bar with browse trigger only */}
       <div
-        className={`fixed left-0 right-0 top-[72px] z-50 flex min-h-[56px] items-center border-b border-cream-dark bg-white/95 px-5 backdrop-blur-sm transition-[opacity,transform,visibility,box-shadow] duration-[360ms] ease-[var(--ease-emil)] lg:hidden ${
+        className={`fixed left-0 right-0 top-[72px] z-50 flex min-h-[56px] items-center border-b border-cream-dark bg-white/95 px-5 backdrop-blur-sm transition-[opacity,transform,visibility,box-shadow] duration-[360ms] ease-[var(--ease-emil)] xl:hidden ${
           barVisible ? 'visible pointer-events-auto shadow-[0_12px_32px_rgba(36,36,36,0.08)]' : 'invisible pointer-events-none'
         }`}
         style={{
@@ -135,7 +135,7 @@ export default function NewsroomStickyHero({ categories, dates, dispatchCount }:
 
       {/* Desktop: full sticky filter bar */}
       <div
-        className={`fixed left-0 right-0 top-[124px] z-50 hidden min-h-[66px] items-center overflow-visible border-b border-cream-dark bg-white/95 backdrop-blur-sm transition-[opacity,transform,visibility,box-shadow] duration-[360ms] ease-[var(--ease-emil)] lg:flex ${
+        className={`fixed left-0 right-0 top-[124px] z-50 hidden min-h-[66px] items-center overflow-visible border-b border-cream-dark bg-white/95 backdrop-blur-sm transition-[opacity,transform,visibility,box-shadow] duration-[360ms] ease-[var(--ease-emil)] xl:flex ${
           barVisible ? 'visible pointer-events-auto shadow-[0_18px_44px_rgba(36,36,36,0.08)]' : 'invisible pointer-events-none'
         }`}
         style={{

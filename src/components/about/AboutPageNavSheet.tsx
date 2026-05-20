@@ -62,13 +62,16 @@ export default function AboutPageNavSheet({ activeHref, links }: AboutPageNavShe
         onClick={() => setOpen(true)}
         aria-expanded={open}
         aria-controls={sheetId}
-        className="motion-control type-kicker shrink-0 text-ink/58 hover:text-earth-red focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-gold"
+        className="motion-control flex shrink-0 items-center gap-1.5 rounded-full border border-cream-dark px-3 py-1.5 font-body text-xs font-black uppercase tracking-[0.08em] text-ink/70 hover:border-earth-red hover:text-earth-red focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-gold"
       >
         {copy.trigger}
+        <svg className="h-3 w-3 shrink-0" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
+          <path d="m5 8 5 5 5-5" />
+        </svg>
       </button>
 
       {open ? (
-        <div className="fixed inset-0 z-[80] md:hidden" role="presentation">
+        <div className="fixed inset-0 z-[80]" role="presentation">
           <button
             type="button"
             className="absolute inset-0 bg-ink/35"

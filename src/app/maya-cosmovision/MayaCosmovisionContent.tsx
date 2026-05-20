@@ -177,7 +177,7 @@ export default function MayaCosmovisionContent() {
   return (
     <>
       <Navbar />
-      <main id="main-content" className="bg-ink pt-[72px] text-cream lg:pt-[124px]">
+      <main id="main-content" className="bg-ink pt-[72px] text-cream xl:pt-[124px]">
         <section className="relative overflow-hidden">
           <div className="absolute inset-0" aria-hidden="true">
             <img

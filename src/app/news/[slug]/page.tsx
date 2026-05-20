@@ -77,7 +77,7 @@ export default async function NewsDetailPage({ params }: PageProps) {
   return (
     <>
       <Navbar />
-      <main id="main-content" className="bg-mist pt-[72px] text-ink lg:pt-[124px]">
+      <main id="main-content" className="bg-mist pt-[72px] text-ink xl:pt-[124px]">
         <article className="mx-auto max-w-[1728px] px-5 py-12 sm:px-8 lg:px-12 lg:py-20">
           <div className="mb-8 flex items-center justify-between border-y border-cream-dark py-3">
             <a

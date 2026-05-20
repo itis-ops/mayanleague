@@ -145,7 +145,7 @@ export function MediaIndexContent({ slug }: { slug: keyof typeof mediaPages.en }
   return (
     <>
       <Navbar />
-      <main id="main-content" className="bg-mist pt-[72px] text-ink lg:pt-[124px]">
+      <main id="main-content" className="bg-mist pt-[72px] text-ink xl:pt-[124px]">
         <section className="mx-auto max-w-[1728px] px-5 py-12 sm:px-8 lg:px-12 lg:py-20">
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-[0.23fr_1fr] lg:gap-14">
             <Sidebar label={copy.media} activeHref={`/${slug}`} links={localizedMediaLinks(lang)} />
@@ -193,7 +193,7 @@ export function ResourceCollectionContent({ slug }: { slug: keyof typeof resourc
   return (
     <>
       <Navbar />
-      <main id="main-content" className="bg-mist pt-[72px] text-ink lg:pt-[124px]">
+      <main id="main-content" className="bg-mist pt-[72px] text-ink xl:pt-[124px]">
         <section className="mx-auto max-w-[1728px] px-5 py-12 sm:px-8 lg:px-12 lg:py-20">
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-[0.23fr_1fr] lg:gap-14">
             <Sidebar label={copy.resources} activeHref={`/${slug}`} links={localizedResourceLinks(lang)} />
@@ -246,7 +246,7 @@ export function ResourcesIndexContent() {
   return (
     <>
       <Navbar />
-      <main id="main-content" className="bg-white pt-[72px] text-ink lg:pt-[124px]">
+      <main id="main-content" className="bg-white pt-[72px] text-ink xl:pt-[124px]">
         <section className="mx-auto max-w-[1728px] px-5 py-12 sm:px-8 lg:px-12 lg:py-20">
           <PageHero eyebrow={copy.resources} title={title} intro={intro} count={resourceNav.length} />
           <div className="grid grid-cols-1 gap-4 bg-cream py-4 md:grid-cols-2 xl:grid-cols-4">
@@ -291,7 +291,7 @@ export function IndigenousLanguageResourcesContent() {
   return (
     <>
       <Navbar />
-      <main id="main-content" className="bg-mist pt-[72px] text-ink lg:pt-[124px]">
+      <main id="main-content" className="bg-mist pt-[72px] text-ink xl:pt-[124px]">
         <section className="mx-auto max-w-[1728px] px-5 py-12 sm:px-8 lg:px-12 lg:py-20">
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-[0.23fr_1fr] lg:gap-14">
             <Sidebar label={copy.resources} activeHref="/indigenous-language-resources" links={localizedResourceLinks(lang)} />

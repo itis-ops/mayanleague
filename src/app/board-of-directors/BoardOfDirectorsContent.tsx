@@ -27,7 +27,6 @@ export default function BoardOfDirectorsContent() {
           }
           asideLabel={page.introLabel}
           asideBody={page.intro}
-          titleClassName="type-display max-w-[14ch] text-[clamp(2.5rem,4vw,4.5rem)] leading-[0.94] text-ink"
         />
 
         <AboutPersonStickyStack label={page.membersSectionLabel ?? page.title}>

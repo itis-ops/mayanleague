@@ -89,24 +89,24 @@ export default function Navbar() {
         scrolled ? 'shadow-[0_1px_0_rgba(36,36,36,0.1)]' : ''
       }`}
     >
-      <div className="mx-auto max-w-[1728px] px-4 sm:px-8 lg:px-24">
-        <div className="flex h-[72px] items-center justify-between lg:h-[124px]">
+      <div className="mx-auto max-w-[1728px] px-4 sm:px-8 xl:px-24">
+        <div className="flex h-[72px] items-center justify-between xl:h-[124px]">
           <a
             href="/"
-            className="group motion-control flex min-w-0 items-center gap-3 rounded-md focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-gold lg:gap-6"
+            className="group motion-control flex min-w-0 items-center gap-3 rounded-md focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-gold xl:gap-6"
             aria-label={`${t.brand.full} home`}
           >
             <img
               src="/brand/mayan-league-logo.png"
               alt=""
-              className="h-12 w-12 shrink-0 object-contain lg:h-20 lg:w-20"
+              className="h-12 w-12 shrink-0 object-contain xl:h-20 xl:w-20"
             />
-            <span className="min-w-0 max-w-[10rem] font-display text-base font-bold uppercase leading-[0.94] tracking-[-0.035em] text-ink motion-link group-hover:text-earth-red sm:max-w-none sm:text-xl lg:text-2xl">
+            <span className="min-w-0 max-w-[10rem] font-display text-base font-bold uppercase leading-[0.94] tracking-[-0.035em] text-ink motion-link group-hover:text-earth-red sm:max-w-none sm:text-xl xl:text-2xl">
               {t.brand.full}
             </span>
           </a>
 
-          <nav className="hidden items-center gap-1 lg:flex">
+          <nav className="hidden items-center gap-1 xl:flex">
             {navLinks.map((link) => (
               <a
                 key={link.label}
@@ -118,14 +118,15 @@ export default function Navbar() {
             ))}
           </nav>
 
-          <div className="hidden lg:flex items-center gap-5">
+          <div className="hidden xl:flex items-center gap-5">
             <LanguageToggle className="border-ink/20 text-ink" />
             <Button href={DONATE_URL} variant="primary">
               {t.nav.donate}
             </Button>
           </div>
 
-          <div className="flex items-center gap-2 lg:hidden">
+          <div className="flex items-center gap-2 xl:hidden">
+            <LanguageToggle className="border-ink/15 text-ink" />
             <button
               ref={menuButtonRef}
               className="motion-control min-h-11 min-w-11 rounded-md p-2 text-ink hover:bg-cream active:bg-cream-dark focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-gold"
@@ -153,14 +154,6 @@ export default function Navbar() {
         </div>
       </div>
 
-      <div className="fixed bottom-[calc(1rem+env(safe-area-inset-bottom))] right-4 z-[60] lg:hidden">
-        <LanguageToggle
-          className="border-earth-red bg-white text-earth-red shadow-[0_10px_30px_rgba(36,36,36,0.14)]"
-          activeClassName="bg-earth-red text-white"
-          inactiveClassName="text-earth-red hover:bg-earth-red/10 hover:text-earth-red active:bg-earth-red/15 active:text-earth-red"
-        />
-      </div>
-
       {menuOpen ? (
         <div
           ref={menuRef}
@@ -168,7 +161,7 @@ export default function Navbar() {
           role="dialog"
           aria-modal="true"
           aria-label={t.ui.openMenu}
-          className="border-t border-cream-dark bg-white shadow-xl lg:hidden"
+          className="border-t border-cream-dark bg-white shadow-xl xl:hidden"
         >
           <div className="flex flex-col gap-4 px-4 py-6">
             {navLinks.map((link, index) => (
@@ -182,7 +175,8 @@ export default function Navbar() {
                 {link.label}
               </a>
             ))}
-            <div className="flex items-center justify-end border-t border-cream-dark pt-4">
+            <div className="flex items-center justify-between border-t border-cream-dark pt-4">
+              <LanguageToggle className="border-ink/20 text-ink" />
               <Button href={DONATE_URL} variant="primary" className="px-5 py-2">
                 {t.nav.donate}
               </Button>

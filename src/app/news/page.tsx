@@ -61,12 +61,12 @@ export default function NewsPage() {
   return (
     <>
       <Navbar />
-      <main id="main-content" className="bg-mist pt-[72px] text-ink lg:pt-[124px]">
+      <main id="main-content" className="bg-mist pt-[72px] text-ink xl:pt-[124px]">
         <section className="mx-auto max-w-[1728px] px-5 py-8 sm:px-8 lg:px-12 lg:py-12">
           <NewsroomStickyHero categories={categoryFilters} dates={dateFilters} dispatchCount={newsArticles.length} />
 
           <section className="relative mt-8 grid grid-cols-1 gap-5 lg:grid-cols-[1fr_0.42fr]">
-            <article id={featuredArticle.category.toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-')} className="group relative scroll-mt-32 border border-cream-dark bg-white p-1.5 hover:bg-cream lg:scroll-mt-48">
+            <article id={featuredArticle.category.toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-')} className="group relative scroll-mt-32 border border-cream-dark bg-white p-1.5 hover:bg-cream xl:scroll-mt-48">
               {dateArchive.find((group) => group.firstSlug === featuredArticle.slug) ? (
                 <span id={dateArchive.find((group) => group.firstSlug === featuredArticle.slug)?.id} className="absolute -top-32" aria-hidden="true" />
               ) : null}
@@ -144,10 +144,10 @@ export default function NewsPage() {
                   <article
                     id={shouldAnchor ? categoryId : undefined}
                     key={article.slug}
-                    className="relative grid scroll-mt-32 grid-cols-1 gap-8 border-b border-cream-dark px-7 py-10 hover:bg-mist sm:px-10 lg:scroll-mt-48 lg:grid-cols-[0.12fr_0.22fr_1fr_0.2fr] lg:items-start lg:px-12"
+                    className="relative grid scroll-mt-32 grid-cols-1 gap-8 border-b border-cream-dark px-7 py-10 hover:bg-mist sm:px-10 xl:scroll-mt-48 lg:grid-cols-[0.12fr_0.22fr_1fr_0.2fr] lg:items-start lg:px-12"
                   >
                     {dateArchive.find((group) => group.firstSlug === article.slug) ? (
-                      <span id={dateArchive.find((group) => group.firstSlug === article.slug)?.id} className="absolute -top-32 lg:-top-48" aria-hidden="true" />
+                      <span id={dateArchive.find((group) => group.firstSlug === article.slug)?.id} className="absolute -top-32 xl:-top-48" aria-hidden="true" />
                     ) : null}
                     <p className="font-display text-5xl font-bold leading-none tracking-[-0.06em] text-earth-red">
                       {String(index + 1).padStart(2, '0')}

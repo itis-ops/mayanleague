@@ -31,7 +31,7 @@ export default function AboutPersonRow({
     <article
       className={
         isSticky
-          ? `relative sticky top-[72px] border-b border-cream-dark bg-white lg:top-[124px] ${sectionPadding}`
+          ? `relative sticky top-[72px] border-b border-cream-dark bg-white xl:top-[124px] ${sectionPadding}`
           : `relative scroll-mt-36 border-b border-cream-dark bg-white ${sectionPadding}`
       }
     >
