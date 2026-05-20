@@ -1,7 +1,14 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+
+const projectRoot = path.dirname(fileURLToPath(import.meta.url))
 
 const nextConfig: NextConfig = {
-  /* config options here */
-};
+  // Pin Turbopack to this app so parent workspace lockfiles do not hijack the dev server.
+  turbopack: {
+    root: projectRoot,
+  },
+}
 
-export default nextConfig;
+export default nextConfig

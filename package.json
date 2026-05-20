@@ -3,7 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "node scripts/dev.mjs",
+    "dev:stop": "node scripts/dev-stop.mjs",
+    "dev:status": "node scripts/dev-status.mjs",
+    "dev:raw": "next dev -p 3000",
     "build": "next build",
     "start": "next start"
   },
