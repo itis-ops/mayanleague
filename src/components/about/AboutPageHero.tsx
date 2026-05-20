@@ -23,10 +23,7 @@ function EditorialBar({
   details: readonly string[]
 }) {
   return (
-    <div
-      className="border-t border-cream-dark px-6 py-3 sm:px-10 lg:px-14"
-      aria-label={brand}
-    >
+    <div className="border-t border-cream-dark py-3" aria-label={brand}>
       <div className="flex items-center justify-between gap-6 overflow-hidden">
         <p className="type-kicker shrink-0 text-earth-red">{brand}</p>
         <ul className="flex items-center gap-5 overflow-hidden" aria-label="Page context">
@@ -120,7 +117,7 @@ export default function AboutPageHero({
         <div className="grid grid-cols-1 bg-white lg:grid-cols-[0.52fr_1fr] lg:items-start">
           {isTextAside && hasStructuredAside ? (
             <>
-              <div className="px-6 pb-8 pt-8 sm:px-10 lg:px-14 lg:pb-10 lg:pt-8">
+              <div className="pb-8 pt-8 lg:pb-10 lg:pt-8">
                 <HeroTitleBlock
                   label={label}
                   title={title}
@@ -132,7 +129,7 @@ export default function AboutPageHero({
                 />
               </div>
 
-              <div className="border-t border-cream-dark px-6 pb-8 pt-8 sm:px-10 lg:border-l lg:border-t-0 lg:px-14 lg:pb-10 lg:pt-8">
+              <div className="border-t border-cream-dark pb-8 pt-8 lg:border-l lg:border-t-0 lg:pb-10 lg:pt-8">
                 <p className="type-kicker mb-4 text-earth-red">{asideLabel}</p>
                 <p className="max-w-[48ch] font-accent text-[clamp(1.2rem,1.8vw,1.65rem)] leading-[1.38] tracking-[-0.02em] text-ink/88">
                   {asideBody}
@@ -144,8 +141,8 @@ export default function AboutPageHero({
               <div
                 className={
                   isTextAside
-                    ? 'px-6 pb-8 pt-8 sm:px-10 sm:pb-10 lg:px-14 lg:pb-10'
-                    : 'flex min-h-[320px] flex-col justify-end px-6 pb-12 pt-6 sm:px-10 sm:pb-14 sm:pt-8 lg:min-h-[560px] lg:px-14 lg:pb-16 lg:pt-10'
+                    ? 'pb-8 pt-8 sm:pb-10'
+                    : 'flex min-h-[320px] flex-col justify-end pb-12 pt-6 sm:pb-14 sm:pt-8 lg:min-h-[560px] lg:pb-16 lg:pt-10'
                 }
               >
                 <HeroTitleBlock
@@ -159,7 +156,7 @@ export default function AboutPageHero({
               {heroImage ? (
                 <HeroImagePanel src={heroImage} />
               ) : (
-                <div className="border-t border-cream-dark px-6 pb-8 pt-8 sm:px-10 lg:border-l lg:border-t-0 lg:px-14 lg:pb-10">
+                <div className="border-t border-cream-dark pb-8 pt-8 lg:border-l lg:border-t-0 lg:pb-10">
                   {aside}
                 </div>
               )}
@@ -167,7 +164,7 @@ export default function AboutPageHero({
           )}
         </div>
       ) : (
-        <div className="bg-white px-6 pb-12 pt-6 sm:px-10 sm:pb-14 sm:pt-8 lg:px-14 lg:pb-16 lg:pt-10">
+        <div className="bg-white pb-12 pt-6 sm:pb-14 sm:pt-8 lg:pb-16 lg:pt-10">
           <HeroTitleBlock label={label} title={title} intro={intro} titleClassName={titleClassName} />
         </div>
       )}

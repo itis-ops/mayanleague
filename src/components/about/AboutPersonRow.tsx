@@ -24,8 +24,8 @@ export default function AboutPersonRow({
 }: AboutPersonRowProps) {
   const isSticky = layout === 'sticky'
   const sectionPadding = compact
-    ? 'px-6 pb-9 pt-8 sm:px-10 sm:pb-10 sm:pt-9 lg:px-14 lg:pb-11 lg:pt-10'
-    : 'px-6 pb-14 pt-12 sm:px-10 sm:pb-16 sm:pt-14 lg:px-14 lg:pb-20 lg:pt-16'
+    ? 'pb-9 pt-8 sm:pb-10 sm:pt-9 lg:pb-11 lg:pt-10'
+    : 'pb-14 pt-12 sm:pb-16 sm:pt-14 lg:pb-20 lg:pt-16'
 
   const article = (
     <article

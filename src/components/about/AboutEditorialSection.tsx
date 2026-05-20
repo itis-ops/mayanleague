@@ -49,7 +49,7 @@ export default function AboutEditorialSection({
     return (
       <article
         id={id}
-        className={`relative scroll-mt-36 border-b border-cream-dark px-6 pb-14 pt-12 sm:px-10 sm:pb-16 sm:pt-14 lg:px-14 lg:pb-20 lg:pt-16 ${bgClass} ${className}`}
+        className={`relative scroll-mt-36 border-b border-cream-dark pb-14 pt-12 sm:pb-16 sm:pt-14 lg:pb-20 lg:pt-16 ${bgClass} ${className}`}
       >
         {heading ? (
           <header className="mb-8">
@@ -104,7 +104,7 @@ export default function AboutEditorialSection({
   return (
     <section
       id={id}
-      className={`scroll-mt-36 border-b border-cream-dark px-6 py-16 sm:px-10 lg:px-14 lg:py-20 ${bgClass} ${className}`}
+      className={`scroll-mt-36 border-b border-cream-dark py-16 lg:py-20 ${bgClass} ${className}`}
     >
       <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-x-14">
         <div className="flex flex-col gap-6 lg:col-span-3">

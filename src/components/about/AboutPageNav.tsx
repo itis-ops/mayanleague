@@ -46,7 +46,7 @@ function AboutPageNavDesktop({ activeHref }: { activeHref: string }) {
   const { label, links } = useAboutNavLinks(activeHref)
 
   return (
-    <div className="sticky top-36 w-full">
+    <div className="sticky top-[72px] w-full xl:top-[124px]">
       <p className="type-kicker mb-8 text-earth-red">{label}</p>
       <nav className="flex w-full flex-col gap-4" aria-label={label}>
         {links.map((link) => (
@@ -61,8 +61,8 @@ function AboutPageNavCompact({ activeHref }: { activeHref: string }) {
   const { label, links, activeLink } = useAboutNavLinks(activeHref)
 
   return (
-    <div className="sticky top-[72px] z-20 border-b border-cream-dark bg-white xl:hidden">
-      <div className="flex h-11 items-center justify-between gap-4 px-6 sm:px-10">
+    <div className="sticky top-[72px] z-20 -mx-4 border-b border-cream-dark bg-white sm:-mx-8 xl:hidden">
+      <div className="flex h-11 items-center justify-between gap-4">
         <div className="flex min-w-0 items-center gap-2 overflow-hidden">
           <span className="type-kicker shrink-0 text-earth-red">{label}</span>
           <span className="shrink-0 font-body text-xs font-black text-ink/25" aria-hidden="true">/</span>

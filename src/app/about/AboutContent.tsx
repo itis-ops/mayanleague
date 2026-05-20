@@ -25,7 +25,7 @@ export default function AboutContent() {
 
         <section
           id="who-we-are"
-          className="scroll-mt-36 border-b border-cream-dark px-6 py-16 sm:px-10 lg:px-14 lg:py-24"
+          className="scroll-mt-36 border-b border-cream-dark py-16 lg:py-24"
         >
           <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-x-14">
             <p className="type-kicker text-ink/55 lg:col-span-3 lg:pt-1">{aboutPage.whoWeAreLabel}</p>
@@ -45,7 +45,7 @@ export default function AboutContent() {
 
         <section
           id="how-we-work"
-          className="scroll-mt-36 px-6 py-14 sm:px-10 lg:px-14 lg:py-20"
+          className="scroll-mt-36 py-14 lg:py-20"
         >
           <p className="type-kicker mb-10 text-earth-red">{aboutPage.howWeWorkLabel}</p>
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,22rem)] lg:gap-20">
