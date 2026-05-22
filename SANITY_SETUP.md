@@ -1,176 +1,168 @@
-# Sanity Studio Setup
+# Sanity Studio — Setup & Editor Guide
 
-The Mayan League site uses **Sanity** as its headless CMS, embedded inside this Next.js app at [`/studio`](http://localhost:3000/studio). This document walks you through the one-time setup so a content editor (or developer running locally) can sign in and start editing News, the Homepage, and Site Settings.
-
-> **Scope at launch:** News articles, Homepage curation, and Site Settings only. See [`CMS_SCOPE.md`](./CMS_SCOPE.md) for what stays in code and the post-launch migration order.
+The Mayan League site uses **Sanity** as its CMS, embedded at `/studio`. This document covers one-time setup for developers and a day-to-day guide for content editors.
 
 ---
 
-## 1. Create the Sanity project (one-time, by an admin)
+## Table of contents
 
-> This step happens **outside** the codebase. It cannot be automated from here.
-
-1. Go to <https://www.sanity.io/manage>.
-2. Sign in with the account that should own the project (use the team owner's email).
-3. Click **Create new project**.
-   - **Project name:** `mayanleague`
-   - **Use the default dataset configuration:** *yes* — this gives you a public dataset named `production`.
-   - **Use TypeScript:** doesn't matter, the schemas live in this repo.
-4. Once the project is created, copy the **Project ID** shown at the top of the project page (it looks like `abc12xyz`).
-5. **CORS origins:** Project page → **API** → **CORS origins** → **Add CORS origin**:
-   - Origin: `http://localhost:3000`
-   - Allow credentials: **on** (needed so the embedded Studio at `/studio` can authenticate against Sanity from the browser).
-   - Repeat for any deployed URL (e.g. `https://mayanleague.vercel.app`) when you're ready.
-6. **Read token (server only):** Project page → **API** → **Tokens** → **Add API token**:
-   - Name: `nextjs-read-token`
-   - Permissions: **Viewer**
-   - Copy the token value — it's only shown once.
-   - Paste it into `.env.local` as `SANITY_API_READ_TOKEN=...`.
-   - This token is **not** required to load the Studio; it's only used by the Next.js server for draft previews and webhook revalidation (post-launch features).
+1. [Vercel environment variables](#1-vercel-environment-variables)
+2. [One-time local setup](#2-one-time-local-setup)
+3. [CORS configuration](#3-cors-configuration)
+4. [Accessing the Studio](#4-accessing-the-studio)
+5. [Live preview (Presentation Tool)](#5-live-preview-presentation-tool)
+6. [Editor test — end-to-end checklist](#6-editor-test--end-to-end-checklist)
+7. [Troubleshooting](#7-troubleshooting)
 
 ---
 
-## 2. Populate your local environment
+## 1. Vercel environment variables
 
-The repo ships with a placeholder `.env.local` so `npm run build` succeeds before the real project exists. Once you've got the real Project ID, update `.env.local` in place:
+These must be set in **Vercel → mayanleague → Settings → Environment Variables** for production to work. All environments (Production, Preview, Development) should have the same values unless noted.
+
+| Variable | Required | Example value | Where to get it |
+|---|---|---|---|
+| `NEXT_PUBLIC_SANITY_PROJECT_ID` | ✅ Required | `lehb2c4h` | [sanity.io/manage](https://sanity.io/manage) → project → top of page |
+| `NEXT_PUBLIC_SANITY_DATASET` | ✅ Required | `production` | Same page — always `production` for the live site |
+| `SANITY_API_VERSION` | ✅ Required | `2026-05-21` | Copy exactly as shown — do not change |
+| `SANITY_API_READ_TOKEN` | ✅ Required | `skAj...` | Sanity Manage → API → Tokens → Viewer role token |
+| `NEXT_PUBLIC_SITE_URL` | ✅ Required | `https://mayanleague.vercel.app` | Your production domain |
+
+> **`SANITY_API_WRITE_TOKEN`** is only needed locally when running migration scripts (`scripts/migrate-*.mjs`). Do not add it to Vercel — it grants write access.
+
+### How to add variables in Vercel
+
+1. Open [vercel.com](https://vercel.com) → your **mayanleague** project.
+2. **Settings** → **Environment Variables**.
+3. Add each variable from the table above. Paste the name exactly as shown.
+4. Click **Save**.
+5. **Redeploy** the project — env vars only take effect after a new deploy.
+
+---
+
+## 2. One-time local setup
 
 ```bash
-# mayanleague/.env.local
-NEXT_PUBLIC_SANITY_PROJECT_ID=abc12xyz        # ← replace placeholder-project-id with the real value
-NEXT_PUBLIC_SANITY_DATASET=production
-SANITY_API_VERSION=2026-05-21                 # do not change unless you know why
-SANITY_API_READ_TOKEN=                        # paste the read token from step 1.6 (optional locally)
-NEXT_PUBLIC_SITE_URL=http://localhost:3000
+# 1. Copy the env template
+cp .env.example .env.local
+
+# 2. Fill in the real values (open in any text editor)
+# NEXT_PUBLIC_SANITY_PROJECT_ID=lehb2c4h
+# SANITY_API_READ_TOKEN=skAj...
+# NEXT_PUBLIC_SITE_URL=http://localhost:3000
+
+# 3. Install and run
+npm install
+npm run dev
 ```
 
-Reference template lives in [`.env.example`](./.env.example). The `.env.local` file is gitignored — never commit it.
+Open <http://localhost:3000/studio>. Sign in with the Google or GitHub account that is a member of the Sanity project.
 
-### Why these names?
-
-| Variable | Public/Server | Why |
-|---|---|---|
-| `NEXT_PUBLIC_SANITY_PROJECT_ID` | Public — leaks to browser bundle | Required by the embedded Studio and any client-side Sanity reads. |
-| `NEXT_PUBLIC_SANITY_DATASET` | Public | Same reason. Defaults to `production`. |
-| `SANITY_API_VERSION` | Server | Pinned to today's date (`2026-05-21`) to lock GROQ behavior — IETF stability convention. |
-| `SANITY_API_READ_TOKEN` | **Server only** — never expose to the browser | For draft previews + webhook revalidation. Optional until you wire those up. |
+> **Add team members:** [sanity.io/manage](https://sanity.io/manage) → project → **Members** → **Invite member**.
 
 ---
 
-## 3. Run the app and visit the Studio
+## 3. CORS configuration
 
-From the `mayanleague/` directory:
+The Studio and Presentation Tool require your site domain to be in the Sanity project's CORS allow-list.
+
+### Add origins (one-time)
 
 ```bash
-npm install      # already done if you cloned the repo and ran build before
-npm run dev      # guarded launcher on port 3000
-```
-
-Open <http://localhost:3000/studio>. The first time you load it:
-
-1. Sanity will prompt you to sign in (Google, GitHub, or email).
-2. The signed-in account must be a **member of the `mayanleague` Sanity project**. Add team members via Sanity Manage → **Members** → **Invite member**.
-3. Once signed in you should see three top-level items in the left nav:
-   - **Homepage** (singleton)
-   - **Site Settings** (singleton)
-   - **Newsroom → News article** (collection)
-
-> If `/studio` shows a "Cannot connect to project" error, double-check `NEXT_PUBLIC_SANITY_PROJECT_ID` and that `http://localhost:3000` is in the project's CORS origins.
-
----
-
-## 4. Build verification
-
-You can confirm the integration without ever opening the browser:
-
-```bash
-npm run build
-```
-
-The build should exit `0` and list `/studio` as a dynamic route. If env vars are missing, the build still succeeds (lazy access) but `/studio` will throw a clear error at runtime.
-
----
-
-## 5. Embedded Studio routes
-
-| Route | Purpose |
-|---|---|
-| `/studio` | Editor home — pinned singletons + collection list. |
-| `/studio/structure/...` | Sanity desk structure deep links. |
-| `/studio/vision` | GROQ query playground (development only). |
-
-The studio chunks are isolated under `/studio` and do not affect the public site bundle.
-
----
-
-## 6. Troubleshooting
-
-| Symptom | Fix |
-|---|---|
-| `/studio` blank + console says `projectId is not valid` | `.env.local` still has `placeholder-project-id`. Replace it. |
-| `/studio` 404 in production | The route is dynamic (`force-dynamic`). Make sure `/studio` is not blocked by hosting rewrites. |
-| "Network error" inside Studio | Add `http://localhost:3000` (or your deployed URL) to **CORS origins** in Sanity Manage. |
-| Schemas not appearing | Restart `npm run dev` — schema changes hot-reload but new files sometimes need a restart. |
-
----
-
-## 7. Live Preview (Presentation Tool)
-
-The Studio now includes a **Presentation Tool** that lets editors preview their changes in real time — before publishing — in a side-by-side iframe of the live site.
-
-### How it works
-
-1. In the Studio left nav, click **Presentation** (the camera icon).
-2. Navigate to a **News article** or **Homepage** document.
-3. The right panel shows a live preview of the front-end. Edits you make in Studio fields update the preview in real time, even in draft state.
-4. **Click-to-edit:** In the preview pane, click any piece of editable text to jump directly to that field in Studio.
-5. The preview is contained inside the Studio session — published visitors never see draft content.
-
-### CORS setup (required once per environment)
-
-The Presentation Tool's iframe makes credentialed requests from the Studio origin. You must allow the Studio to call the front-end:
-
-| Environment | Where | Action |
-|---|---|---|
-| **Local dev** | Sanity Manage → Project → API → CORS | Add `http://localhost:3000` with **Allow credentials: on** |
-| **Production** | Sanity Manage → Project → API → CORS | Add `https://mayanleague.vercel.app` with **Allow credentials: on** |
-
-CLI shortcut (from the `mayanleague/` directory):
-
-```bash
+# From the mayanleague/ directory:
 npx sanity cors add http://localhost:3000 --credentials
 npx sanity cors add https://mayanleague.vercel.app --credentials
 ```
 
-### Environment variables for preview
-
-| Variable | Where to set | Why |
-|---|---|---|
-| `SANITY_API_READ_TOKEN` | `.env.local` + Vercel env vars | Server fetches draft content; browser subscribes to live updates. Must be a **Viewer** token. Already configured locally. |
-| `NEXT_PUBLIC_SITE_URL` | Vercel env vars | Tells Studio which front-end URL to load in the Presentation iframe. Set to your production URL (e.g. `https://mayanleague.vercel.app`). |
-
-> **Vercel:** Add `NEXT_PUBLIC_SITE_URL=https://mayanleague.vercel.app` in the project → Settings → Environment Variables, then redeploy.
-
-### Verification checklist
-
-| Step | What to check |
-|---|---|
-| Local | `npm run dev` → `/studio` → Presentation → open a News article draft → edit the title → iframe updates without publish |
-| Homepage | Edit hero tagline in Studio → preview `/` updates live |
-| Click-to-edit | Click text in the preview → Studio jumps to that field |
-| Published site | With Draft Mode off, `/` and `/news` are unchanged (published data only) |
-| Production | After deploy, confirm Presentation `origin` in `sanity.config.ts` matches your `NEXT_PUBLIC_SITE_URL` |
-
-### Exit preview
-
-An **Exit preview** badge appears at the bottom-right of the browser when Draft Mode is active (inside the Presentation iframe). Click it to leave draft mode and return to the published site. Direct URL: `/api/draft-mode/disable`.
+Or manually: [sanity.io/manage](https://sanity.io/manage) → project → **API** → **CORS origins** → **Add** → paste URL → enable **Allow credentials** → save.
 
 ---
 
-## 8. What you can edit today
+## 4. Accessing the Studio
 
-See [`CMS_SCOPE.md`](./CMS_SCOPE.md) for the authoritative scope. Short version:
+| URL | What it does |
+|---|---|
+| `https://mayanleague.vercel.app/studio` | Production Studio |
+| `http://localhost:3000/studio` | Local Studio |
+| `/studio/presentation` | Live preview (Presentation Tool) |
 
-- **Edit in Studio:** News articles, Homepage sections, Site Settings (donate URL, contact info, social, footer, default OG image).
-- **Still in code (for now):** Programs, About / Board / Our Path / Core Values / Job Opportunities, Team, Resources collections, Maya Cosmovision custom blocks, route paths.
+The left sidebar has three sections:
 
-The post-launch migration order is documented in `CMS_SCOPE.md`.
+- **Homepage** — the entire homepage, one document.
+- **Site settings** — contact info, nav labels, footer, social links, donate URL.
+- **Newsroom → News articles** — all published and draft articles.
+
+---
+
+## 5. Live preview (Presentation Tool)
+
+The Presentation Tool lets editors see draft changes on the real site before publishing.
+
+1. In the Studio left nav, click **Presentation** (the eye/camera icon).
+2. Open a **News article** or the **Homepage** document.
+3. The right pane shows a live preview of the front-end. Edits update the preview in real time — no need to publish first.
+4. **Click to edit:** click any text in the preview pane → Studio jumps to that field.
+5. When done previewing, click **Exit preview** (red badge, bottom-right of the preview).
+
+> Changes in the preview are **never visible** to regular site visitors until you publish the document.
+
+---
+
+## 6. Editor test — end-to-end checklist
+
+Use this checklist to verify the Studio → live site flow is working correctly.
+
+### Test A: News article (create → publish → verify)
+
+- [ ] Open Studio → **Newsroom → News articles → Create**.
+- [ ] Fill in: **Title (EN)**, **Slug** (auto-fills from title — verify it looks clean), **Category**, **Published at** (set to today), **Excerpt (EN)**.
+- [ ] Click **Publish**.
+- [ ] Open `https://mayanleague.vercel.app/news` in a new tab. Wait up to 60 seconds and refresh.
+- [ ] The new article appears in the listing.
+- [ ] Click the article → the detail page loads at `/news/your-slug`.
+
+### Test B: News article (edit → re-publish → verify)
+
+- [ ] In Studio, open the article from Test A.
+- [ ] Change the **Title (EN)** to something clearly different.
+- [ ] Click **Publish** (or it auto-saves a draft — click Publish to go live).
+- [ ] Refresh `/news` after ~60 seconds. The new title appears.
+
+### Test C: Site settings — contact info
+
+- [ ] Open Studio → **Site settings → Contact**.
+- [ ] Change the **Phone** field to a test number (e.g. `(555) 000-0000`).
+- [ ] Click **Publish**.
+- [ ] Open `https://mayanleague.vercel.app/contact` and wait ~60 seconds.
+- [ ] The test phone number appears on the contact page and in the footer.
+- [ ] Change the phone back to the real number and **Publish** again.
+
+### Test D: Homepage rail — pin a news article
+
+- [ ] Open Studio → **Homepage → News rail**.
+- [ ] Under **Featured articles**, click **Add item** and search for a published article.
+- [ ] Click **Publish**.
+- [ ] Open `https://mayanleague.vercel.app` and wait ~60 seconds.
+- [ ] The pinned article appears as the first card in the news section.
+
+### Test E: Live preview (Presentation Tool)
+
+- [ ] Open Studio → **Presentation**.
+- [ ] Navigate to a **News article**.
+- [ ] Edit the **Dek** (short tagline) field. The preview pane updates without publishing.
+- [ ] Click the dek text in the preview pane → Studio jumps to the dek field.
+- [ ] Click **Exit preview** to leave draft mode.
+
+---
+
+## 7. Troubleshooting
+
+| Symptom | Fix |
+|---|---|
+| `/studio` blank — "projectId is not valid" | `.env.local` still has `placeholder-project-id`. Add the real ID. |
+| Studio loads but shows no data | CORS origin missing. Run `npx sanity cors add http://localhost:3000 --credentials`. |
+| Presentation Tool shows a blank iframe | `NEXT_PUBLIC_SITE_URL` is wrong or CORS not configured for production. |
+| Changes not appearing on the live site | Wait 60 seconds and hard-refresh. If still missing, check that the document is **Published** (not just saved as draft). |
+| "Network error" in Studio | Check CORS origins in Sanity Manage. Both local and production URLs need `Allow credentials: on`. |
+| Build fails with Sanity import errors | `NEXT_PUBLIC_SANITY_PROJECT_ID` is missing from Vercel env vars. Add it and redeploy. |
+| "Exit preview" badge missing | Navigate directly to `/api/draft-mode/disable` to clear the draft cookie. |

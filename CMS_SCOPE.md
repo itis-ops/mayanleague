@@ -1,131 +1,145 @@
-# CMS Scope at Launch
+# CMS Scope — International Mayan League
 
-The Sanity CMS is **additive** at launch. The public site continues to read content from the existing TypeScript files under `src/lib/` — wiring the rendered pages to live Sanity queries is a post-launch task (the "Phase 6+" work tracked in the 5/21 plan).
-
-This document is the source of truth for what a non-developer editor can change in Studio versus what still requires a code change.
+This is the source of truth for what a non-developer editor can change in Studio versus what still requires a code change.
 
 ---
 
-## At launch the client can edit in Studio (`/studio`)
+## What editors can change in Studio today
 
-### News articles (`newsArticle` document type)
+### 1. News articles (`newsArticle`)
 
-Full CRUD over individual articles, including:
+Full create / edit / publish / unpublish for every article.
 
-- Title, slug, category, keywords, dek, summary, why-it-matters, excerpt — all bilingual (EN + ES required).
-- Article type: **External** (links to source) or **Internal** (full body hosted on the site, Portable Text).
-- Author, source name, source URL.
-- Main image — choose between an Unsplash hotlink (with photographer credit fields) or a direct upload. Alt text is required on every image.
-- Featured flag (controls inclusion in the homepage news rail).
-- Publish status: `draft`, `scheduled`, or `published`, with ISO 8601 `publishedAt`.
-- SEO fields: social title, social description, OG image, hashtags.
+| Field | Where it appears on the site |
+|---|---|
+| Title (EN + ES) | Article page `<h1>`, news listing card, homepage news rail |
+| Slug | URL (`/news/your-slug`) — set on first save, avoid changing after publish |
+| Category | News card label (e.g. "Human Rights") |
+| Keywords | Related articles logic |
+| Dek (short tagline) | Below the title on the article page |
+| Summary + Why It Matters | Key-points sidebar on the article page |
+| Excerpt | Homepage news card and listing teaser |
+| Type: External / Internal | External → link-out card; Internal → full article hosted here |
+| Author, Source name + URL | Byline on article page |
+| Main image (Unsplash or upload) | Article hero image + social OG image |
+| Featured flag | Fallback for homepage rail when no pinned articles are set |
+| Published at | Sort order on `/news`; required to publish |
+| SEO fields | Google title/description, OG/social preview |
 
-### Homepage (`homepage` singleton)
-
-Full control over the seven sections rendered in [`src/app/page.tsx`](src/app/page.tsx):
-
-1. **Hero** — eyebrow, tagline, mission line, clarity line, CTA labels, three proof points.
-2. **Impact moment** — eyebrow, headline, body, and one featured `newsArticle` reference.
-3. **Mission** — kicker, heading, body, optional CTA.
-4. **Programs spotlight** — kicker, heading, intro, and three items (label + description). Note: the program *pages* themselves are not in Sanity yet — the homepage spotlight just labels and links to fixed routes.
-5. **Call to action** — kicker, heading, body, primary + secondary CTAs.
-6. **Resources spotlight** — kicker, heading, intro, items (title + description).
-7. **News rail** — kicker, headline, up to four featured `newsArticle` references.
-
-Plus homepage-level SEO (OG title/description/image).
-
-### Site Settings (`siteSettings` singleton)
-
-Global values used in every layout:
-
-- **Brand:** short and full names (bilingual).
-- **Navigation labels:** About, Programs, Resources, News, Contact, Donate (bilingual). Route paths stay in code.
-- **Footer:** tagline, columns, copyright (bilingual).
-- **Contact:** email, phone, address lines.
-- **Social handles:** Facebook, Instagram, YouTube, X/Twitter, etc. (URL-validated).
-- **Donate URL:** the destination of every `Donate` button site-wide.
-- **Default OG image, default social title, default social description.**
+Changes appear on the live site within **60 seconds** after publishing.
 
 ---
 
-## At launch the client cannot edit (post-launch migration)
+### 2. Homepage (`homepage` singleton)
 
-These still live in TypeScript and require a code change:
+All seven homepage sections are editable. Changes go live within 60 seconds.
 
-| Content | File | Notes |
-|---|---|---|
-| Program pages (Maya Cosmovision, Human Rights, Environmental Protection, Immigration, Maya Women Delegation, Gathering of Ancestral Wisdom) | [`src/lib/siteContent.ts`](src/lib/siteContent.ts) | All six program detail pages + index intro copy. |
-| Maya Cosmovision custom blocks (artist bio, directional colors, art section) | [`src/app/maya-cosmovision/MayaCosmovisionContent.tsx`](src/app/maya-cosmovision/MayaCosmovisionContent.tsx) and [`MayaCosmovisionArtSection.tsx`](src/app/maya-cosmovision/MayaCosmovisionArtSection.tsx) | Hardcoded special-case content. |
-| About / Board of Directors / Our Path / Our Core Values / Job Opportunities | [`src/lib/aboutPages.ts`](src/lib/aboutPages.ts) | All four collection pages share the same shape. |
-| Team page | [`src/lib/i18n.ts`](src/lib/i18n.ts) (under `team` keys) | Roster + bios. |
-| Resources collections (LGBTQIA2S+, Land Rights, Sovereignty, etc.) | [`src/lib/siteContent.ts`](src/lib/siteContent.ts) and [`src/lib/resourcePages.ts`](src/lib/resourcePages.ts) | Includes the Indigenous Language Resources singleton. |
-| UI strings / hardcoded labels not surfaced in Site Settings | [`src/lib/i18n.ts`](src/lib/i18n.ts) | Skip-link text, ARIA labels, etc. |
-| Route paths and navigation order | [`src/lib/siteContent.ts`](src/lib/siteContent.ts) `programNav`, `resourceNav`, `mediaNav` and [`src/lib/aboutPages.ts`](src/lib/aboutPages.ts) `ABOUT_PAGE_LINKS` | The labels are in Site Settings; the *paths* are in code. |
+| Section | What you can change |
+|---|---|
+| **Hero** | Eyebrow, main headline, sidebar mission line, supporting paragraph, Donate + Connect button labels, 3 proof-point lines |
+| **Impact moment** | Section label, kicker (date + location), large headline, body paragraph, statement link label + URL |
+| **Mission** | Section label + kicker, heading, board statement paragraphs (up to 2), attribution, Learn-more label |
+| **Programs spotlight** | Section kicker, heading, intro paragraph, Learn-more label, up to 6 program cards (name + description each) |
+| **Call to action** | Eyebrow, heading, body, Monthly Donate label, One-time Donate label, Contact label |
+| **Resources spotlight** | Section label + kicker, eyebrow, heading, explore label, up to 8 resource cards (title + description each) |
+| **News rail** | Section label, headline, Visit newsroom label, up to 4 pinned article references |
+
+> **Tip:** The homepage reads from Sanity as soon as the **Hero → Main headline** field is filled in and the document is published. If the hero headline is blank, the site falls back to the built-in copy — so you will not accidentally blank out the homepage.
+
+---
+
+### 3. Site settings (`siteSettings` singleton)
+
+Global values used across every page. Changes go live within 60 seconds.
+
+| Setting | Where it appears |
+|---|---|
+| **Brand name** (short + full, EN + ES) | Top nav logo label, footer |
+| **Nav labels** (About, Programs, Resources, News, Contact, Donate) | Top navigation bar + mobile menu |
+| **Footer tagline** | Footer left column |
+| **Footer column headings** (Who we are, What we do, Get involved) | Footer |
+| **Footer link labels** | Footer navigation lists |
+| **Copyright line** | Footer bottom |
+| **Contact email** | Footer, Contact page, job application mailto links |
+| **Contact phone** | Footer, Contact page |
+| **Address lines** | Footer, Contact page + embedded map query |
+| **Social URLs** (Facebook, Instagram, YouTube, X/Twitter) | Footer social icons |
+| **Donate URL** | Every Donate button on the site (hero, nav, CTA section, footer) |
+
+---
+
+## What still requires a code change
+
+These pages read from TypeScript files (`src/lib/`) and need a developer to update. They are planned for future Sanity migration phases.
+
+| Content | Why not in CMS yet |
+|---|---|
+| **Program detail pages** (Maya Cosmovision, Human Rights, Environmental Protection, Immigration, Maya Women Delegation, Gathering of Ancestral Wisdom) | Six pages with highly structured, culturally specific copy including custom art blocks. Phase 2 migration. |
+| **About collection** (Board of Directors, Our Path, Core Values, Job Opportunities) | Four pages sharing a common schema; need `aboutPage` document type first. Phase 2. |
+| **Team page** | Staff roster and bios; need `teamMember` documents. Phase 2. |
+| **Resource collection pages** (`/indigenous-language-resources`, `/land-rights`, `/lgbtqia2s`, etc.) | Specialized legal/cultural documents, some in Maya Mam. Require `resourceCollection` schema. Phase 3. |
+| **Contact page copy** (hero, newsletter section) | Rarely changes; labels in Site Settings cover the live contact info. Phase 3. |
+| **Navigation routes** | Paths like `/about`, `/programs` are in code; only the *labels* are editable in Site Settings. |
+| **UI accessibility strings** | Skip-link text, ARIA labels — these are developer concerns, not content. |
 
 ---
 
 ## Post-launch migration order
 
-Sequence chosen so each phase compiles independently and the public site never breaks:
+Each phase is independent — the site never breaks between phases.
 
-1. **News rendering → Sanity** (5/21+).
-   - Add GROQ queries.
-   - Replace `import { newsArticles } from '@/lib/news'` with server-side queries.
-   - Wire ISR revalidation on publish/unpublish via Sanity webhook + `revalidateTag('news')`.
-   - Add draft preview routing (`/preview/...`).
-2. **Homepage rendering → Sanity.**
-   - Same pattern as News. Each section component receives its slice of the `homepage` singleton via a single query.
-3. **Site Settings → Sanity.**
-   - Replace `useLanguage` reads from `i18n.ts` (for nav, footer, brand, contact) with a server-fetched settings object passed via Layout.
-4. **Programs.** Define `program` document type with Portable Text sections + Maya Cosmovision custom fields (artist bio, directional colors). Migrate all six programs.
-5. **Resources.** Define `resourceCollection` document type and `indigenousLanguageResources` singleton.
-6. **About + Team.** Define `aboutPage` document type for the four About-family pages and `teamMember` documents for the Team page.
-
-Each post-launch phase ends with: GROQ queries written, component reads ported, content migrated from the static files into Sanity, then the static file deleted.
+| Phase | Work |
+|---|---|
+| **Phase 2** | Programs, About, Team — define document types, migrate content, delete static files. |
+| **Phase 3** | Resource collection pages (indigenous language resources, thematic resource hubs). Contact page copy. |
+| **Phase 4** | Instant ISR revalidation via Sanity webhook → `revalidateTag`. Currently the site caches for 60 seconds. |
+| **Phase 5** | Full i18n parity — any remaining hardcoded strings surfaced in Site Settings. |
 
 ---
 
-## Standards the schemas enforce
+## Schema enforcement (cannot be bypassed by editors)
 
-These cannot be bypassed by editors — Sanity validation rejects the document otherwise:
-
-- **WCAG 1.1.1** — every image (`unsplashImage`, `sanityImage`, `inlineImage`, `seoFields.ogImage`) requires a localized `alt` (EN + ES).
-- **IETF RFC 3986** — `newsArticle.slug` must match `^[a-z0-9-]+$` and is unique per type.
-- **ISO 8601** — `publishedAt` is a `datetime`. The legacy free-form `"Mar 26, 2026"` strings are formatted on render, not stored.
-- **OG / Twitter safe limits** — `seoFields.socialTitle` ≤ 60 chars per locale; `socialDescription` ≤ 160 chars per locale.
-- **Bilingual rule** (per `.cursor/rules/bilingual-content.mdc`) — every `localized*` field requires both `en` and `es` non-empty.
-- **Unsplash compliance** (per `.cursor/rules/unsplash-compliance.mdc`) — `unsplashImage` preserves photographer name, photographer URL, source URL, photo ID, download location, and palette notes. Hotlinked URLs stay primary; uploads are the escape hatch.
+- **Images** — every image requires alt text in both EN and ES (WCAG 1.1.1).
+- **Slugs** — lowercase letters, digits, and hyphens only; unique per type (RFC 3986).
+- **Publish date** — ISO 8601 datetime; required to publish a news article.
+- **SEO limits** — social title ≤ 60 chars, social description ≤ 160 chars per locale.
+- **Bilingual rule** — every `localizedString` / `localizedText` field requires both English and Spanish.
+- **Unsplash compliance** — Unsplash images preserve photographer name, URL, photo ID, and download location. Attribution is never hidden.
 
 ---
 
-## Files involved
+## Files
 
 ```
 mayanleague/
-├── sanity.config.ts                       # Studio config (mounted at /studio)
-├── sanity.cli.ts                          # CLI config (for `npx sanity ...`)
+├── sanity.config.ts                         Studio config (mounted at /studio)
+├── sanity.cli.ts                            CLI config (npx sanity ...)
 ├── src/sanity/
-│   ├── env.ts                             # Typed env access, build-safe fallbacks
-│   ├── client.ts                          # createClient for server-side GROQ
-│   ├── image.ts                           # @sanity/image-url helper
-│   ├── structure.ts                       # Desk structure (singletons pinned)
+│   ├── env.ts                               Typed env access with build-safe fallbacks
+│   ├── client.ts                            Sanity client + stega (click-to-edit)
+│   ├── lib/
+│   │   ├── live.ts                          sanityFetch + SanityLive (draft / live preview)
+│   │   ├── mapHomepage.ts                   Sanity doc → per-locale section slices
+│   │   ├── mapSiteSettings.ts               Sanity doc → contact, nav, footer slices
+│   │   ├── mapNewsArticle.ts                Sanity doc → NewsArticle interface
+│   │   └── fieldDescriptions.ts            Shared field description strings
+│   ├── queries/
+│   │   ├── news.ts                          GROQ: news article queries
+│   │   ├── homepage.ts                      GROQ: homepage singleton
+│   │   └── siteSettings.ts                  GROQ: site settings singleton
+│   ├── presentation/
+│   │   └── resolve.ts                       Presentation Tool URL mapping
+│   ├── structure.ts                         Desk sidebar (singletons pinned at top)
 │   └── schemas/
-│       ├── index.ts
-│       ├── objects/
-│       │   ├── localizedString.ts
-│       │   ├── localizedText.ts
-│       │   ├── localizedBlockContent.ts
-│       │   ├── ctaLink.ts
-│       │   ├── unsplashImage.ts
-│       │   ├── sanityImage.ts
-│       │   ├── inlineImage.ts
-│       │   └── seoFields.ts
-│       └── documents/
-│           ├── newsArticle.ts
-│           ├── homepage.ts
-│           └── siteSettings.ts
-└── src/app/studio/[[...tool]]/
-    ├── page.tsx                           # NextStudio mount
-    ├── layout.tsx                         # noindex + minimal chrome
-    └── loading.tsx                        # hydration placeholder
+│       ├── objects/  (localizedString, localizedText, inlineImage, seoFields …)
+│       └── documents/ (newsArticle, homepage, siteSettings)
+├── src/lib/
+│   ├── newsRepository.ts                    News data: Sanity-first, static fallback
+│   ├── homepageRepository.ts                Homepage data: Sanity-first, static fallback
+│   ├── siteSettingsRepository.ts            Site settings: Sanity-first, static fallback
+│   └── mergeSiteSettings.ts                 Merges Sanity settings into i18n translation set
+└── src/app/
+    ├── api/draft-mode/enable/route.ts       Draft Mode enable (Presentation Tool)
+    ├── api/draft-mode/disable/route.ts      Draft Mode disable (Exit preview)
+    └── studio/[[...tool]]/                  Embedded Sanity Studio
 ```
