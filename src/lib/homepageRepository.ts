@@ -18,7 +18,11 @@ export async function getHomepageContent(): Promise<HomepageContent | null> {
   try {
     const { data } = await sanityFetch({ query: homepageQuery })
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return mapHomepage(data as Record<string, any> | null)
+    const mapped = mapHomepage(data as Record<string, any> | null)
+    // If the Sanity homepage document exists but the hero tagline hasn't been
+    // filled in yet, treat it as unpublished and fall back to static i18n data.
+    if (!mapped?.hero?.en?.tagline) return null
+    return mapped
   } catch (error) {
     console.error('[homepageRepository] Failed to fetch homepage content:', error)
     return null
