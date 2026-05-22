@@ -13,6 +13,23 @@ export type NewsArticleType = 'external' | 'internal'
 
 export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://mayanleague.vercel.app'
 
+export interface NewsArticleI18n {
+  title?: string
+  dek?: string
+  summary?: string
+  whyItMatters?: string
+  excerpt?: string
+  socialTitle?: string
+  socialDescription?: string
+  suggestedPostCopy?: string
+  category?: string
+  keywords?: string[]
+  mainImage?: {
+    alt?: string
+    caption?: string
+  }
+}
+
 export interface NewsArticle {
   title: string
   slug: string
@@ -47,6 +64,8 @@ export interface NewsArticle {
     unsplashDownloadLocation?: string
     paletteNotes?: string[]
   }
+  /** Spanish copy from Sanity (`localized*` fields). */
+  _i18n?: { es: NewsArticleI18n }
 }
 
 export const newsArticles: NewsArticle[] = [
@@ -266,7 +285,7 @@ export const newsArticles: NewsArticle[] = [
       'Grupo Sotz’il performed “Uk’u’x Ulew: Heart of the Earth” in Centreville’s Historic District.',
     date: 'Sep 13, 2017',
     sourceName: 'Connection Newspapers',
-    sourceUrl: 'http://www.connectionnewspapers.com/news/2017/sep/13/art-can-transform-world/',
+    sourceUrl: 'https://www.connectionnewspapers.com/news/2017/sep/13/art-can-transform-world/',
     type: 'external',
     socialTitle: 'Art can transform the world',
     socialDescription:
@@ -308,8 +327,8 @@ export const newsArticles: NewsArticle[] = [
       'The defense of water knows no borders, according to the Mayan Ancestral Authorities.',
     date: 'Aug 9, 2017',
     author: 'Jeff Abbott',
-    sourceName: 'teleSUR English',
-    sourceUrl: 'https://www.telesurenglish.net/opinion/In-Defense-of-Land-and-Water-From-Standing-Rock-to-Guatemala-20170322-0011.html',
+    sourceName: 'Remezcla',
+    sourceUrl: 'https://remezcla.com/culture/mayan-elders-guatemala-standing-rock-solidarity-nodapl/',
     type: 'external',
     featured: true,
     socialTitle: 'The defense of water knows no borders',
@@ -395,7 +414,7 @@ export const newsArticles: NewsArticle[] = [
       'Maya representatives from the Mam and Ixil peoples of Guatemala came to the Oceti Sakowin Camp to meet with Standing Rock leaders.',
     date: 'Nov 2016',
     sourceName: 'White Wolf Pack',
-    sourceUrl: 'http://www.whitewolfpack.com/2016/11/mayan-elders-go-to-standing-rock-to.html',
+    sourceUrl: 'https://www.whitewolfpack.com/2016/11/mayan-elders-go-to-standing-rock-to.html',
     type: 'external',
     socialTitle: 'Maya solidarity at Standing Rock',
     socialDescription:
@@ -486,7 +505,7 @@ const keywordLabelsEs: Record<string, string> = {
   immigration: 'inmigración',
 }
 
-const newsArticleTranslationsEs: Record<string, Partial<NewsArticle>> = {
+export const newsArticleTranslationsEs: Record<string, Partial<NewsArticle>> = {
   'iml-un-roundtable-human-rights-2026': {
     title: 'La LMI presenta en mesa redonda de la ONU sobre derechos humanos con el Alto Comisionado Türk',
     dek:
@@ -607,23 +626,28 @@ export function getLocalizedNewsArticle(article: NewsArticle, lang: 'en' | 'es')
     return article
   }
 
-  const translation = newsArticleTranslationsEs[article.slug] || {}
+  const fromSanity = article._i18n?.es
+  const fromStatic = newsArticleTranslationsEs[article.slug] || {}
+  const translation = { ...fromStatic, ...fromSanity }
 
   return {
     ...article,
     ...translation,
-    category: categoryLabelsEs[article.category],
-    keywords: article.keywords.map((keyword) => keywordLabelsEs[keyword] || keyword),
+    category: translation.category ?? categoryLabelsEs[article.category],
+    keywords: (translation.keywords ?? article.keywords).map(
+      (keyword) => keywordLabelsEs[keyword] || keyword,
+    ),
     mainImage: article.mainImage
       ? {
           ...article.mainImage,
           alt:
-            article.slug === 'protesters-demand-protection-indigenous-migrant-children'
+            translation.mainImage?.alt ??
+            (article.slug === 'protesters-demand-protection-indigenous-migrant-children'
               ? 'Manifestantes protestan por derechos al debido proceso.'
               : article.slug === 'mayan-elders-standing-rock-solidarity'
                 ? 'Cinco tipis en un campo abierto bajo la luz del día.'
-                : article.mainImage.alt,
-          caption: article.mainImage.caption,
+                : article.mainImage.alt),
+          caption: translation.mainImage?.caption ?? article.mainImage.caption,
         }
       : undefined,
   }

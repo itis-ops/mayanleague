@@ -1,3 +1,23 @@
+import type { Lang } from './i18n'
+import { resourceCollections, resourceNav, uiCopy } from './siteContent'
+
+export function localizedResourceNavLinks(lang: Lang) {
+  return [
+    { label: uiCopy[lang].resources, href: '/resources' },
+    ...resourceNav.map((link) => {
+      const slug = link.href.replace(/^\//, '')
+      const label =
+        slug === 'indigenous-language-resources'
+          ? lang === 'es'
+            ? 'Recursos de Idiomas Indígenas'
+            : 'Indigenous Language Resources'
+          : resourceCollections[lang][slug as keyof typeof resourceCollections.en]?.label || link.label
+
+      return { ...link, label }
+    }),
+  ]
+}
+
 export const resourceCategories = [
   { label: 'LGBTQIA2S+', href: '/lgbtqia2s' },
   { label: 'Land Rights', href: '/land-rights' },

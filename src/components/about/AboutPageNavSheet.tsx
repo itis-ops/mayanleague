@@ -6,9 +6,20 @@ import { useLanguage } from '@/hooks/useLanguage'
 interface AboutPageNavSheetProps {
   activeHref: string
   links: ReadonlyArray<{ label: string; href: string }>
+  triggerLabel?: string
+  variant?: 'pill' | 'control'
+  fullWidth?: boolean
+  compact?: boolean
 }
 
-export default function AboutPageNavSheet({ activeHref, links }: AboutPageNavSheetProps) {
+export default function AboutPageNavSheet({
+  activeHref,
+  links,
+  triggerLabel,
+  variant = 'pill',
+  fullWidth = false,
+  compact = false,
+}: AboutPageNavSheetProps) {
   const sheetId = useId()
   const triggerRef = useRef<HTMLButtonElement>(null)
   const sheetRef = useRef<HTMLDivElement>(null)
@@ -18,15 +29,26 @@ export default function AboutPageNavSheet({ activeHref, links }: AboutPageNavShe
   const copy =
     lang === 'es'
       ? {
-          trigger: 'Menú',
+          trigger: triggerLabel ?? 'Menú',
+          triggerShort: 'Menú',
           title: t.aboutPage.label,
           close: 'Cerrar',
         }
       : {
-          trigger: 'Menu',
+          trigger: triggerLabel ?? 'Menu',
+          triggerShort: 'Menu',
           title: t.aboutPage.label,
           close: 'Close',
         }
+
+  const triggerClass = compact
+    ? 'motion-control inline-flex w-full items-center justify-center rounded-full border border-ink/15 bg-white font-body text-sm font-black uppercase leading-none tracking-[0.06em] text-ink hover:border-earth-red hover:bg-cream focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-gold min-h-10 px-4'
+    : variant === 'control'
+      ? [
+          'motion-control inline-flex min-h-11 items-center gap-2 rounded-full border border-ink/15 px-4 font-body text-xs font-bold uppercase tracking-[0.04em] text-ink hover:bg-cream hover:text-earth-red active:bg-cream-dark active:text-ink focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-gold',
+          fullWidth ? 'w-full justify-between' : 'shrink-0',
+        ].join(' ')
+      : 'motion-control flex shrink-0 items-center gap-1.5 rounded-full border border-cream-dark px-3 py-1.5 font-body text-xs font-black uppercase tracking-[0.08em] text-ink/70 hover:border-earth-red hover:text-earth-red focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-gold'
 
   useEffect(() => {
     if (!open) return
@@ -62,12 +84,23 @@ export default function AboutPageNavSheet({ activeHref, links }: AboutPageNavShe
         onClick={() => setOpen(true)}
         aria-expanded={open}
         aria-controls={sheetId}
-        className="motion-control flex shrink-0 items-center gap-1.5 rounded-full border border-cream-dark px-3 py-1.5 font-body text-xs font-black uppercase tracking-[0.08em] text-ink/70 hover:border-earth-red hover:text-earth-red focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-gold"
+        className={triggerClass}
       >
-        {copy.trigger}
-        <svg className="h-3 w-3 shrink-0" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
-          <path d="m5 8 5 5 5-5" />
-        </svg>
+        {variant === 'control' && !compact ? (
+          <svg className="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+            <line x1="4" y1="7" x2="20" y2="7" />
+            <line x1="4" y1="12" x2="20" y2="12" />
+            <line x1="4" y1="17" x2="20" y2="17" />
+          </svg>
+        ) : null}
+        <span className={fullWidth && variant === 'control' && !compact ? 'min-w-0 flex-1 text-left' : undefined}>
+          {compact ? copy.triggerShort : copy.trigger}
+        </span>
+        {(variant === 'pill' || variant === 'control') && !compact ? (
+          <svg className="h-3 w-3 shrink-0" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
+            <path d="m5 8 5 5 5-5" />
+          </svg>
+        ) : null}
       </button>
 
       {open ? (

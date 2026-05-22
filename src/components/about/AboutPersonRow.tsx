@@ -1,5 +1,6 @@
 import AboutMemberPortrait from '@/components/about/AboutMemberPortrait'
 import MayaNumber from '@/components/ui/MayaNumber'
+import { collectionArticleSectionClass } from '@/lib/editorialLayout'
 
 interface AboutPersonRowProps {
   index: number
@@ -23,6 +24,8 @@ export default function AboutPersonRow({
   compact = false,
 }: AboutPersonRowProps) {
   const isSticky = layout === 'sticky'
+  /** Sticky stack is desktop-only; mobile uses a simple vertical list. */
+  const useStickyStack = isSticky
   const sectionPadding = compact
     ? 'pb-9 pt-8 sm:pb-10 sm:pt-9 lg:pb-11 lg:pt-10'
     : 'pb-14 pt-12 sm:pb-16 sm:pt-14 lg:pb-20 lg:pt-16'
@@ -30,9 +33,9 @@ export default function AboutPersonRow({
   const article = (
     <article
       className={
-        isSticky
-          ? `relative sticky top-[72px] border-b border-cream-dark bg-white xl:top-[124px] ${sectionPadding}`
-          : `relative scroll-mt-36 border-b border-cream-dark bg-white ${sectionPadding}`
+        useStickyStack
+          ? `relative border-b border-cream-dark bg-white lg:sticky lg:top-[72px] lg:scroll-mt-36 xl:top-[124px] ${collectionArticleSectionClass} ${sectionPadding}`
+          : `relative scroll-mt-36 border-b border-cream-dark bg-white ${collectionArticleSectionClass} ${sectionPadding}`
       }
     >
       <div
@@ -45,11 +48,11 @@ export default function AboutPersonRow({
         <div
           className={
             compact
-              ? 'w-full max-w-[10rem] shrink-0 sm:max-w-[11rem]'
-              : 'w-full max-w-[11.5rem] shrink-0 sm:max-w-[12.5rem]'
+              ? 'size-[11.5rem] shrink-0 sm:size-[14rem] lg:size-[16rem]'
+              : 'size-[12.5rem] shrink-0 sm:size-[15rem] lg:size-[18rem]'
           }
         >
-          <AboutMemberPortrait name={name} role={role} image={image} />
+          <AboutMemberPortrait name={name} role={role} image={image} priority={index === 0} />
         </div>
 
         <div className="min-w-0 flex-1 lg:max-w-[72ch]">
@@ -94,12 +97,20 @@ export default function AboutPersonRow({
     </article>
   )
 
-  if (!isSticky) {
+  if (!useStickyStack) {
     return article
   }
 
   return (
-    <div className={isLast ? 'relative' : compact ? 'relative pb-[min(18vh,5rem)]' : 'relative pb-[min(28vh,10rem)]'}>
+    <div
+      className={
+        isLast
+          ? 'relative'
+          : compact
+            ? 'relative lg:pb-[min(18vh,5rem)]'
+            : 'relative lg:pb-[min(28vh,10rem)]'
+      }
+    >
       {article}
     </div>
   )

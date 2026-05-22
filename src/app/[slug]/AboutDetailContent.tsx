@@ -1,9 +1,9 @@
 'use client'
 
+import AboutCollectionShell from '@/components/about/AboutCollectionShell'
 import AboutEditorialSection from '@/components/about/AboutEditorialSection'
-import AboutPageHero from '@/components/about/AboutPageHero'
-import AboutPageShell from '@/components/about/AboutPageShell'
 import AboutQuoteFigure from '@/components/about/AboutQuoteFigure'
+import JobApplyButton from '@/components/about/JobApplyButton'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import { useLanguage } from '@/hooks/useLanguage'
@@ -14,7 +14,7 @@ interface Props {
 }
 
 function usesPathLayout(slug: AboutPageData['slug']) {
-  return slug === 'job-opportunities'
+  return slug === 'job-opportunities' || slug === 'our-path'
 }
 
 export default function AboutDetailContent({ page }: Props) {
@@ -22,29 +22,22 @@ export default function AboutDetailContent({ page }: Props) {
   const currentPage = localizedAboutPages[lang][page.slug]
   const pathLayout = usesPathLayout(currentPage.slug)
   const isOurPath = currentPage.slug === 'our-path'
+  const heroIntro =
+    currentPage.intro ??
+    (isOurPath
+      ? lang === 'es'
+        ? 'Misión, visión y futuro compartido para nuestros pueblos y la Madre Tierra.'
+        : 'Mission, vision, and shared future for our peoples and Mother Earth.'
+      : currentPage.sections[0]?.body[0] ?? currentPage.title)
 
   return (
     <>
       <Navbar />
-      <AboutPageShell activeHref={`/${currentPage.slug}`}>
-        <AboutPageHero
-          label={currentPage.label}
-          title={currentPage.title}
-          intro={currentPage.intro}
-          heroImage={currentPage.heroImage}
-          details={
-            isOurPath
-              ? lang === 'es'
-                ? ['Misión', 'Visión', 'Futuro compartido']
-                : ['Mission', 'Vision', 'Shared future']
-              : currentPage.slug === 'job-opportunities'
-                ? lang === 'es'
-                  ? ['Medio tiempo', 'Administrativo', 'Organización Maya']
-                  : ['Part-time', 'Administrative', 'Maya-led nonprofit']
-                : undefined
-          }
-        />
-
+      <AboutCollectionShell
+        activeHref={`/${currentPage.slug}`}
+        heroTitle={currentPage.title}
+        heroIntro={heroIntro}
+      >
         {currentPage.sections.map((section, index) => (
           <AboutEditorialSection
             key={`${section.title || section.kicker || currentPage.slug}-${index}`}
@@ -58,7 +51,11 @@ export default function AboutDetailContent({ page }: Props) {
             leadFirstBody={isOurPath && index === 0}
             layout={pathLayout ? 'path' : 'editorial'}
             wideTitle={currentPage.slug === 'job-opportunities'}
-          />
+          >
+            {currentPage.slug === 'job-opportunities' && section.title ? (
+              <JobApplyButton jobTitle={section.title} />
+            ) : null}
+          </AboutEditorialSection>
         ))}
 
         {currentPage.quote ? (
@@ -68,7 +65,7 @@ export default function AboutDetailContent({ page }: Props) {
             source={currentPage.quote.source}
           />
         ) : null}
-      </AboutPageShell>
+      </AboutCollectionShell>
       <Footer />
     </>
   )

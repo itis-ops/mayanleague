@@ -1,9 +1,10 @@
 import type { ReactNode } from 'react'
-import LinkedMayaCosmovision from '@/components/ui/LinkedMayaCosmovision'
 import MayaNumber from '@/components/ui/MayaNumber'
+import LinkedMayaCosmovision from '@/components/ui/LinkedMayaCosmovision'
+import { collectionArticleSectionClass } from '@/lib/editorialLayout'
 
 type SectionVariant = 'white' | 'mist'
-type SectionLayout = 'editorial' | 'path'
+type SectionLayout = 'editorial' | 'path' | 'lead'
 
 interface AboutEditorialSectionProps {
   index?: number
@@ -45,11 +46,59 @@ export default function AboutEditorialSection({
   const bgClass = variant === 'mist' ? 'bg-mist' : 'bg-white'
   const heading = title || railLabel
 
+  if (layout === 'lead') {
+    return (
+      <section
+        id={id}
+        className={`relative scroll-mt-36 border-b border-cream-dark py-16 lg:py-20 ${collectionArticleSectionClass} bg-white ${className}`}
+      >
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-12">
+          <div className="lg:col-span-10 lg:col-start-1">
+            {railLabel ? (
+              <p className="type-kicker mb-5 text-ink/55">{railLabel}</p>
+            ) : null}
+            {title ? (
+              <h2 className="type-display max-w-[20ch] text-[clamp(2.25rem,5.5vw,4.75rem)] leading-[0.93] text-ink">
+                {title}
+              </h2>
+            ) : null}
+          </div>
+        </div>
+
+        {body && body.length > 0 ? (
+          <div className="mt-12 grid grid-cols-1 gap-x-14 border-t border-cream-dark pt-10 lg:grid-cols-12">
+            <div className="lg:col-span-7 lg:col-start-1">
+              <p className={leadParagraphClass}>{body[0]}</p>
+            </div>
+            {body.length > 1 ? (
+              <div className="mt-8 space-y-7 lg:col-span-7 lg:col-start-1 lg:mt-8">
+                {body.slice(1).map((paragraph) => (
+                  <p key={paragraph} className={bodyParagraphClass}>
+                    <LinkedMayaCosmovision text={paragraph} />
+                  </p>
+                ))}
+              </div>
+            ) : null}
+          </div>
+        ) : null}
+
+        {children}
+
+        {index !== undefined ? (
+          <MayaNumber
+            value={index}
+            className="pointer-events-none absolute bottom-5 left-7 origin-bottom-left scale-75 text-earth-red/60 sm:bottom-6 sm:left-10 lg:bottom-8 lg:left-14"
+          />
+        ) : null}
+      </section>
+    )
+  }
+
   if (layout === 'path') {
     return (
       <article
         id={id}
-        className={`relative scroll-mt-36 border-b border-cream-dark pb-14 pt-12 sm:pb-16 sm:pt-14 lg:pb-20 lg:pt-16 ${bgClass} ${className}`}
+        className={`relative scroll-mt-36 border-b border-cream-dark pb-14 pt-12 sm:pb-16 sm:pt-14 lg:pb-20 lg:pt-16 ${collectionArticleSectionClass} ${bgClass} ${className}`}
       >
         {heading ? (
           <header className="mb-8">
@@ -60,7 +109,6 @@ export default function AboutEditorialSection({
             >
               {heading}
             </h2>
-            {railLabel ? <p className="type-kicker mt-3 text-earth-red">{railLabel}</p> : null}
           </header>
         ) : null}
 
@@ -94,7 +142,7 @@ export default function AboutEditorialSection({
         {index !== undefined ? (
           <MayaNumber
             value={index}
-            className="pointer-events-none absolute bottom-5 right-5 origin-bottom-right scale-75 text-earth-red/75 sm:bottom-6 sm:right-6 lg:bottom-8 lg:right-8"
+            className="pointer-events-none absolute bottom-5 left-7 origin-bottom-left scale-75 text-earth-red/60 sm:bottom-6 sm:left-10 lg:bottom-8 lg:left-14"
           />
         ) : null}
       </article>
@@ -104,13 +152,10 @@ export default function AboutEditorialSection({
   return (
     <section
       id={id}
-      className={`scroll-mt-36 border-b border-cream-dark py-16 lg:py-20 ${bgClass} ${className}`}
+      className={`relative scroll-mt-36 border-b border-cream-dark py-16 lg:py-20 ${collectionArticleSectionClass} ${bgClass} ${className}`}
     >
       <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-x-14">
         <div className="flex flex-col gap-6 lg:col-span-3">
-          {index !== undefined ? (
-            <MayaNumber value={index} className="shrink-0 scale-75 origin-top-left text-earth-red" />
-          ) : null}
           {railLabel ? (
             <p className="type-kicker text-ink/55 lg:max-w-[12ch]">{railLabel}</p>
           ) : null}
@@ -160,6 +205,13 @@ export default function AboutEditorialSection({
           {children}
         </div>
       </div>
+
+      {index !== undefined ? (
+        <MayaNumber
+          value={index}
+          className="pointer-events-none absolute bottom-5 left-7 origin-bottom-left scale-75 text-earth-red/60 sm:bottom-6 sm:left-10 lg:bottom-8 lg:left-14"
+        />
+      ) : null}
     </section>
   )
 }

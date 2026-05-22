@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { ResourceCollectionContent } from '@/components/content/SitePageContent'
+import ResourceCollectionPage from '@/components/content/ResourceCollectionPage'
 
 export const metadata: Metadata = {
   title: 'LGBTQIA2S+ | International Mayan League',
@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 }
 
 export default function LGBTQIA2SPage() {
-  return <ResourceCollectionContent slug="lgbtqia2s" />
+  return <ResourceCollectionPage slug="lgbtqia2s" />
 }

@@ -1,7 +1,10 @@
 import type { Metadata } from 'next'
 import { Inter, Oswald, Source_Serif_4 } from 'next/font/google'
+import { draftMode } from 'next/headers'
+import { VisualEditing } from 'next-sanity/visual-editing'
 import LanguageProvider from '@/components/ui/LanguageProvider'
 import SkipLink from '@/components/ui/SkipLink'
+import { SanityLive } from '@/sanity/lib/live'
 import './globals.css'
 
 const oswald = Oswald({
@@ -42,7 +45,9 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const { isEnabled: isDraftMode } = await draftMode()
+
   return (
     <html
       lang="en"
@@ -53,6 +58,40 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <SkipLink />
           {children}
         </LanguageProvider>
+
+        {/* Real-time content subscription — picks up Sanity mutations while
+            Studio is open. Renders nothing visible; re-triggers RSC fetches. */}
+        <SanityLive />
+
+        {/* Click-to-edit overlays — only active when Draft Mode is on
+            (i.e. inside the Presentation Tool iframe). */}
+        {isDraftMode && (
+          <>
+            <VisualEditing />
+            {/* Exit preview banner */}
+            <a
+              href={`/api/draft-mode/disable?redirect=${encodeURIComponent(typeof window !== 'undefined' ? window.location.pathname : '/')}`}
+              style={{
+                position: 'fixed',
+                bottom: '1rem',
+                right: '1rem',
+                zIndex: 9999,
+                background: '#b91c1c',
+                color: '#fff',
+                fontFamily: 'sans-serif',
+                fontSize: '0.75rem',
+                fontWeight: 700,
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase',
+                padding: '0.5rem 1rem',
+                borderRadius: '0.25rem',
+                textDecoration: 'none',
+              }}
+            >
+              Exit preview
+            </a>
+          </>
+        )}
       </body>
     </html>
   )

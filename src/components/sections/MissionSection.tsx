@@ -3,22 +3,29 @@
 import EditorialSectionBar from '@/components/editorial/EditorialSectionBar'
 import { useLanguage } from '@/hooks/useLanguage'
 import Button from '@/components/ui/Button'
+import type { MissionSlice } from '@/sanity/lib/mapHomepage'
 
-export default function MissionSection() {
-  const { t } = useLanguage()
+interface MissionSectionProps {
+  content?: { en: MissionSlice; es: MissionSlice }
+}
+
+export default function MissionSection({ content }: MissionSectionProps) {
+  const { lang, t } = useLanguage()
+  const m = content?.[lang] ?? t.mission
 
   return (
-    <section id="about" className="overflow-hidden bg-cream px-5 py-14 sm:px-8 lg:px-12 lg:py-20">
+    <section id="about" className="overflow-hidden bg-cream px-5 py-12 sm:px-8 sm:py-14 lg:px-12 lg:py-20">
       <div className="mx-auto max-w-[1728px]">
         <EditorialSectionBar
           hideDetailOnMobile
-          label={t.mission.sectionLabel}
-          detail={t.mission.sectionKicker}
+          label={m.sectionLabel}
+          detail={m.sectionKicker}
         />
 
         <div className="motion-reveal flex flex-col gap-5">
-          <div className="order-2 border border-cream-dark bg-white p-1.5 lg:order-1">
-            <div className="relative min-h-[min(52vw,320px)] overflow-hidden bg-ink sm:min-h-[400px] lg:min-h-[520px]">
+          {/* Image — first on mobile for immediate visual impact */}
+          <div className="border border-cream-dark bg-white p-1.5">
+            <div className="relative min-h-[52vw] max-h-[380px] overflow-hidden bg-ink sm:min-h-[380px] sm:max-h-none lg:min-h-[520px]">
               <img
                 src={t.mission.imageSrc}
                 alt={t.mission.imageAlt}
@@ -32,48 +39,52 @@ export default function MissionSection() {
             </div>
           </div>
 
-          <div className="order-1 grid grid-cols-1 gap-5 lg:order-2 lg:grid-cols-[1fr_minmax(260px,0.38fr)] lg:items-stretch">
+          {/* Text + stats row */}
+          <div className="grid grid-cols-1 gap-5 lg:grid-cols-[1fr_minmax(260px,0.38fr)] lg:items-stretch">
+            {/* Mission statement */}
             <div className="border border-cream-dark bg-white p-1.5">
               <div className="bg-white px-7 py-10 sm:px-10 sm:py-12 lg:px-14 lg:py-16">
-                <p className="type-kicker mb-5 text-earth-red sm:mb-8">{t.mission.eyebrow}</p>
+                <p className="type-kicker mb-5 text-earth-red sm:mb-8">{m.eyebrow}</p>
                 <h2 className="type-section mb-8 max-w-4xl text-[clamp(2.55rem,10vw,5.6rem)] text-ink sm:mb-10">
-                  {t.mission.heading}
+                  {m.heading}
                 </h2>
 
                 <figure className="border-t border-cream-dark pt-8 sm:pt-10">
-                  <div className="space-y-10 sm:space-y-12">
-                    <p className="max-w-[48ch] font-accent text-[clamp(1.35rem,2.1vw,1.85rem)] leading-[1.48] tracking-[-0.02em] text-ink/90">
-                      {t.mission.boardStatement[0]}
+                  <div className="space-y-8 sm:space-y-10">
+                    <p className="max-w-[48ch] font-accent text-[clamp(1.25rem,2.1vw,1.85rem)] leading-[1.48] tracking-[-0.02em] text-ink/90">
+                      {m.boardStatement[0]}
                     </p>
-                    <p className="max-w-[56ch] type-body text-[1.0625rem] leading-[1.75] text-ink/72">
-                      {t.mission.boardStatement[1]}
+                    {/* Second paragraph hidden on mobile — reduces length without losing meaning */}
+                    <p className="hidden max-w-[56ch] type-body text-[1.0625rem] leading-[1.75] text-ink/72 sm:block">
+                      {m.boardStatement[1]}
                     </p>
                     <figcaption className="type-kicker max-w-[40ch] pt-2 text-ink/45">
-                      — {t.mission.boardStatementAttribution}
+                      — {m.boardStatementAttribution}
                     </figcaption>
                   </div>
                 </figure>
 
                 <Button href="/our-path" variant="secondary" className="mt-10">
-                  {t.mission.learnMore}
+                  {m.learnMore}
                 </Button>
               </div>
             </div>
 
-            <div className="flex h-full min-h-0 flex-col border border-cream-dark bg-white p-1.5">
-              <div className="grid h-full min-h-0 grid-cols-1 grid-rows-3 divide-y divide-cream-dark [grid-auto-rows:1fr] lg:min-h-full">
+            {/* Stats — horizontal row on mobile, vertical column on desktop */}
+            <div className="border border-cream-dark bg-white p-1.5">
+              <div className="grid h-full grid-cols-3 divide-x divide-cream-dark lg:grid-cols-1 lg:grid-rows-3 lg:divide-x-0 lg:divide-y">
                 {t.mission.stats.map((stat) => (
                   <div
                     key={stat.label}
-                    className="flex h-full min-h-0 flex-col items-center justify-center gap-2.5 px-5 py-6 text-center sm:py-7 lg:px-6"
+                    className="flex flex-col items-center justify-center gap-2 px-3 py-7 text-center sm:py-8 lg:px-6 lg:py-8"
                   >
                     <p
-                      className="font-display text-[clamp(3.25rem,9vw,5.75rem)] font-black leading-none tracking-[-0.065em] text-earth-red tabular-nums"
+                      className="font-display font-black leading-none tracking-[-0.065em] text-earth-red tabular-nums text-[clamp(2rem,6vw,5.75rem)]"
                       aria-hidden="true"
                     >
                       {stat.value}
                     </p>
-                    <p className="type-kicker max-w-[15ch] text-ink/72">
+                    <p className="type-kicker max-w-[12ch] text-ink/72 lg:max-w-[15ch]">
                       {stat.label}
                     </p>
                     <span className="sr-only">

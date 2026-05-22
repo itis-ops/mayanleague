@@ -46,6 +46,7 @@ export interface ResourceCollectionData {
   label: string
   eyebrow: string
   title: string
+  heroDek?: string
   intro: string[]
   links: ContentLink[]
 }
@@ -96,9 +97,18 @@ export const uiCopy: Localized<{
   resources: string
   viewPage: string
   openResource: string
+  openStatement: string
   visitSource: string
   downloadResources: string
   resourceAreas: string
+  resourceArchive: string
+  statements: string
+  bilingualStatements: string
+  pdfDocuments: string
+  pdfDocument: string
+  webResource: string
+  statementsIndexed: string
+  viewStatements: string
   index: string
 }> = {
   en: {
@@ -107,9 +117,18 @@ export const uiCopy: Localized<{
     resources: 'Resources',
     viewPage: 'View page',
     openResource: 'Open resource',
+    openStatement: 'Open statement',
     visitSource: 'Visit source',
     downloadResources: 'Download resources',
     resourceAreas: 'Resource areas',
+    resourceArchive: 'Statement archive',
+    statements: 'statements',
+    bilingualStatements: 'bilingual statements',
+    pdfDocuments: 'PDF documents',
+    pdfDocument: 'PDF document',
+    webResource: 'Resource',
+    statementsIndexed: 'statements indexed',
+    viewStatements: 'View our statements below to learn more.',
     index: 'Index',
   },
   es: {
@@ -118,9 +137,18 @@ export const uiCopy: Localized<{
     resources: 'Recursos',
     viewPage: 'Ver página',
     openResource: 'Abrir recurso',
+    openStatement: 'Abrir declaración',
     visitSource: 'Visitar fuente',
     downloadResources: 'Descargar recursos',
     resourceAreas: 'Áreas de recursos',
+    resourceArchive: 'Archivo de declaraciones',
+    statements: 'declaraciones',
+    bilingualStatements: 'declaraciones bilingües',
+    pdfDocuments: 'documentos PDF',
+    pdfDocument: 'documento PDF',
+    webResource: 'Recurso',
+    statementsIndexed: 'declaraciones indexadas',
+    viewStatements: 'Vea nuestras declaraciones a continuación para conocer más.',
     index: 'Índice',
   },
 }
@@ -545,14 +573,14 @@ const newsItemsEn: MediaItem[] = [
     meta: 'Wednesday, September 13, 2017',
     excerpt:
       'The Grupo Sotz’il performed “Uk’u’x Ulew: Heart of the Earth” in Centreville’s Historic District.',
-    href: 'http://www.connectionnewspapers.com/news/2017/sep/13/art-can-transform-world/',
+    href: 'https://www.connectionnewspapers.com/news/2017/sep/13/art-can-transform-world/',
   },
   {
     title: 'In Defense of Land and Water, From Standing Rock to Guatemala',
     meta: 'By Jeff Abbott, 9 August 2017',
     excerpt:
       'The defense of water knows no borders, according to the Mayan Ancestral Authorities.',
-    href: 'https://www.telesurenglish.net/opinion/In-Defense-of-Land-and-Water-From-Standing-Rock-to-Guatemala-20170322-0011.html',
+    href: 'https://remezcla.com/culture/mayan-elders-guatemala-standing-rock-solidarity-nodapl/',
   },
 ]
 
@@ -629,9 +657,11 @@ export const resourceCollections: Localized<Record<string, ResourceCollectionDat
       label: 'LGBTQIA2S+',
       eyebrow: 'Resources',
       title: 'LGBTQIA2S+',
+      heroDek:
+        'Support for Indigenous LGBTQIA2S+ migrants through cultural accompaniment, interpretation, and community workshops in Abiayala.',
       intro: [
         'Since 2020, with the COVID-19 pandemic, Indigenous migrants from the LGTBS2+ community have been increasing, settling in states such as Virginia.',
-        'The International Mayan League has been providing support through cultural accompaniment, interpretation, as well as developing workshops on sexual diversity in Abiayala to generate awareness and alliances among community members.',
+        'The Mayan League has been aware of the situation of LGBTQ2s+ migrant relatives. To address their trauma, the International Mayan League has been providing support through cultural accompaniment, interpretation, as well as developing workshops on sexual diversity in Abiayala (October 22, 2022) to generate awareness and alliances among community members.',
       ],
       links: [
         { label: 'IML Indigenous Sexual Diversity (ENGLISH)', href: 'https://www.mayanleague.org/s/English-Declaration_FINAL.pdf' },
@@ -643,9 +673,10 @@ export const resourceCollections: Localized<Record<string, ResourceCollectionDat
       label: 'Land Rights',
       eyebrow: 'Resources',
       title: 'Land Rights',
+      heroDek: 'Statements on territory, extractivism, and the defense of Maya Q’eqchi’ land and life.',
       intro: ['View our statements below to learn more:'],
       links: [
-        { label: "illegal evictions of buena vista maya q'eqchi' community", href: 'https://www.mayanleague.org/land-rights' },
+        { label: "illegal evictions of buena vista maya q'eqchi' community", href: '/land-rights' },
         { label: 'WE CONDEMN STATE SPONSORED REPRESSION AGAINST THE MAYA Q’EQCHI’ NATION IN CHAPÍN ABAJO, EL ESTOR, IZABAL, GUATEMALA', href: 'https://www.mayanleague.org/s/We-condemn-State-Sponsored-Repression_FINAL1272022-2.pdf' },
         { label: 'WE CONDEMN THE EVICTION OF THE Q’EQCHI’ MAYA COMMUNITY OF BUENA VISTA (EspaÑol)', href: 'https://www.mayanleague.org/s/CONDENAMOS-EL-DESALOJO-DE-LA-COMUNIDAD-BUENA-VISTA.pdf' },
         { label: 'EXTRACTIVISM AND CLIMATE INJUSTICE: Indigenous Migration in Abiayala', href: 'https://www.mayanleague.org/s/EXTRACTIVISM-AND-CLIMATE-INJUSTICE-Indigenous-Migration-in-Abiayala-1.pdf' },
@@ -656,10 +687,11 @@ export const resourceCollections: Localized<Record<string, ResourceCollectionDat
       label: 'Sovereignty and Self-Determination',
       eyebrow: 'Resources',
       title: 'Sovereignty and Self-Determination',
+      heroDek: 'Solidarity statements on sovereignty, self-determination, and Indigenous resistance across Abiayala.',
       intro: ['View our statements below to learn more:'],
       links: [
         { label: 'Statement of Solidarity Regarding the Dakota Access Pipeline Project (espaÑol)', href: 'https://www.mayanleague.org/s/Declaracion-de-Solidaridad-con-Firma.pdf' },
-        { label: 'Statement of Solidarity Regarding the Dakota Access Pipeline Project (english)', href: 'https://www.mayanleague.org/sovereignty-and-self-determination' },
+        { label: 'Statement of Solidarity Regarding the Dakota Access Pipeline Project (english)', href: '/sovereignty-and-self-determination' },
         { label: 'END GENOCIDE OF THE PALESTINIAN PEOPLE', href: 'https://www.mayanleague.org/s/INDIGENOUS-SOLIDARITY_-END-GENOCIDE-AGAINST-THE-PALESTINIAN-PEOPLE-d6xd.pdf' },
       ],
     },
@@ -668,15 +700,26 @@ export const resourceCollections: Localized<Record<string, ResourceCollectionDat
       label: 'Indigenous Forced Migration',
       eyebrow: 'Resources',
       title: 'Indigenous Forced Migration',
+      heroDek:
+        'Research, testimonies, and lived experiences on the root drivers of Indigenous forced migration across Turtle Island.',
       intro: [
         'What causes Indigenous Peoples to migrate? The resources on this page offer insight on this invisibilized crisis through research, testimonies and lived experiences.',
-        'View our statements below to learn more:',
+        'Learn about the root drivers of forced migration and the policies that dispossess Indigenous Peoples across Abiayala.',
       ],
       links: [
         { label: 'ACNUR Letter regarding displaced indigenous peoples (espaÑol)', href: 'https://www.mayanleague.org/s/FINAL-CARTA-ONU_FIRMAS_2017.pdf' },
         { label: 'UN Submission: colonial states are killing our indigenous identities', href: 'https://www.mayanleague.org/s/ColonialStatesKillOurIdentitiesAndOurPeoples_UNPFII-2023-intervencion_MayanLeague.pdf' },
         { label: 'scotus ruling on migrant protection protocols', href: 'https://www.mayanleague.org/s/THE-INTERNATIONAL-MAYAN-LEAGUE-WELCOMES-THE-SCOTUS-RULING-ON-MPP.pdf' },
+        { label: 'indigenous peoples demand justice (espaÑol)', href: 'https://www.mayanleague.org/s/Los-pueblos-indigenas-exigen-justicia-en-el-Dia-Internacional-del-Migrante-12_18_21.pdf' },
+        { label: 'indigenous peoples living in urban areas', href: 'https://www.mayanleague.org/s/HR_Urban-Areas_Submission_FINAL.pdf' },
+        { label: 'colonial states and inhumane policies kill (English)', href: 'https://www.mayanleague.org/s/COLONIAL-STATES-AND-INHUMANE-IMMIGRATION-POLICIES-KILL-THIS-IS-PROOF.pdf' },
+        { label: 'colonial states and inhumane policies kill (espaÑol)', href: 'https://www.mayanleague.org/s/Comunicado-de-Solidaridad_PLM_LigaMaya_2023.pdf' },
         { label: 'indigenous migration fact sheet', href: 'https://www.mayanleague.org/s/FACT-SHEET_INDIGENOUS-MIGRATION-AND-THE-US-IMMIGRATION-SYSTEM_22224.pdf' },
+        { label: 'we denounce the raids terrorizing our communities', href: 'https://www.mayanleague.org/s/Comunidad-Sol-x-Mayan-League-Aug-9-Statement.pdf' },
+        { label: 'Forced Migration and Maya Resistance From Turtle Island', href: 'https://www.mayanleague.org/s/Guatemalan-Colonial-State-Forced-Migration-and-Maya-Resistance-From-Turtle-Island.pdf' },
+        { label: "un submission: indigenous peoples' rights to exist", href: 'https://www.mayanleague.org/s/Indigenous-Peoples-Rights-to-Exist-Self-Determination-Language-and-Due-Process-in-Migration_AISF_May.pdf' },
+        { label: "in response to trump's second administration", href: 'https://www.mayanleague.org/s/For-immediate-Release_Mayan-League-Statement_2024_FINALdocx.pdf' },
+        { label: 'Tribunal of Conscience Against Racism', href: 'https://www.mayanleague.org/s/Tribunal-of-Conscience-Against-Racism-2025-Statement.pdf' },
         { label: 'The United States Creates the Refugees it Hates', href: 'https://www.mayanleague.org/s/The-United-States-Creates-the-Refugees-it-Hates-9sfe.pdf' },
       ],
     },
@@ -685,15 +728,20 @@ export const resourceCollections: Localized<Record<string, ResourceCollectionDat
       label: 'Indigenous Children',
       eyebrow: 'Resources',
       title: 'Indigenous Children',
+      heroDek:
+        'Statements and advocacy on the human rights violations Indigenous children face in forced migration.',
       intro: [
         'Our children are sacred. The following resources delve into the human rights violations that Indigenous children face in forced migration.',
-        'View our statements below to learn more:',
       ],
       links: [
         { label: 'we demand justice for Jakelin Amei Rosmery Caal Maquin (espaÑol)', href: 'https://www.mayanleague.org/s/Denuncia-de-muerte-de-Jakelin-Caal.pdf' },
         { label: 'we demand justice for jakelin amei rosmery caal maquin (english)', href: 'https://www.mayanleague.org/s/We-denounce-the-death-of-Jakeline-Caal.pdf' },
         { label: 'We Demand Justice for Claudia Patricia Gómez González', href: 'https://www.mayanleague.org/s/Claudia-Patricia-Gomez-Gonzalez_Letter-to-DHS.pdf' },
+        { label: 'Faith Vigil for Children Dying at the Border', href: 'https://www.mayanleague.org/s/MayanLeague_Statement-_Faith-Vigil-for-Children-Dying-at-the-Border.pdf' },
+        { label: 'exploited indigenous migrant children invisible in plain sight', href: 'https://www.mayanleague.org/s/IML-Statement_Exploitation-of-Indigenous-Children-3-6-2023docx.pdf' },
         { label: 'Indigenous Children are Dying at the Boarder', href: 'https://www.mayanleague.org/s/INDIGENOUS-CHILDREN-DYING-AT-THE-BORDER.pdf' },
+        { label: 'we Demand the Halt of Illegal Deportations of Indigenous Children from Guatemala (english)', href: 'https://www.mayanleague.org/s/MayanLeague_Statement-_Faith-Vigil-for-Children-Dying-at-the-Border-zwx6.pdf' },
+        { label: 'we Demand the Halt of Illegal Deportations of Indigenous Children from Guatemala (espaÑol)', href: 'https://www.mayanleague.org/s/Declaracion_LIGAMAYA_EXIGIMOS-EL-CESE-DE-LAS-DEPORTACIONES-ILEGALES-DE-NIOS-Y-NIAS-DE-PUEBLOS-ORIGIN.pdf' },
         { label: 'Comment on the Proposed rule by dept of HHS', href: 'https://www.mayanleague.org/s/Comment-on-the-Proposed-Rule-by-the-Department-of-Health-and-Human-Services-Administration-for-Child.pdf' },
       ],
     },
@@ -702,6 +750,8 @@ export const resourceCollections: Localized<Record<string, ResourceCollectionDat
       label: 'Indigenous Human Rights',
       eyebrow: 'Resources',
       title: 'Indigenous Human Rights',
+      heroDek:
+        'Statements, submissions, and advocacy on asylum, raids, detention, and Indigenous migrants’ human rights.',
       intro: ['View our statements below to learn more:'],
       links: [
         { label: "'This is about Power' article with High Country News", href: 'https://www.mayanleague.org/s/This-is-about-power_-Indigenous-immigrants-face-a-second-Trump-administration-High-Country-News.pdf' },
@@ -709,6 +759,11 @@ export const resourceCollections: Localized<Record<string, ResourceCollectionDat
         { label: 'Biden’s Proclamation is a Betrayal to Indigenous Peoples Seeking Refuge', href: 'https://www.mayanleague.org/s/IML-Statement-Executive-Order-June-4-2024docx.pdf' },
         { label: 'Refugees, Immigrants & Asylum Seekers are Under Attack, #SaveAsylum Now!', href: 'https://www.mayanleague.org/s/Refugees-Immigrants-Asylum-Seekers-are-Under-Attack-SaveAsylum-Now_IML-statement.pdf' },
         { label: 'THE MAYAN LEAGUE DENOUNCES THE BIDEN ADMINISTRATION’S PROPOSED ASYLUM BAN AND FAMILY DETENTION CENTERS', href: 'https://www.mayanleague.org/s/WE-DENOUNCE-THE-BIDEN-ADMINISTRATIONS-PROPOSED-ASYLUM-BAN-AND-FAMILY-DETENTION-CENTERS.pdf' },
+        { label: 'THE U.S. GOVERNMENT’S PLANS TO MANAGE REGIONAL MIGRATION LACK ADEQUATE SAFEGUARDS FOR INDIGENOUS PEOPLES SEEKING REFUGE', href: 'https://www.mayanleague.org/s/MayanLeagueStatement_DHS-and-DOS-announcement-4_27_2023.pdf' },
+        { label: 'ifr comments: procedures for credible fear screening', href: 'https://www.mayanleague.org/s/MayanLeague_IFR_comments-FINAL_2022.pdf' },
+        { label: 'iml comments on proposed asylum ban', href: 'https://www.mayanleague.org/s/MayanLeague_Comment-on-the-Proposed-Asylum-Ban_2023.pdf' },
+        { label: 'WE DEMAND THE RELEASE OF OUR SISTER, JUANA ALONZO SANTIZO', href: 'https://www.mayanleague.org/s/ON-THIS-INTERNATIONAL-WOMENS-DAY_LibertadParaJuanita.pdf' },
+        { label: 'The Illegal Asylum Ban Violates Indigenous Peoples’ Human Rights', href: 'https://www.mayanleague.org/s/The-Illegal-Asylum-Ban-Violates-Indigenous-Peoples-Human-Rights-1.pdf' },
       ],
     },
   },
@@ -718,9 +773,11 @@ export const resourceCollections: Localized<Record<string, ResourceCollectionDat
       label: 'LGBTQIA2S+',
       eyebrow: 'Recursos',
       title: 'LGBTQIA2S+',
+      heroDek:
+        'Apoyo a migrantes indígenas LGBTQIA2S+ mediante acompañamiento cultural, interpretación y talleres comunitarios en Abiayala.',
       intro: [
         'Desde 2020, con la pandemia de COVID-19, ha aumentado la presencia de migrantes indígenas de la comunidad LGBTQIA2S+ que se establecen en estados como Virginia.',
-        'La Liga Maya Internacional ha brindado apoyo mediante acompañamiento cultural, interpretación y talleres sobre diversidad sexual en Abiayala para generar conciencia y alianzas comunitarias.',
+        'La Liga Maya ha estado atenta a la situación de nuestrxs parientes migrantes LGBTQIA2S+. Para abordar su trauma, la Liga Maya Internacional ha brindado apoyo mediante acompañamiento cultural, interpretación y talleres sobre diversidad sexual en Abiayala (22 de octubre de 2022) para generar conciencia y alianzas comunitarias.',
       ],
       links: [
         { label: 'IML Indigenous Sexual Diversity (ENGLISH)', href: 'https://www.mayanleague.org/s/English-Declaration_FINAL.pdf' },
@@ -732,9 +789,10 @@ export const resourceCollections: Localized<Record<string, ResourceCollectionDat
       label: 'Derechos sobre la Tierra',
       eyebrow: 'Recursos',
       title: 'Derechos sobre la Tierra',
+      heroDek: 'Declaraciones sobre territorio, extractivismo y la defensa de la tierra y la vida Maya Q’eqchi’.',
       intro: ['Vea nuestras declaraciones a continuación para conocer más:'],
       links: [
-        { label: "illegal evictions of buena vista maya q'eqchi' community", href: 'https://www.mayanleague.org/land-rights' },
+        { label: "illegal evictions of buena vista maya q'eqchi' community", href: '/land-rights' },
         { label: 'WE CONDEMN STATE SPONSORED REPRESSION AGAINST THE MAYA Q’EQCHI’ NATION IN CHAPÍN ABAJO, EL ESTOR, IZABAL, GUATEMALA', href: 'https://www.mayanleague.org/s/We-condemn-State-Sponsored-Repression_FINAL1272022-2.pdf' },
         { label: 'WE CONDEMN THE EVICTION OF THE Q’EQCHI’ MAYA COMMUNITY OF BUENA VISTA (EspaÑol)', href: 'https://www.mayanleague.org/s/CONDENAMOS-EL-DESALOJO-DE-LA-COMUNIDAD-BUENA-VISTA.pdf' },
         { label: 'EXTRACTIVISM AND CLIMATE INJUSTICE: Indigenous Migration in Abiayala', href: 'https://www.mayanleague.org/s/EXTRACTIVISM-AND-CLIMATE-INJUSTICE-Indigenous-Migration-in-Abiayala-1.pdf' },
@@ -745,10 +803,11 @@ export const resourceCollections: Localized<Record<string, ResourceCollectionDat
       label: 'Soberanía y Libre Determinación',
       eyebrow: 'Recursos',
       title: 'Soberanía y Libre Determinación',
+      heroDek: 'Declaraciones de solidaridad sobre soberanía, autodeterminación y resistencia indígena en Abiayala.',
       intro: ['Vea nuestras declaraciones a continuación para conocer más:'],
       links: [
         { label: 'Statement of Solidarity Regarding the Dakota Access Pipeline Project (espaÑol)', href: 'https://www.mayanleague.org/s/Declaracion-de-Solidaridad-con-Firma.pdf' },
-        { label: 'Statement of Solidarity Regarding the Dakota Access Pipeline Project (english)', href: 'https://www.mayanleague.org/sovereignty-and-self-determination' },
+        { label: 'Statement of Solidarity Regarding the Dakota Access Pipeline Project (english)', href: '/sovereignty-and-self-determination' },
         { label: 'END GENOCIDE OF THE PALESTINIAN PEOPLE', href: 'https://www.mayanleague.org/s/INDIGENOUS-SOLIDARITY_-END-GENOCIDE-AGAINST-THE-PALESTINIAN-PEOPLE-d6xd.pdf' },
       ],
     },
@@ -757,15 +816,26 @@ export const resourceCollections: Localized<Record<string, ResourceCollectionDat
       label: 'Migración Forzada Indígena',
       eyebrow: 'Recursos',
       title: 'Migración Forzada Indígena',
+      heroDek:
+        'Investigación, testimonios y experiencias vividas sobre las causas de la migración forzada indígena en Isla Tortuga.',
       intro: [
         '¿Qué causa que los Pueblos Indígenas migren? Los recursos de esta página ofrecen información sobre esta crisis invisibilizada mediante investigación, testimonios y experiencias vividas.',
-        'Vea nuestras declaraciones a continuación para conocer más:',
+        'Conozca las causas estructurales de la migración forzada y las políticas que despojan a los Pueblos Indígenas en Abiayala.',
       ],
       links: [
         { label: 'ACNUR Letter regarding displaced indigenous peoples (espaÑol)', href: 'https://www.mayanleague.org/s/FINAL-CARTA-ONU_FIRMAS_2017.pdf' },
         { label: 'UN Submission: colonial states are killing our indigenous identities', href: 'https://www.mayanleague.org/s/ColonialStatesKillOurIdentitiesAndOurPeoples_UNPFII-2023-intervencion_MayanLeague.pdf' },
         { label: 'scotus ruling on migrant protection protocols', href: 'https://www.mayanleague.org/s/THE-INTERNATIONAL-MAYAN-LEAGUE-WELCOMES-THE-SCOTUS-RULING-ON-MPP.pdf' },
+        { label: 'indigenous peoples demand justice (espaÑol)', href: 'https://www.mayanleague.org/s/Los-pueblos-indigenas-exigen-justicia-en-el-Dia-Internacional-del-Migrante-12_18_21.pdf' },
+        { label: 'indigenous peoples living in urban areas', href: 'https://www.mayanleague.org/s/HR_Urban-Areas_Submission_FINAL.pdf' },
+        { label: 'colonial states and inhumane policies kill (English)', href: 'https://www.mayanleague.org/s/COLONIAL-STATES-AND-INHUMANE-IMMIGRATION-POLICIES-KILL-THIS-IS-PROOF.pdf' },
+        { label: 'colonial states and inhumane policies kill (espaÑol)', href: 'https://www.mayanleague.org/s/Comunicado-de-Solidaridad_PLM_LigaMaya_2023.pdf' },
         { label: 'indigenous migration fact sheet', href: 'https://www.mayanleague.org/s/FACT-SHEET_INDIGENOUS-MIGRATION-AND-THE-US-IMMIGRATION-SYSTEM_22224.pdf' },
+        { label: 'we denounce the raids terrorizing our communities', href: 'https://www.mayanleague.org/s/Comunidad-Sol-x-Mayan-League-Aug-9-Statement.pdf' },
+        { label: 'Forced Migration and Maya Resistance From Turtle Island', href: 'https://www.mayanleague.org/s/Guatemalan-Colonial-State-Forced-Migration-and-Maya-Resistance-From-Turtle-Island.pdf' },
+        { label: "un submission: indigenous peoples' rights to exist", href: 'https://www.mayanleague.org/s/Indigenous-Peoples-Rights-to-Exist-Self-Determination-Language-and-Due-Process-in-Migration_AISF_May.pdf' },
+        { label: "in response to trump's second administration", href: 'https://www.mayanleague.org/s/For-immediate-Release_Mayan-League-Statement_2024_FINALdocx.pdf' },
+        { label: 'Tribunal of Conscience Against Racism', href: 'https://www.mayanleague.org/s/Tribunal-of-Conscience-Against-Racism-2025-Statement.pdf' },
         { label: 'The United States Creates the Refugees it Hates', href: 'https://www.mayanleague.org/s/The-United-States-Creates-the-Refugees-it-Hates-9sfe.pdf' },
       ],
     },
@@ -774,15 +844,20 @@ export const resourceCollections: Localized<Record<string, ResourceCollectionDat
       label: 'Niñez Indígena',
       eyebrow: 'Recursos',
       title: 'Niñez Indígena',
+      heroDek:
+        'Declaraciones y advocacy sobre las violaciones de derechos humanos que enfrenta la niñez indígena en la migración forzada.',
       intro: [
         'Nuestra niñez es sagrada. Los siguientes recursos abordan las violaciones de derechos humanos que enfrenta la niñez indígena en la migración forzada.',
-        'Vea nuestras declaraciones a continuación para conocer más:',
       ],
       links: [
         { label: 'we demand justice for Jakelin Amei Rosmery Caal Maquin (espaÑol)', href: 'https://www.mayanleague.org/s/Denuncia-de-muerte-de-Jakelin-Caal.pdf' },
         { label: 'we demand justice for jakelin amei rosmery caal maquin (english)', href: 'https://www.mayanleague.org/s/We-denounce-the-death-of-Jakeline-Caal.pdf' },
         { label: 'We Demand Justice for Claudia Patricia Gómez González', href: 'https://www.mayanleague.org/s/Claudia-Patricia-Gomez-Gonzalez_Letter-to-DHS.pdf' },
+        { label: 'Faith Vigil for Children Dying at the Border', href: 'https://www.mayanleague.org/s/MayanLeague_Statement-_Faith-Vigil-for-Children-Dying-at-the-Border.pdf' },
+        { label: 'exploited indigenous migrant children invisible in plain sight', href: 'https://www.mayanleague.org/s/IML-Statement_Exploitation-of-Indigenous-Children-3-6-2023docx.pdf' },
         { label: 'Indigenous Children are Dying at the Boarder', href: 'https://www.mayanleague.org/s/INDIGENOUS-CHILDREN-DYING-AT-THE-BORDER.pdf' },
+        { label: 'we Demand the Halt of Illegal Deportations of Indigenous Children from Guatemala (english)', href: 'https://www.mayanleague.org/s/MayanLeague_Statement-_Faith-Vigil-for-Children-Dying-at-the-Border-zwx6.pdf' },
+        { label: 'we Demand the Halt of Illegal Deportations of Indigenous Children from Guatemala (espaÑol)', href: 'https://www.mayanleague.org/s/Declaracion_LIGAMAYA_EXIGIMOS-EL-CESE-DE-LAS-DEPORTACIONES-ILEGALES-DE-NIOS-Y-NIAS-DE-PUEBLOS-ORIGIN.pdf' },
         { label: 'Comment on the Proposed rule by dept of HHS', href: 'https://www.mayanleague.org/s/Comment-on-the-Proposed-Rule-by-the-Department-of-Health-and-Human-Services-Administration-for-Child.pdf' },
       ],
     },
@@ -791,6 +866,8 @@ export const resourceCollections: Localized<Record<string, ResourceCollectionDat
       label: 'Derechos Humanos Indígenas',
       eyebrow: 'Recursos',
       title: 'Derechos Humanos Indígenas',
+      heroDek:
+        'Declaraciones, presentaciones y advocacy sobre asilo, redadas, detención y los derechos humanos de migrantes indígenas.',
       intro: ['Vea nuestras declaraciones a continuación para conocer más:'],
       links: [
         { label: "'This is about Power' article with High Country News", href: 'https://www.mayanleague.org/s/This-is-about-power_-Indigenous-immigrants-face-a-second-Trump-administration-High-Country-News.pdf' },
@@ -798,6 +875,11 @@ export const resourceCollections: Localized<Record<string, ResourceCollectionDat
         { label: 'Biden’s Proclamation is a Betrayal to Indigenous Peoples Seeking Refuge', href: 'https://www.mayanleague.org/s/IML-Statement-Executive-Order-June-4-2024docx.pdf' },
         { label: 'Refugees, Immigrants & Asylum Seekers are Under Attack, #SaveAsylum Now!', href: 'https://www.mayanleague.org/s/Refugees-Immigrants-Asylum-Seekers-are-Under-Attack-SaveAsylum-Now_IML-statement.pdf' },
         { label: 'THE MAYAN LEAGUE DENOUNCES THE BIDEN ADMINISTRATION’S PROPOSED ASYLUM BAN AND FAMILY DETENTION CENTERS', href: 'https://www.mayanleague.org/s/WE-DENOUNCE-THE-BIDEN-ADMINISTRATIONS-PROPOSED-ASYLUM-BAN-AND-FAMILY-DETENTION-CENTERS.pdf' },
+        { label: 'THE U.S. GOVERNMENT’S PLANS TO MANAGE REGIONAL MIGRATION LACK ADEQUATE SAFEGUARDS FOR INDIGENOUS PEOPLES SEEKING REFUGE', href: 'https://www.mayanleague.org/s/MayanLeagueStatement_DHS-and-DOS-announcement-4_27_2023.pdf' },
+        { label: 'ifr comments: procedures for credible fear screening', href: 'https://www.mayanleague.org/s/MayanLeague_IFR_comments-FINAL_2022.pdf' },
+        { label: 'iml comments on proposed asylum ban', href: 'https://www.mayanleague.org/s/MayanLeague_Comment-on-the-Proposed-Asylum-Ban_2023.pdf' },
+        { label: 'WE DEMAND THE RELEASE OF OUR SISTER, JUANA ALONZO SANTIZO', href: 'https://www.mayanleague.org/s/ON-THIS-INTERNATIONAL-WOMENS-DAY_LibertadParaJuanita.pdf' },
+        { label: 'The Illegal Asylum Ban Violates Indigenous Peoples’ Human Rights', href: 'https://www.mayanleague.org/s/The-Illegal-Asylum-Ban-Violates-Indigenous-Peoples-Human-Rights-1.pdf' },
       ],
     },
   },

@@ -4,20 +4,26 @@ import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import Button from '@/components/ui/Button'
 import { LocalizedNewsKeywords, LocalizedNewsText, LocalizedText } from '@/components/news/LocalizedNewsText'
+import NewsArticleLanguageBar from '@/components/news/NewsArticleLanguageBar'
 import ShareThisDispatch from '@/components/news/ShareThisDispatch'
-import { getNewsArticle, getNewsArticleUrl, getNewsInstagramStoryImageUrl, getNewsShareImageUrl, getNewsSocial, getRelatedNewsArticles, newsArticles } from '@/lib/news'
+import { hubPageMainClass, hubPageSectionClass } from '@/lib/editorialLayout'
+import { getNewsArticleUrl, getNewsInstagramStoryImageUrl, getNewsShareImageUrl, getNewsSocial } from '@/lib/news'
+import { getNewsArticleBySlug, getNewsSlugs, getRelatedNewsArticles } from '@/lib/newsRepository'
+
+export const revalidate = 60
 
 interface PageProps {
   params: Promise<{ slug: string }>
 }
 
-export function generateStaticParams() {
-  return newsArticles.map((article) => ({ slug: article.slug }))
+export async function generateStaticParams() {
+  const slugs = await getNewsSlugs()
+  return slugs.map((slug) => ({ slug }))
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params
-  const article = getNewsArticle(slug)
+  const article = await getNewsArticleBySlug(slug)
 
   if (!article) {
     return {
@@ -64,11 +70,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function NewsDetailPage({ params }: PageProps) {
   const { slug } = await params
-  const article = getNewsArticle(slug)
+  const article = await getNewsArticleBySlug(slug)
 
   if (!article) notFound()
 
-  const relatedArticles = getRelatedNewsArticles(article)
+  const relatedArticles = await getRelatedNewsArticles(article)
   const articleUrl = getNewsArticleUrl(article.slug)
   const shareImageUrl = getNewsShareImageUrl(article.slug)
   const storyImageUrl = getNewsInstagramStoryImageUrl(article.slug)
@@ -77,8 +83,11 @@ export default async function NewsDetailPage({ params }: PageProps) {
   return (
     <>
       <Navbar />
-      <main id="main-content" className="bg-mist pt-[72px] text-ink xl:pt-[124px]">
-        <article className="mx-auto max-w-[1728px] px-5 py-12 sm:px-8 lg:px-12 lg:py-20">
+      <main id="main-content" className={hubPageMainClass}>
+        <section className={`${hubPageSectionClass} border-t border-cream-dark`}>
+          <article className="min-w-0 bg-white">
+            <NewsArticleLanguageBar />
+            <div className="px-5 py-12 sm:px-8 lg:px-12 lg:py-20">
           <div className="mb-8 flex items-center justify-between border-y border-cream-dark py-3">
             <a
               href="/news"
@@ -271,7 +280,9 @@ export default async function NewsDetailPage({ params }: PageProps) {
               </div>
             </section>
           ) : null}
-        </article>
+            </div>
+          </article>
+        </section>
       </main>
       <Footer />
     </>

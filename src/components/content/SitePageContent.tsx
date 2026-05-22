@@ -4,7 +4,10 @@ import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import Button from '@/components/ui/Button'
 import MayaNumber from '@/components/ui/MayaNumber'
+import { CollectionNavDesktop } from '@/components/collection/CollectionNav'
+import PageLanguageCorner from '@/components/editorial/PageLanguageCorner'
 import { useLanguage } from '@/hooks/useLanguage'
+import { aboutCollectionSidebarClass, hubPageMainClass } from '@/lib/editorialLayout'
 import {
   mediaNav,
   mediaPages,
@@ -106,7 +109,7 @@ function PageHero({
   image?: string
 }) {
   return (
-    <section className="grid grid-cols-1 border-b border-cream-dark bg-cream lg:grid-cols-[0.66fr_0.34fr]">
+    <section className="grid grid-cols-1 border-b border-cream-dark bg-white lg:grid-cols-[0.66fr_0.34fr]">
       <div className="flex min-h-[360px] flex-col justify-between p-7 sm:p-10 lg:min-h-[560px] lg:p-14">
         <div className="flex items-center justify-between border-y border-cream-dark py-3">
             <p className="type-kicker text-earth-red">
@@ -145,15 +148,18 @@ export function MediaIndexContent({ slug }: { slug: keyof typeof mediaPages.en }
   return (
     <>
       <Navbar />
-      <main id="main-content" className="bg-mist pt-[72px] text-ink xl:pt-[124px]">
+      <main id="main-content" className={hubPageMainClass}>
         <section className="mx-auto max-w-[1728px] px-5 py-12 sm:px-8 lg:px-12 lg:py-20">
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-[0.23fr_1fr] lg:gap-14">
-            <Sidebar label={copy.media} activeHref={`/${slug}`} links={localizedMediaLinks(lang)} />
+          <div className="grid grid-cols-1 gap-8 border-t border-cream-dark lg:grid-cols-[0.23fr_1fr] lg:gap-14">
+            <aside className={aboutCollectionSidebarClass}>
+              <CollectionNavDesktop label={copy.media} links={localizedMediaLinks(lang)} activeHref={`/${slug}`} />
+            </aside>
             <article className="bg-white">
+              <PageLanguageCorner />
               <PageHero eyebrow={page.eyebrow} title={page.title} intro={page.intro} count={page.items.length} />
               <section className="grid grid-cols-1 border-t border-cream-dark md:grid-cols-2">
                 {page.items.map((item, index) => (
-                  <article key={`${item.title}-${index}`} className="flex min-h-80 flex-col border-b border-cream-dark p-7 hover:bg-mist sm:p-10 md:border-r md:last:border-r-0">
+                  <article key={`${item.title}-${index}`} className="flex min-h-80 flex-col border-b border-cream-dark p-7 sm:p-10 md:border-r md:last:border-r-0">
                     <div className="mb-8 flex items-start justify-between gap-6">
                       <p className="type-kicker text-earth-red">
                         {item.meta || page.label}

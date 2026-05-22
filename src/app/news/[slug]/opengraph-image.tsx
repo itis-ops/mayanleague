@@ -1,6 +1,7 @@
 import { ImageResponse } from 'next/og'
 import { notFound } from 'next/navigation'
-import { getNewsArticle, getNewsSocial } from '@/lib/news'
+import { getNewsSocial } from '@/lib/news'
+import { getNewsArticleBySlug } from '@/lib/newsRepository'
 
 export const size = {
   width: 1200,
@@ -19,7 +20,7 @@ function fitTitle(title: string) {
 
 export default async function Image({ params }: ImageProps) {
   const { slug } = await params
-  const article = getNewsArticle(slug)
+  const article = await getNewsArticleBySlug(slug)
 
   if (!article) notFound()
 

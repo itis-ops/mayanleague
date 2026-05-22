@@ -1,5 +1,6 @@
 import { ImageResponse } from 'next/og'
-import { getNewsArticle, getNewsSocial } from '@/lib/news'
+import { getNewsSocial } from '@/lib/news'
+import { getNewsArticleBySlug } from '@/lib/newsRepository'
 
 interface RouteProps {
   params: Promise<{ slug: string }>
@@ -11,7 +12,7 @@ function fitTitle(title: string) {
 
 export async function GET(_request: Request, { params }: RouteProps) {
   const { slug } = await params
-  const article = getNewsArticle(slug)
+  const article = await getNewsArticleBySlug(slug)
 
   if (!article) {
     return new Response('Not found', { status: 404 })

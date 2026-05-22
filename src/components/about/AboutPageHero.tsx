@@ -2,6 +2,7 @@
 
 import type { ReactNode } from 'react'
 import { useLanguage } from '@/hooks/useLanguage'
+import { collectionArticleSectionClass } from '@/lib/editorialLayout'
 
 interface AboutPageHeroProps {
   title: string
@@ -13,36 +14,6 @@ interface AboutPageHeroProps {
   label?: string
   details?: string[]
   titleClassName?: string
-}
-
-function EditorialBar({
-  brand,
-  details,
-}: {
-  brand: string
-  details: readonly string[]
-}) {
-  return (
-    <div className="border-t border-cream-dark py-3" aria-label={brand}>
-      <div className="flex items-center justify-between gap-6 overflow-hidden">
-        <p className="type-kicker shrink-0 text-earth-red">{brand}</p>
-        <ul className="flex items-center gap-5 overflow-hidden" aria-label="Page context">
-          {details.map((point, index) => (
-            <li
-              key={point}
-              className={[
-                'flex shrink-0 items-center gap-5',
-                index === 0 ? 'hidden sm:flex' : index === 1 ? 'hidden md:flex' : 'hidden lg:flex',
-              ].join(' ')}
-            >
-              <span className="h-3 w-px shrink-0 bg-ink/20" aria-hidden="true" />
-              <span className="type-kicker whitespace-nowrap text-ink/52">{point}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </div>
-  )
 }
 
 function HeroTitleBlock({
@@ -68,7 +39,7 @@ function HeroTitleBlock({
         {title}
       </h1>
       {intro ? (
-        <p className="type-intro mt-8 max-w-[54ch] text-[clamp(1.45rem,2.4vw,2.15rem)] leading-[1.28] text-ink/82">
+        <p className="type-intro mt-6 max-w-[48ch] text-[clamp(1.25rem,2vw,1.75rem)] leading-[1.32] text-ink/82">
           {intro}
         </p>
       ) : null}
@@ -78,7 +49,7 @@ function HeroTitleBlock({
 
 function HeroImagePanel({ src }: { src: string }) {
   return (
-    <div className="relative min-h-[320px] overflow-hidden lg:min-h-[560px]">
+    <div className="relative min-h-[280px] overflow-hidden border-t border-cream-dark lg:min-h-[480px] lg:border-l lg:border-t-0 xl:min-h-[520px]">
       <img
         src={src}
         alt=""
@@ -86,7 +57,7 @@ function HeroImagePanel({ src }: { src: string }) {
         className="absolute inset-0 h-full w-full object-cover grayscale"
       />
       <div
-        className="absolute inset-0 bg-gradient-to-t from-ink/30 via-transparent to-transparent"
+        className="absolute inset-0 bg-gradient-to-t from-ink/20 via-transparent to-transparent"
         aria-hidden="true"
       />
     </div>
@@ -112,12 +83,12 @@ export default function AboutPageHero({
   const isTextAside = Boolean(!heroImage && (hasStructuredAside || aside))
 
   return (
-    <section className="overflow-hidden bg-white">
+    <section className="overflow-hidden border-b border-cream-dark bg-white">
       {hasRightColumn ? (
-        <div className="grid grid-cols-1 bg-white lg:grid-cols-[0.52fr_1fr] lg:items-start">
+        <div className="grid grid-cols-1 bg-white lg:grid-cols-[0.48fr_1fr] lg:items-stretch">
           {isTextAside && hasStructuredAside ? (
             <>
-              <div className="pb-8 pt-8 lg:pb-10 lg:pt-8">
+              <div className={`pb-8 pt-8 lg:pb-10 lg:pt-8 ${collectionArticleSectionClass}`}>
                 <HeroTitleBlock
                   label={label}
                   title={title}
@@ -129,7 +100,9 @@ export default function AboutPageHero({
                 />
               </div>
 
-              <div className="border-t border-cream-dark pb-8 pt-8 lg:border-l lg:border-t-0 lg:pb-10 lg:pt-8">
+              <div
+                className={`border-t border-cream-dark pb-8 pt-8 lg:border-l lg:border-t-0 lg:pb-10 lg:pt-8 ${collectionArticleSectionClass}`}
+              >
                 <p className="type-kicker mb-4 text-earth-red">{asideLabel}</p>
                 <p className="max-w-[48ch] font-accent text-[clamp(1.2rem,1.8vw,1.65rem)] leading-[1.38] tracking-[-0.02em] text-ink/88">
                   {asideBody}
@@ -141,8 +114,8 @@ export default function AboutPageHero({
               <div
                 className={
                   isTextAside
-                    ? 'pb-8 pt-8 sm:pb-10'
-                    : 'flex min-h-[320px] flex-col justify-end pb-12 pt-6 sm:pb-14 sm:pt-8 lg:min-h-[560px] lg:pb-16 lg:pt-10'
+                    ? `pb-8 pt-8 sm:pb-10 ${collectionArticleSectionClass}`
+                    : `flex flex-col justify-center ${collectionArticleSectionClass} py-10 sm:py-12 lg:min-h-[480px] lg:py-14 xl:min-h-[520px]`
                 }
               >
                 <HeroTitleBlock
@@ -156,7 +129,9 @@ export default function AboutPageHero({
               {heroImage ? (
                 <HeroImagePanel src={heroImage} />
               ) : (
-                <div className="border-t border-cream-dark pb-8 pt-8 lg:border-l lg:border-t-0 lg:pb-10">
+                <div
+                  className={`border-t border-cream-dark pb-8 pt-8 lg:border-l lg:border-t-0 lg:pb-10 ${collectionArticleSectionClass}`}
+                >
                   {aside}
                 </div>
               )}
@@ -164,12 +139,30 @@ export default function AboutPageHero({
           )}
         </div>
       ) : (
-        <div className="bg-white pb-12 pt-6 sm:pb-14 sm:pt-8 lg:pb-16 lg:pt-10">
+        <div className={`bg-white pb-12 pt-6 sm:pb-14 sm:pt-8 lg:pb-16 lg:pt-10 ${collectionArticleSectionClass}`}>
           <HeroTitleBlock label={label} title={title} intro={intro} titleClassName={titleClassName} />
         </div>
       )}
 
-      <EditorialBar brand={brand} details={editorialDetails} />
+      <div className={`${collectionArticleSectionClass} border-t border-cream-dark py-3`} aria-label={brand}>
+        <div className="flex items-center justify-between gap-6 overflow-hidden">
+          <p className="type-kicker shrink-0 text-earth-red">{brand}</p>
+          <ul className="flex items-center gap-5 overflow-hidden" aria-label="Organization highlights">
+            {editorialDetails.map((point, index) => (
+              <li
+                key={point}
+                className={[
+                  'flex shrink-0 items-center gap-5',
+                  index === 0 ? 'hidden sm:flex' : index === 1 ? 'hidden md:flex' : 'hidden lg:flex',
+                ].join(' ')}
+              >
+                <span className="h-3 w-px shrink-0 bg-ink/20" aria-hidden="true" />
+                <span className="type-kicker whitespace-nowrap text-ink/52">{point}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
     </section>
   )
 }

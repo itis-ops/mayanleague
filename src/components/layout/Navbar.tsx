@@ -1,19 +1,22 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { usePathname } from 'next/navigation'
 import { useLanguage } from '@/hooks/useLanguage'
+import { isAboutCollectionRoute, localizedAboutPageLinks } from '@/lib/aboutPages'
 import Button from '@/components/ui/Button'
-import LanguageToggle from '@/components/ui/LanguageToggle'
 
 const DONATE_URL = 'https://internationalmayanleague-bloom.kindful.com/embeds/94567c30-cca9-4853-a87f-43c38750420a'
 
 export default function Navbar() {
-  const { t } = useLanguage()
+  const pathname = usePathname()
+  const { lang, t } = useLanguage()
+  const aboutLinks = localizedAboutPageLinks[lang]
+  const showAboutSectionLinks = isAboutCollectionRoute(pathname)
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
   const menuButtonRef = useRef<HTMLButtonElement>(null)
-  const firstMenuLinkRef = useRef<HTMLAnchorElement>(null)
 
   const closeMenu = useCallback(() => {
     setMenuOpen(false)
@@ -30,7 +33,7 @@ export default function Navbar() {
 
     const previousOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
-    firstMenuLinkRef.current?.focus()
+    menuRef.current?.focus()
 
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === 'Escape') {
@@ -119,14 +122,12 @@ export default function Navbar() {
           </nav>
 
           <div className="hidden xl:flex items-center gap-5">
-            <LanguageToggle className="border-ink/20 text-ink" />
             <Button href={DONATE_URL} variant="primary">
               {t.nav.donate}
             </Button>
           </div>
 
           <div className="flex items-center gap-2 xl:hidden">
-            <LanguageToggle className="border-ink/15 text-ink" />
             <button
               ref={menuButtonRef}
               className="motion-control min-h-11 min-w-11 rounded-md p-2 text-ink hover:bg-cream active:bg-cream-dark focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-gold"
@@ -161,22 +162,52 @@ export default function Navbar() {
           role="dialog"
           aria-modal="true"
           aria-label={t.ui.openMenu}
-          className="border-t border-cream-dark bg-white shadow-xl xl:hidden"
+          tabIndex={-1}
+          className="border-t border-cream-dark bg-white shadow-xl xl:hidden outline-none"
         >
           <div className="flex flex-col gap-4 px-4 py-6">
-            {navLinks.map((link, index) => (
-              <a
-                key={link.label}
-                ref={index === 0 ? firstMenuLinkRef : undefined}
-                href={link.href}
-                className="motion-link inline-flex min-h-11 items-center rounded-md text-sm font-bold uppercase leading-none tracking-[0.12em] text-ink hover:text-earth-red active:text-ink focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-gold"
-                onClick={closeMenu}
-              >
-                {link.label}
-              </a>
-            ))}
-            <div className="flex items-center justify-between border-t border-cream-dark pt-4">
-              <LanguageToggle className="border-ink/20 text-ink" />
+            {navLinks.map((link, index) => {
+              if (link.href === '/about' && showAboutSectionLinks) {
+                return (
+                  <div key={link.label} className="flex flex-col gap-3">
+                    <a
+                      href={link.href}
+                      className="motion-link inline-flex min-h-11 items-center rounded-md text-sm font-bold uppercase leading-none tracking-[0.12em] text-ink hover:text-earth-red active:text-ink focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-gold"
+                      onClick={closeMenu}
+                      aria-current={pathname === link.href ? 'page' : undefined}
+                    >
+                      {link.label}
+                    </a>
+                    <div className="flex flex-col gap-3 border-l border-cream-dark pl-4">
+                      {aboutLinks.map((aboutLink) => (
+                        <a
+                          key={aboutLink.href}
+                          href={aboutLink.href}
+                          className="motion-nav-link inline-flex min-h-10 items-center font-body text-sm font-semibold leading-5 text-ink/58 hover:text-earth-red focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-gold"
+                          onClick={closeMenu}
+                          aria-current={pathname === aboutLink.href ? 'page' : undefined}
+                        >
+                          {aboutLink.label}
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )
+              }
+
+              return (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  className="motion-link inline-flex min-h-11 items-center rounded-md text-sm font-bold uppercase leading-none tracking-[0.12em] text-ink hover:text-earth-red active:text-ink focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-gold"
+                  onClick={closeMenu}
+                  aria-current={pathname === link.href ? 'page' : undefined}
+                >
+                  {link.label}
+                </a>
+              )
+            })}
+            <div className="flex items-center justify-end border-t border-cream-dark pt-4">
               <Button href={DONATE_URL} variant="primary" className="px-5 py-2">
                 {t.nav.donate}
               </Button>

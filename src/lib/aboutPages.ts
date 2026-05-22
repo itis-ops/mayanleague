@@ -195,6 +195,10 @@ export const localizedAboutPageLinks: Record<Lang, Array<{ label: string; href: 
   ],
 }
 
+export function isAboutCollectionRoute(pathname: string) {
+  return ABOUT_PAGE_LINKS.some((link) => link.href === pathname)
+}
+
 export const localizedAboutPages: Record<Lang, Record<AboutPageSlug, AboutPageData>> = {
   en: aboutPages,
   es: {

@@ -1,7 +1,6 @@
 'use client'
 
-import AboutPageHero from '@/components/about/AboutPageHero'
-import AboutPageShell from '@/components/about/AboutPageShell'
+import AboutCollectionShell from '@/components/about/AboutCollectionShell'
 import AboutPersonRow from '@/components/about/AboutPersonRow'
 import AboutPersonStickyStack from '@/components/about/AboutPersonStickyStack'
 import Navbar from '@/components/layout/Navbar'
@@ -9,23 +8,17 @@ import Footer from '@/components/layout/Footer'
 import { useLanguage } from '@/hooks/useLanguage'
 
 export default function TeamContent() {
-  const { lang, t } = useLanguage()
+  const { t } = useLanguage()
 
   return (
     <>
       <Navbar />
-      <AboutPageShell activeHref="/team">
-        <AboutPageHero
-          title={t.teamPage.heroHeading}
-          details={
-            lang === 'es'
-              ? ['6 líderes', 'Organización liderada por Maya', 'Washington, D.C.']
-              : ['6 leaders', 'Maya-led organization', 'Washington, D.C.']
-          }
-          asideLabel={t.teamPage.introLabel}
-          asideBody={t.teamPage.intro}
-        />
-
+      <AboutCollectionShell
+        activeHref="/team"
+        heroTitle={t.teamPage.heroHeading}
+        heroIntro={t.teamPage.intro}
+        animateContent={false}
+      >
         <AboutPersonStickyStack label={t.teamPage.membersSectionLabel}>
           {t.teamPage.members.map((member, index) => (
             <AboutPersonRow
@@ -41,7 +34,7 @@ export default function TeamContent() {
             />
           ))}
         </AboutPersonStickyStack>
-      </AboutPageShell>
+      </AboutCollectionShell>
       <Footer />
     </>
   )

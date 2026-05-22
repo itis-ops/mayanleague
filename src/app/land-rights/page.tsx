@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { ResourceCollectionContent } from '@/components/content/SitePageContent'
+import ResourceCollectionPage from '@/components/content/ResourceCollectionPage'
 
 export const metadata: Metadata = {
   title: 'Land Rights | International Mayan League',
@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 }
 
 export default function LandRightsPage() {
-  return <ResourceCollectionContent slug="land-rights" />
+  return <ResourceCollectionPage slug="land-rights" />
 }

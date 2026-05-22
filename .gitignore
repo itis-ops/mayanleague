@@ -32,7 +32,14 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # env files (can opt-in for committing if needed)
-.env*
+# Local env files stay out of git; `.env.example` is committed as the template.
+.env
+.env.local
+.env*.local
+
+# Sanity build artifacts (Studio dist + dev caches)
+/dist
+.sanity/
 
 # vercel
 .vercel

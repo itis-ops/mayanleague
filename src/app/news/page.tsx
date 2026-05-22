@@ -3,8 +3,13 @@ import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import Button from '@/components/ui/Button'
 import NewsroomStickyHero from '@/components/news/NewsroomStickyHero'
+import { hubPageMainClass, hubPageSectionClass } from '@/lib/editorialLayout'
+import NewsArchiveMobileBar from '@/components/news/NewsArchiveMobileBar'
 import { LocalizedNewsKeywords, LocalizedNewsText, LocalizedText } from '@/components/news/LocalizedNewsText'
-import { newsArticles, newsCategories } from '@/lib/news'
+import { newsCategories } from '@/lib/news'
+import { getNewsArticles } from '@/lib/newsRepository'
+
+export const revalidate = 60
 
 export const metadata: Metadata = {
   title: 'News | International Mayan League',
@@ -22,7 +27,8 @@ function getDateArchive(date: string) {
   return { label, id }
 }
 
-export default function NewsPage() {
+export default async function NewsPage() {
+  const newsArticles = await getNewsArticles()
   const featuredArticles = newsArticles.filter((article) => article.featured)
   const featuredArticle = featuredArticles[0] || newsArticles[0]
   const supportingFeatured = featuredArticles.slice(1)
@@ -61,16 +67,16 @@ export default function NewsPage() {
   return (
     <>
       <Navbar />
-      <main id="main-content" className="bg-mist pt-[72px] text-ink xl:pt-[124px]">
-        <section className="mx-auto max-w-[1728px] px-5 py-8 sm:px-8 lg:px-12 lg:py-12">
+      <main id="main-content" className={hubPageMainClass}>
+        <section className={`${hubPageSectionClass} border-t border-cream-dark pb-8 lg:pb-12`}>
           <NewsroomStickyHero categories={categoryFilters} dates={dateFilters} dispatchCount={newsArticles.length} />
 
           <section className="relative mt-8 grid grid-cols-1 gap-5 lg:grid-cols-[1fr_0.42fr]">
-            <article id={featuredArticle.category.toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-')} className="group relative scroll-mt-32 border border-cream-dark bg-white p-1.5 hover:bg-cream xl:scroll-mt-48">
+            <article id={featuredArticle.category.toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-')} className="group relative scroll-mt-32 border border-cream-dark bg-white p-1.5 xl:scroll-mt-48">
               {dateArchive.find((group) => group.firstSlug === featuredArticle.slug) ? (
                 <span id={dateArchive.find((group) => group.firstSlug === featuredArticle.slug)?.id} className="absolute -top-32" aria-hidden="true" />
               ) : null}
-              <div className="flex min-h-0 flex-col bg-white p-6 group-hover:bg-cream sm:min-h-[420px] sm:p-10 lg:min-h-[520px] lg:p-12">
+              <div className="flex min-h-0 flex-col bg-white p-6 sm:min-h-[420px] sm:p-10 lg:min-h-[520px] lg:p-12">
                 <div className="mb-6 flex items-start justify-between gap-6 sm:mb-10 sm:gap-8">
                   <div>
                     <p className="type-kicker mb-3 text-earth-red"><LocalizedNewsText article={featuredArticle} field="category" /></p>
@@ -129,8 +135,9 @@ export default function NewsPage() {
           </section>
 
           <section className="mt-5 bg-white">
+            <NewsArchiveMobileBar categories={categoryFilters} dates={dateFilters} />
             <div className="grid grid-cols-1 border-y border-cream-dark lg:grid-cols-[0.24fr_1fr]">
-              <div className="border-b border-cream-dark p-7 sm:p-10 lg:border-b-0 lg:border-r lg:p-12">
+              <div className="hidden lg:block lg:border-r lg:border-cream-dark lg:p-12">
                 <p className="type-kicker mb-8 text-earth-red"><LocalizedText en="All dispatches" es="Todos los despachos" /></p>
                 <p className="type-body text-ink/70">
                   <LocalizedText

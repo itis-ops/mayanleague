@@ -48,16 +48,16 @@ function MayaDigit({ value, size }: { value: number; size: keyof typeof sizeStyl
   const dots = value % 5
 
   if (value === 0) {
-    return <span className={`block rounded-full border border-current opacity-80 ${styles.shell}`} />
+    return <span className={`block rounded-full border border-current opacity-80 ${styles.shell} mx-auto`} />
   }
 
   return (
-    <span className={`flex flex-col-reverse items-center ${styles.glyphGap}`}>
+    <span className={`inline-flex min-w-[2.25rem] flex-col-reverse items-center ${styles.glyphGap}`}>
       {Array.from({ length: bars }).map((_, index) => (
         <span key={`bar-${index}`} className={`block rounded-full bg-current ${styles.bar}`} />
       ))}
       {dots > 0 ? (
-        <span className="flex gap-1">
+        <span className="flex items-center justify-center gap-1">
           {Array.from({ length: dots }).map((_, index) => (
             <span key={`dot-${index}`} className={`block rounded-full bg-current ${styles.dot}`} />
           ))}
@@ -72,7 +72,7 @@ export default function MayaNumber({ value, className = '', size = 'md' }: MayaN
 
   return (
     <span
-      className={`inline-flex flex-col items-center ${styles.digitGap} text-current ${className}`}
+      className={`inline-flex flex-col items-center justify-end ${styles.digitGap} text-current ${className}`}
       aria-hidden="true"
     >
       {toMayaDigits(value).map((digit, index) => (

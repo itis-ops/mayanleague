@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { ResourceCollectionContent } from '@/components/content/SitePageContent'
+import ResourceCollectionPage from '@/components/content/ResourceCollectionPage'
 
 export const metadata: Metadata = {
   title: 'Sovereignty and Self-Determination | International Mayan League',
@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 }
 
 export default function SovereigntyPage() {
-  return <ResourceCollectionContent slug="sovereignty-and-self-determination" />
+  return <ResourceCollectionPage slug="sovereignty-and-self-determination" />
 }

@@ -7,11 +7,14 @@ import {
   editorialPageGridClass,
   editorialPageRailClass,
   editorialSidebarClass,
+  hubPageGridClass,
+  hubPageSectionClass,
 } from '@/lib/editorialLayout'
 
 interface ProgramPageShellProps {
   activeHref: string
   children: ReactNode
+  hubHero?: ReactNode
 }
 
 function splitHeroContent(children: ReactNode) {
@@ -24,7 +27,27 @@ function splitHeroContent(children: ReactNode) {
   return { hero: items[0], rest: items.slice(1) }
 }
 
-export default function ProgramPageShell({ activeHref, children }: ProgramPageShellProps) {
+export default function ProgramPageShell({ activeHref, children, hubHero }: ProgramPageShellProps) {
+  if (hubHero) {
+    return (
+      <main id="main-content" className="bg-mist pt-[72px] text-ink xl:pt-[124px]">
+        <section className={hubPageSectionClass}>
+          {hubHero}
+          <div className={hubPageGridClass}>
+            <aside className={editorialSidebarClass}>
+              <ProgramPageNav activeHref={activeHref} variant="desktop" />
+            </aside>
+
+            <div className={editorialMainClass}>
+              <ProgramPageNav activeHref={activeHref} variant="compact" />
+              <article>{children}</article>
+            </div>
+          </div>
+        </section>
+      </main>
+    )
+  }
+
   const { hero, rest } = splitHeroContent(children)
 
   return (

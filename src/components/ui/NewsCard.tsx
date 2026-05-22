@@ -12,7 +12,7 @@ interface Props {
 
 export default function NewsCard({ date, title, excerpt, cta, index, href = '/news' }: Props) {
   return (
-    <article className="group motion-card w-full min-w-0 border border-cream-dark bg-white p-1.5 text-ink hover:bg-cream">
+    <article className="group motion-card h-full w-full min-w-0 border border-cream-dark bg-white p-1.5 text-ink hover:bg-cream">
       <div className="flex h-full min-h-[330px] flex-col bg-white p-6 group-hover:bg-cream">
         <div className="flex-1">
           <div className="mb-5 flex items-center justify-between gap-6">

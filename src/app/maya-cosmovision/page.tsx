@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import ProgramDetailContent from '@/components/programs/ProgramDetailContent'
+import MayaCosmovisionContent from './MayaCosmovisionContent'
 
 export const metadata: Metadata = {
   title: 'Maya Cosmovision | International Mayan League',
@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 }
 
 export default function MayaCosmovisionPage() {
-  return <ProgramDetailContent slug="maya-cosmovision" />
+  return <MayaCosmovisionContent />
 }
