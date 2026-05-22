@@ -18,6 +18,16 @@ export const resolve: PresentationPluginOptions['resolve'] = {
       }),
     }),
 
+    siteSettings: defineLocations({
+      select: {},
+      resolve: () => ({
+        locations: [
+          { title: 'Contact page', href: '/contact' },
+          { title: 'Homepage (footer)', href: '/' },
+        ],
+      }),
+    }),
+
     newsArticle: defineLocations({
       select: {
         title: 'title.en',

@@ -1,11 +1,34 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { LanguageContext } from '@/hooks/useLanguage'
-import translations from '@/lib/i18n'
+import type { SiteSettingsContent } from '@/sanity/lib/mapSiteSettings'
+import { mergeTranslations } from '@/lib/mergeSiteSettings'
+import { DONATE_URL as DEFAULT_DONATE_URL } from '@/lib/siteLinks'
 import type { Lang } from '@/lib/i18n'
 
-export default function LanguageProvider({ children }: { children: React.ReactNode }) {
+const defaultSite = {
+  email: 'info@mayanleague.org',
+  phone: '(202) 827-6673',
+  phoneHref: 'tel:+12028276673',
+  addressLines: ['1201 K ST NW', 'Washington, D.C. 20005'],
+  addressDisplay: '1201 K ST NW, Washington, D.C. 20005',
+  mapQuery: '1201 K ST NW Washington D.C. 20005',
+  donateUrl: DEFAULT_DONATE_URL,
+  social: {
+    facebook: 'https://facebook.com/mayanleague',
+    instagram: 'https://instagram.com/mayanleague',
+    youtube: 'https://youtube.com/@mayanleague',
+    twitter: 'https://twitter.com/mayanleague',
+  },
+}
+
+interface LanguageProviderProps {
+  children: React.ReactNode
+  siteSettings?: SiteSettingsContent | null
+}
+
+export default function LanguageProvider({ children, siteSettings }: LanguageProviderProps) {
   const [lang, setLangState] = useState<Lang>('en')
 
   useEffect(() => {
@@ -30,9 +53,15 @@ export default function LanguageProvider({ children }: { children: React.ReactNo
     }
   }
 
-  return (
-    <LanguageContext.Provider value={{ lang, setLang, t: translations[lang] }}>
-      {children}
-    </LanguageContext.Provider>
+  const value = useMemo(
+    () => ({
+      lang,
+      setLang,
+      t: mergeTranslations(lang, siteSettings),
+      site: siteSettings?.global ?? defaultSite,
+    }),
+    [lang, siteSettings],
   )
+
+  return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>
 }

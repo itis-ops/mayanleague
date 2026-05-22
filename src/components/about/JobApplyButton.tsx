@@ -9,9 +9,9 @@ interface JobApplyButtonProps {
 }
 
 export default function JobApplyButton({ jobTitle }: JobApplyButtonProps) {
-  const { lang } = useLanguage()
+  const { lang, site } = useLanguage()
   const label = lang === 'es' ? 'Solicitar' : 'Apply'
-  const href = buildJobApplicationMailto(jobTitle, lang)
+  const href = buildJobApplicationMailto(jobTitle, lang, site.email)
   const ariaLabel =
     lang === 'es'
       ? `Solicitar el puesto de ${jobTitle} por correo electrónico`

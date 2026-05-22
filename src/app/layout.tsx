@@ -4,6 +4,7 @@ import { draftMode } from 'next/headers'
 import { VisualEditing } from 'next-sanity/visual-editing'
 import LanguageProvider from '@/components/ui/LanguageProvider'
 import SkipLink from '@/components/ui/SkipLink'
+import { getSiteSettings } from '@/lib/siteSettingsRepository'
 import { SanityLive } from '@/sanity/lib/live'
 import './globals.css'
 
@@ -46,7 +47,10 @@ export const metadata: Metadata = {
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const { isEnabled: isDraftMode } = await draftMode()
+  const [{ isEnabled: isDraftMode }, siteSettings] = await Promise.all([
+    draftMode(),
+    getSiteSettings(),
+  ])
 
   return (
     <html
@@ -54,7 +58,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       className={`${oswald.variable} ${inter.variable} ${sourceSerif.variable}`}
     >
       <body>
-        <LanguageProvider>
+        <LanguageProvider siteSettings={siteSettings}>
           <SkipLink />
           {children}
         </LanguageProvider>

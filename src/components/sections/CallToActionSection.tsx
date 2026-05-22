@@ -5,16 +5,14 @@ import { useLanguage } from '@/hooks/useLanguage'
 import Button from '@/components/ui/Button'
 import type { CtaSlice } from '@/sanity/lib/mapHomepage'
 
-const DONATE_URL = 'https://internationalmayanleague-bloom.kindful.com/embeds/94567c30-cca9-4853-a87f-43c38750420a'
-const DONATE_MONTHLY_URL = `${DONATE_URL}?schedule=1&bill_today=true`
-
 interface CallToActionSectionProps {
   content?: { en: CtaSlice; es: CtaSlice }
 }
 
 export default function CallToActionSection({ content }: CallToActionSectionProps) {
-  const { lang, t } = useLanguage()
+  const { lang, t, site } = useLanguage()
   const cta = content?.[lang] ?? t.cta
+  const donateMonthlyUrl = `${site.donateUrl}?schedule=1&bill_today=true`
 
   return (
     <section className="bg-earth-red px-5 py-10 text-white sm:px-8 lg:px-12 lg:py-16">
@@ -34,13 +32,13 @@ export default function CallToActionSection({ content }: CallToActionSectionProp
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
               <Button
                 variant="secondary"
-                href={DONATE_MONTHLY_URL}
+                href={donateMonthlyUrl}
                 className="!border-white !bg-white !text-earth-red hover:!bg-cream"
               >
                 {cta.donate}
               </Button>
               <a
-                href={DONATE_URL}
+                href={site.donateUrl}
                 className="font-body text-sm font-black uppercase leading-none tracking-[0.06em] text-white underline decoration-current decoration-2 underline-offset-4 hover:text-white/70 focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-white"
               >
                 {cta.donateOnce}

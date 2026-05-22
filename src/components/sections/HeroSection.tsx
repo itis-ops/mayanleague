@@ -6,14 +6,12 @@ import { useLanguage } from '@/hooks/useLanguage'
 import Button from '@/components/ui/Button'
 import type { HeroSlice } from '@/sanity/lib/mapHomepage'
 
-const DONATE_URL = 'https://internationalmayanleague-bloom.kindful.com/embeds/94567c30-cca9-4853-a87f-43c38750420a'
-
 interface HeroSectionProps {
   content?: { en: HeroSlice; es: HeroSlice }
 }
 
 export default function HeroSection({ content }: HeroSectionProps) {
-  const { lang, t } = useLanguage()
+  const { lang, t, site } = useLanguage()
   const hero = content?.[lang] ?? t.hero
 
   return (
@@ -39,7 +37,7 @@ export default function HeroSection({ content }: HeroSectionProps) {
                 {hero.clarityLine}
               </p>
               <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
-                <Button variant="primary" href={DONATE_URL} className="w-full sm:w-auto">
+                <Button variant="primary" href={site.donateUrl} className="w-full sm:w-auto">
                   {hero.ctaDonate}
                 </Button>
                 <Button variant="secondary" href="/contact" className="w-full sm:w-auto">

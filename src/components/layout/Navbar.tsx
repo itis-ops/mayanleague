@@ -6,11 +6,9 @@ import { useLanguage } from '@/hooks/useLanguage'
 import { isAboutCollectionRoute, localizedAboutPageLinks } from '@/lib/aboutPages'
 import Button from '@/components/ui/Button'
 
-const DONATE_URL = 'https://internationalmayanleague-bloom.kindful.com/embeds/94567c30-cca9-4853-a87f-43c38750420a'
-
 export default function Navbar() {
   const pathname = usePathname()
-  const { lang, t } = useLanguage()
+  const { lang, t, site } = useLanguage()
   const aboutLinks = localizedAboutPageLinks[lang]
   const showAboutSectionLinks = isAboutCollectionRoute(pathname)
   const [scrolled, setScrolled] = useState(false)
@@ -122,7 +120,7 @@ export default function Navbar() {
           </nav>
 
           <div className="hidden xl:flex items-center gap-5">
-            <Button href={DONATE_URL} variant="primary">
+            <Button href={site.donateUrl} variant="primary">
               {t.nav.donate}
             </Button>
           </div>
@@ -208,7 +206,7 @@ export default function Navbar() {
               )
             })}
             <div className="flex items-center justify-end border-t border-cream-dark pt-4">
-              <Button href={DONATE_URL} variant="primary" className="px-5 py-2">
+              <Button href={site.donateUrl} variant="primary" className="px-5 py-2">
                 {t.nav.donate}
               </Button>
             </div>

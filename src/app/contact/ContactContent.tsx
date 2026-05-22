@@ -15,14 +15,13 @@ import {
   collectionArticleSectionClass,
 } from '@/lib/editorialLayout'
 
-import { CONTACT_EMAIL } from '@/lib/contact'
+function mapsSearchUrl(query: string) {
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`
+}
 
-const CONTACT_PHONE = '(202) 827-6673'
-const CONTACT_PHONE_HREF = 'tel:+12028276673'
-const MAP_URL =
-  'https://www.google.com/maps/search/?api=1&query=1201%20K%20ST%20NW%20Washington%2C%20D.C.%2020005'
-const MAP_EMBED_URL =
-  'https://www.google.com/maps?q=1201%20K%20ST%20NW%20Washington%2C%20D.C.%2020005&output=embed'
+function mapsEmbedUrl(query: string) {
+  return `https://www.google.com/maps?q=${encodeURIComponent(query)}&output=embed`
+}
 const NEWSLETTER_IMAGE =
   'https://images.squarespace-cdn.com/content/v1/54ba9731e4b077c9026fbea0/1556915788615-JZ3CF571BHDL2U517DVC/Nojbelmayab%2Bcropped.jpg?format=2500w'
 
@@ -34,14 +33,19 @@ const inputClass =
   'mt-2 min-h-12 w-full border border-cream-dark bg-white px-4 type-body text-[1rem] text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-earth-red'
 
 export default function ContactContent() {
-  const { t } = useLanguage()
+  const { t, site } = useLanguage()
   const handleNewsletterSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
   }
 
+  const mapUrl = mapsSearchUrl(site.mapQuery)
+  const mapEmbedUrl = mapsEmbedUrl(site.mapQuery)
+
   const contactMethods = [
-    { label: t.contactPage.writeUs, value: CONTACT_EMAIL, href: `mailto:${CONTACT_EMAIL}` },
-    { label: t.contactPage.callUs, value: CONTACT_PHONE, href: CONTACT_PHONE_HREF },
+    { label: t.contactPage.writeUs, value: site.email, href: `mailto:${site.email}` },
+    ...(site.phone
+      ? [{ label: t.contactPage.callUs, value: site.phone, href: site.phoneHref }]
+      : []),
   ]
 
   return (
@@ -86,8 +90,15 @@ export default function ContactContent() {
 
                     <address className="max-w-[56ch] not-italic">
                       <p className="type-kicker mb-3 text-ink/45">{t.contactPage.addressName}</p>
-                      <p className={`${bodyClass} text-ink/82`}>1201 K ST NW</p>
-                      <p className={bodyClass}>Washington, D.C. 20005</p>
+                      {site.addressLines.length > 0 ? (
+                        site.addressLines.map((line) => (
+                          <p key={line} className={`${bodyClass} text-ink/82`}>
+                            {line}
+                          </p>
+                        ))
+                      ) : (
+                        <p className={`${bodyClass} text-ink/82`}>{t.footer.address}</p>
+                      )}
                     </address>
 
                     <dl className="grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-10">
@@ -112,13 +123,13 @@ export default function ContactContent() {
                     >
                       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                         <p className="type-kicker text-ink/55">{t.contactPage.mapLabel}</p>
-                        <Button href={MAP_URL} variant="tertiary">
+                        <Button href={mapUrl} variant="tertiary">
                           {t.contactPage.mapButton}
                         </Button>
                       </div>
                       <iframe
                         title={t.contactPage.mapTitle}
-                        src={MAP_EMBED_URL}
+                        src={mapEmbedUrl}
                         className="h-[280px] w-full border-0 grayscale sm:h-[320px]"
                         loading="lazy"
                         referrerPolicy="no-referrer-when-downgrade"

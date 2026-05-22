@@ -2,7 +2,11 @@ import type { Lang } from './i18n'
 
 export const CONTACT_EMAIL = 'info@mayanleague.org'
 
-export function buildJobApplicationMailto(jobTitle: string, lang: Lang) {
+export function buildJobApplicationMailto(
+  jobTitle: string,
+  lang: Lang,
+  email: string = CONTACT_EMAIL,
+) {
   const subject =
     lang === 'es' ? `Solicitud: ${jobTitle}` : `Application: ${jobTitle}`
 
@@ -16,5 +20,5 @@ export function buildJobApplicationMailto(jobTitle: string, lang: Lang) {
     body,
   })
 
-  return `mailto:${CONTACT_EMAIL}?${params.toString()}`
+  return `mailto:${email}?${params.toString()}`
 }

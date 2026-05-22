@@ -2,7 +2,6 @@
 
 import React from 'react'
 import { useLanguage } from '@/hooks/useLanguage'
-import { DONATE_URL } from '@/lib/siteLinks'
 
 function SocialIcon({ platform }: { platform: string }) {
   const icons: Record<string, React.ReactElement> = {
@@ -33,40 +32,41 @@ function SocialIcon({ platform }: { platform: string }) {
 }
 
 function SocialLinks({
-  socials,
+  platforms,
   socialUrls,
   socialLabel,
 }: {
-  socials: string[]
+  platforms: string[]
   socialUrls: Record<string, string>
   socialLabel: string
 }) {
+  if (!platforms.length) return null
+
   return (
     <div className="flex flex-wrap gap-3">
-      {socials.map((s) => (
+      {platforms.map((platform) => (
         <a
-          key={s}
-          href={socialUrls[s]}
-          aria-label={`${socialLabel} ${s === 'twitter' ? 'X' : s}`}
+          key={platform}
+          href={socialUrls[platform]}
+          aria-label={`${socialLabel} ${platform === 'twitter' ? 'X' : platform}`}
           className="motion-control flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-[#9a040f] text-white hover:border-white/25 hover:bg-[#b80611] hover:text-white active:border-white/20 active:bg-[#85040d] active:text-white focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-gold"
         >
-          <SocialIcon platform={s} />
+          <SocialIcon platform={platform} />
         </a>
       ))}
     </div>
   )
 }
 
-export default function Footer() {
-  const { t } = useLanguage()
+const WHO_LINK_PATHS = ['/board-of-directors', '/team', null, '/job-opportunities'] as const
+const INVOLVED_LINK_PATHS = [null, '/contact', '/news'] as const
 
-  const socials = ['facebook', 'twitter', 'instagram', 'youtube']
-  const socialUrls: Record<string, string> = {
-    facebook: 'https://facebook.com/mayanleague',
-    twitter: 'https://twitter.com/mayanleague',
-    instagram: 'https://instagram.com/mayanleague',
-    youtube: 'https://youtube.com/@mayanleague',
-  }
+export default function Footer() {
+  const { t, site } = useLanguage()
+
+  const socialPlatforms = (['facebook', 'twitter', 'instagram', 'youtube'] as const).filter(
+    (key) => site.social[key],
+  )
 
   const quickLinks = [
     { label: t.nav.about, href: '/about' },
@@ -76,18 +76,15 @@ export default function Footer() {
     { label: t.nav.contact, href: '/contact' },
   ]
 
-  const whoLinks = [
-    { label: t.footer.whoLinks[0], href: '/board-of-directors' },
-    { label: t.footer.whoLinks[1], href: '/team' },
-    { label: t.footer.whoLinks[2], href: DONATE_URL },
-    { label: t.footer.whoLinks[3], href: '/job-opportunities' },
-  ]
+  const whoLinks = t.footer.whoLinks.map((label, i) => ({
+    label,
+    href: WHO_LINK_PATHS[i] === null ? site.donateUrl : WHO_LINK_PATHS[i]!,
+  }))
 
-  const involvedLinks = [
-    { label: t.footer.involvedLinks[0], href: DONATE_URL },
-    { label: t.footer.involvedLinks[1], href: '/contact' },
-    { label: t.footer.involvedLinks[2], href: '/news' },
-  ]
+  const involvedLinks = t.footer.involvedLinks.map((label, i) => ({
+    label,
+    href: INVOLVED_LINK_PATHS[i] === null ? site.donateUrl : INVOLVED_LINK_PATHS[i]!,
+  }))
 
   const footerGridClass =
     'grid grid-cols-1 gap-9 md:grid-cols-[1.15fr_0.85fr_0.85fr_0.85fr] md:items-start lg:gap-10'
@@ -104,27 +101,37 @@ export default function Footer() {
           </div>
 
           <div className="md:col-start-4 md:row-start-1">
-            <SocialLinks socials={socials} socialUrls={socialUrls} socialLabel={t.footer.socialLabel} />
+            <SocialLinks
+              platforms={socialPlatforms}
+              socialUrls={site.social}
+              socialLabel={t.footer.socialLabel}
+            />
           </div>
 
           <div className="md:row-start-2">
             <p className="type-intro max-w-xs text-lg text-white">{t.footer.tagline}</p>
             <address className="mt-6 not-italic font-body text-sm leading-6 text-white">
-              <p>{t.footer.address}</p>
-              <p className="mt-3">
-                <a
-                  href="tel:+12028276673"
-                  className="motion-link underline-offset-4 hover:underline active:text-cream-dark focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-gold"
-                >
-                  (202) 827-6673
-                </a>
-              </p>
+              {site.addressLines.length > 0 ? (
+                site.addressLines.map((line) => <p key={line}>{line}</p>)
+              ) : (
+                <p>{t.footer.address}</p>
+              )}
+              {site.phone ? (
+                <p className="mt-3">
+                  <a
+                    href={site.phoneHref}
+                    className="motion-link underline-offset-4 hover:underline active:text-cream-dark focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-gold"
+                  >
+                    {site.phone}
+                  </a>
+                </p>
+              ) : null}
               <p className="mt-2">
                 <a
-                  href="mailto:info@mayanleague.org"
+                  href={`mailto:${site.email}`}
                   className="motion-link underline-offset-4 hover:underline active:text-cream-dark focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-gold"
                 >
-                  info@mayanleague.org
+                  {site.email}
                 </a>
               </p>
             </address>
