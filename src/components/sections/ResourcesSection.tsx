@@ -28,7 +28,7 @@ export default function ResourcesSection({ content }: ResourcesSectionProps) {
         <div className="motion-reveal mb-5 border border-cream-dark bg-cream p-1.5 sm:mb-6 lg:mb-8">
           <div className="relative min-h-[64vw] overflow-hidden bg-ink sm:min-h-[360px] lg:min-h-[460px]">
             <img
-              src="/site-images/maya-delegation.jpg"
+              src="/site-images/maya-delegation.webp"
               alt=""
               aria-hidden="true"
               className="absolute inset-0 h-full w-full object-cover grayscale"

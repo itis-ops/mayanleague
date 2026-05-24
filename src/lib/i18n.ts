@@ -114,7 +114,7 @@ const translations = {
         'We are committed to creating a permanent link between our contemporary world and ancestral traditions, respecting the diversity of our Nation while building a shared vision with our peoples, and working closely with other indigenous peoples, organizations, and allies who support our beliefs and values.',
       ],
       boardStatementAttribution: 'International Mayan League Board of Directors',
-      imageSrc: '/site-images/team-hero.png',
+      imageSrc: '/site-images/team-hero.webp',
       imageAlt: 'International Mayan League team',
       stats: [
         { value: '6', label: 'Active Programs' },
@@ -244,7 +244,7 @@ const translations = {
         {
           name: 'Juanita',
           role: 'Executive Director',
-          image: '/site-images/team-juanita.jpg',
+          image: '/site-images/team-juanita.webp',
           bio: [
             'Juanita is Maya Mam and is a survivor of the internal armed conflict in her home country a former political refugee. She now works with Maya leaders and elders through their traditional institutions for environmental protection, recognition of land rights, human rights, cultural preservation and education. Juanita’s work with indigenous peoples has focused on the full and effective use and implementation of the United Nations Declaration on the Rights of Indigenous Peoples. Her emphasis is focused on the right of self-determination and collective rights to lands, territories, natural resources and the environment. She holds a Master of International Public Policy from Johns Hopkins School of Advanced International Studies.',
           ],
@@ -252,7 +252,7 @@ const translations = {
         {
           name: 'Lorena',
           role: 'Policy and Program Manager',
-          image: '/site-images/team-lorena.jpg',
+          image: '/site-images/team-lorena.webp',
           bio: [
             'Lorena has worked alongside indigenous leaders, elders, attorneys, and human rights defenders for the past decade. Her work has focused on supporting indigenous peoples from the United States, Mexico, Central and South America in both local and international human rights advocacy.',
             'Her primary areas of work have been policy, communications and fundraising efforts that assist indigenous peoples’ fight for the recognition of their right of self-determination and securing rights to lands, territories and natural resources. Lorena has worked with prominent indigenous led organizations throughout her entire career in support of the indigenous human rights movement. She studied Government and International Politics with a minor in Conflict Analysis and Resolution from George Mason University in the DC area.',
@@ -261,7 +261,7 @@ const translations = {
         {
           name: 'Ramon',
           role: 'Director of Operations',
-          image: '/site-images/team-ramon.jpg',
+          image: '/site-images/team-ramon.webp',
           bio: [
             'Ramon is an organizational development leader committed to amplifying the impact of people and organizations who drive social justice and impact in our communities. His dedication is deeply rooted in his personal experiences, coming from a proud immigrant family that faced social challenges living in low socioeconomic communities. As a youth, he was fortunate to access social resources and community programs that played an instrumental role in helping him overcome social disparities. This lived experience galvanized Ramon to invest in his community through his work, just as his community invested in him. He has dedicated his career to serving missions that aim to rebuild, nourish, and provide equal access to underserved communities. Ramon’s work ensures that the social resources and programs that supported his development as a youth continue to be present and profound for today’s current and future generations. Ramon’s leadership journey began in human resources, where he implemented organizational development strategies to create mission-driven work environments. He intentionally transitioned into operation roles with the goal of aligning human resources, operations, finances, and information technology frameworks to support building cohesion and strategy within organizations. Ramon holds a BAAS degree in Organizational Development and has recently earned a Master’s in Public Leadership from the University of North Texas at Dallas, with a focus on nonprofit and community leadership.',
           ],
@@ -269,7 +269,7 @@ const translations = {
         {
           name: 'Ernesto',
           role: 'Indigenous Language Rights Program Coordinator',
-          image: '/site-images/team-ernesto.jpg',
+          image: '/site-images/team-ernesto.webp',
           bio: [
             "Ernesto is a Maya K’iche’ youth leader. His parents are survivors of the internal armed conflict in his home country and due to war and genocide, his family was internally displaced. He is fluent in Maya K'iche', Ixil, and Spanish because of his upbringing, and is conversational in English. Ernesto's natural leadership formation stems from his parents' resistance, teachings, and survival. Throughout his childhood, he learned about the importance of languages as a tool to fight for the rights of the Maya People. He continues his work as a community leader where he leads and supports the Maya community's access to resources and better understanding of their rights.",
           ],
@@ -277,7 +277,7 @@ const translations = {
         {
           name: 'Manuela',
           role: 'Development Associate',
-          image: '/site-images/team-manuela.jpg',
+          image: '/site-images/team-manuela.webp',
           bio: [
             'Manuela is an experienced fundraiser whose work has focused on supporting those most affected by the oppressive systems under which we live. Driven by community-centered practices, she enjoys collaborating with communities to create sustainable fundraising practices to meet ongoing needs and decrease reliance on corporate nonprofits and governmental agencies. Through her work in fundraising, she has been able to collaborate with exceptional movement leaders to produce documentaries exploring the white pathological foundations of Latinidad, provide financial and material support to undocumented communities through wealth redistribution, and support currently and formerly incarcerated folks.',
             'Prior to focusing on fundraising, Manuela worked as a bilingual gender-based violence educator hosting workshops on language access services for survivors, the criminalization of survival, identifying patterns of abuse, and more. Manuela is passionate about food, family, and service, so in her spare time, you can find her baking, laughing with loved ones, and narrating audiobooks for kiddos with learning disabilities.',
@@ -286,7 +286,7 @@ const translations = {
         {
           name: 'Andrea',
           role: 'Administrative Coordinator',
-          image: '/site-images/team-andrea.jpg',
+          image: '/site-images/team-andrea.webp',
           bio: [
             'Andrea is a proud ascendent of the Maya Q’eqchi’ nation. She witnessed firsthand the unfiltered and disproportionate effects that poverty, policing, and racism had on minority communities. This experience has shaped her worldview and given her a deep understanding that just as all collective struggles are intrinsically linked, so is their collective liberation.',
             'Andrea has continued to channel her advocacy through her work at the International Mayan League and particularly through her art as the lead communications assistant for the League. She is intentional about always rooting her activism in truth-telling and allowing the words and stories of her relatives to be told through her graphics, with the hope of sparking real and permanent change.',
@@ -434,7 +434,7 @@ const translations = {
         'Estamos comprometidos a crear un vínculo permanente entre nuestro mundo contemporáneo y las tradiciones ancestrales, respetando la diversidad de nuestra Nación y construyendo una visión compartida con nuestros pueblos, y trabajando de cerca con otros pueblos indígenas, organizaciones y aliados que apoyan nuestras creencias y valores.',
       ],
       boardStatementAttribution: 'Junta Directiva de la Liga Maya Internacional',
-      imageSrc: '/site-images/team-hero.png',
+      imageSrc: '/site-images/team-hero.webp',
       imageAlt: 'Equipo de la Liga Maya Internacional',
       stats: [
         { value: '6', label: 'Programas Activos' },
@@ -564,7 +564,7 @@ const translations = {
         {
           name: 'Juanita',
           role: 'Executive Director',
-          image: '/site-images/team-juanita.jpg',
+          image: '/site-images/team-juanita.webp',
           bio: [
             'Juanita is Maya Mam and is a survivor of the internal armed conflict in her home country a former political refugee. She now works with Maya leaders and elders through their traditional institutions for environmental protection, recognition of land rights, human rights, cultural preservation and education. Juanita’s work with indigenous peoples has focused on the full and effective use and implementation of the United Nations Declaration on the Rights of Indigenous Peoples. Her emphasis is focused on the right of self-determination and collective rights to lands, territories, natural resources and the environment. She holds a Master of International Public Policy from Johns Hopkins School of Advanced International Studies.',
           ],
@@ -572,7 +572,7 @@ const translations = {
         {
           name: 'Lorena',
           role: 'Policy and Program Manager',
-          image: '/site-images/team-lorena.jpg',
+          image: '/site-images/team-lorena.webp',
           bio: [
             'Lorena has worked alongside indigenous leaders, elders, attorneys, and human rights defenders for the past decade. Her work has focused on supporting indigenous peoples from the United States, Mexico, Central and South America in both local and international human rights advocacy.',
             'Her primary areas of work have been policy, communications and fundraising efforts that assist indigenous peoples’ fight for the recognition of their right of self-determination and securing rights to lands, territories and natural resources. Lorena has worked with prominent indigenous led organizations throughout her entire career in support of the indigenous human rights movement. She studied Government and International Politics with a minor in Conflict Analysis and Resolution from George Mason University in the DC area.',
@@ -581,7 +581,7 @@ const translations = {
         {
           name: 'Ramon',
           role: 'Director of Operations',
-          image: '/site-images/team-ramon.jpg',
+          image: '/site-images/team-ramon.webp',
           bio: [
             'Ramon is an organizational development leader committed to amplifying the impact of people and organizations who drive social justice and impact in our communities. His dedication is deeply rooted in his personal experiences, coming from a proud immigrant family that faced social challenges living in low socioeconomic communities. As a youth, he was fortunate to access social resources and community programs that played an instrumental role in helping him overcome social disparities. This lived experience galvanized Ramon to invest in his community through his work, just as his community invested in him. He has dedicated his career to serving missions that aim to rebuild, nourish, and provide equal access to underserved communities. Ramon’s work ensures that the social resources and programs that supported his development as a youth continue to be present and profound for today’s current and future generations. Ramon’s leadership journey began in human resources, where he implemented organizational development strategies to create mission-driven work environments. He intentionally transitioned into operation roles with the goal of aligning human resources, operations, finances, and information technology frameworks to support building cohesion and strategy within organizations. Ramon holds a BAAS degree in Organizational Development and has recently earned a Master’s in Public Leadership from the University of North Texas at Dallas, with a focus on nonprofit and community leadership.',
           ],
@@ -589,7 +589,7 @@ const translations = {
         {
           name: 'Ernesto',
           role: 'Indigenous Language Rights Program Coordinator',
-          image: '/site-images/team-ernesto.jpg',
+          image: '/site-images/team-ernesto.webp',
           bio: [
             "Ernesto is a Maya K’iche’ youth leader. His parents are survivors of the internal armed conflict in his home country and due to war and genocide, his family was internally displaced. He is fluent in Maya K'iche', Ixil, and Spanish because of his upbringing, and is conversational in English. Ernesto's natural leadership formation stems from his parents' resistance, teachings, and survival. Throughout his childhood, he learned about the importance of languages as a tool to fight for the rights of the Maya People. He continues his work as a community leader where he leads and supports the Maya community's access to resources and better understanding of their rights.",
           ],
@@ -597,7 +597,7 @@ const translations = {
         {
           name: 'Manuela',
           role: 'Development Associate',
-          image: '/site-images/team-manuela.jpg',
+          image: '/site-images/team-manuela.webp',
           bio: [
             'Manuela is an experienced fundraiser whose work has focused on supporting those most affected by the oppressive systems under which we live. Driven by community-centered practices, she enjoys collaborating with communities to create sustainable fundraising practices to meet ongoing needs and decrease reliance on corporate nonprofits and governmental agencies. Through her work in fundraising, she has been able to collaborate with exceptional movement leaders to produce documentaries exploring the white pathological foundations of Latinidad, provide financial and material support to undocumented communities through wealth redistribution, and support currently and formerly incarcerated folks.',
             'Prior to focusing on fundraising, Manuela worked as a bilingual gender-based violence educator hosting workshops on language access services for survivors, the criminalization of survival, identifying patterns of abuse, and more. Manuela is passionate about food, family, and service, so in her spare time, you can find her baking, laughing with loved ones, and narrating audiobooks for kiddos with learning disabilities.',
@@ -606,7 +606,7 @@ const translations = {
         {
           name: 'Andrea',
           role: 'Administrative Coordinator',
-          image: '/site-images/team-andrea.jpg',
+          image: '/site-images/team-andrea.webp',
           bio: [
             'Andrea is a proud ascendent of the Maya Q’eqchi’ nation. She witnessed firsthand the unfiltered and disproportionate effects that poverty, policing, and racism had on minority communities. This experience has shaped her worldview and given her a deep understanding that just as all collective struggles are intrinsically linked, so is their collective liberation.',
             'Andrea has continued to channel her advocacy through her work at the International Mayan League and particularly through her art as the lead communications assistant for the League. She is intentional about always rooting her activism in truth-telling and allowing the words and stories of her relatives to be told through her graphics, with the hope of sparking real and permanent change.',

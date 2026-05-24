@@ -55,7 +55,7 @@ export default function HeroSection({ content }: HeroSectionProps) {
             </aside>
             <div className="relative min-h-[56vw] max-h-[520px] overflow-hidden bg-ink sm:min-h-[380px] sm:max-h-none lg:min-h-[560px]">
               <img
-                src="/site-images/atitlan-ulew.jpg"
+                src="/site-images/atitlan-ulew.webp"
                 alt="Lake Atitlán, Guatemala — ancestral Maya homeland"
                 className="absolute inset-0 h-full w-full object-cover grayscale"
               />

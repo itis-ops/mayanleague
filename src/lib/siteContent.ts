@@ -162,7 +162,7 @@ export const programPages: Localized<Record<string, ProgramPageData>> = {
       title: 'Maya Cosmovision',
       intro:
         'Our connection to the world and the cosmos are the basis of our action, of our thoughts, and our sentiments in life and of life.',
-      heroImage: '/site-images/maya-cosmovision-hero.jpg',
+      heroImage: '/site-images/maya-cosmovision-hero.webp',
       sections: [
         {
           title: 'Science and spirituality',
@@ -334,7 +334,7 @@ export const programPages: Localized<Record<string, ProgramPageData>> = {
       title: 'Cosmovisión Maya',
       intro:
         'Nuestra conexión con el mundo y el cosmos es la base de nuestra acción, de nuestros pensamientos y de nuestros sentimientos en la vida y de la vida.',
-      heroImage: '/site-images/maya-cosmovision-hero.jpg',
+      heroImage: '/site-images/maya-cosmovision-hero.webp',
       sections: [
         {
           title: 'Ciencia y espiritualidad',

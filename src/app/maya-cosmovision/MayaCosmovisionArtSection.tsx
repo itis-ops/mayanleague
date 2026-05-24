@@ -46,7 +46,7 @@ export default function MayaCosmovisionArtSection({
           <div className="mb-10 overflow-hidden border border-cream-dark bg-cream">
             <div className="relative aspect-[16/10]">
               <img
-                src="/site-images/maya-cosmovision-art.jpg"
+                src="/site-images/maya-cosmovision-art.webp"
                 alt="Mayan League philosophy artwork by Jose Flores"
                 className="absolute inset-0 h-full w-full object-contain p-6 sm:p-8 lg:p-10"
               />
