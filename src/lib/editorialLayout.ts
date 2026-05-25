@@ -29,7 +29,7 @@ export const scrollAnchorProgramSectionClass =
 export const hubPageGridClass = 'mt-8 grid grid-cols-1 xl:grid-cols-[0.26fr_1fr] xl:gap-14'
 
 /** Inner section padding inside collection article cards. */
-export const collectionArticleSectionClass = 'px-5 sm:px-10 lg:px-14'
+export const collectionArticleSectionClass = 'px-4 sm:px-10 lg:px-14'
 
 /** Meta row above collection heroes — aligns sidebar kicker with language bar. */
 export const collectionMetaRowClass =
@@ -44,7 +44,7 @@ export const collectionLanguageBarClass =
 
 /** Language toggle: vertically centered, flush to the article column’s right edge. */
 export const collectionLanguageBarInnerClass =
-  'flex h-11 w-full items-center justify-end pl-5 pr-0 sm:pl-10 lg:pl-14'
+  'flex h-11 w-full items-center justify-end pl-4 pr-0 sm:pl-10 lg:pl-14'
 
 /** Hub/news article language bar — matches hub page gutters, right-flush toggle. */
 export const hubLanguageBarInnerClass =
@@ -81,7 +81,7 @@ export const editorialCompactNavInnerClass =
 export const aboutCollectionMainClass = 'about-page collection-page bg-white pt-[72px] text-ink xl:pt-[124px]'
 
 export const aboutCollectionSectionClass =
-  'mx-auto max-w-[1728px] px-5 sm:px-8 lg:px-12'
+  'mx-auto max-w-[1728px] px-4 sm:px-8 lg:px-12'
 
 export const aboutCollectionGridClass =
   'grid grid-cols-1 border-t border-cream-dark lg:grid-cols-[0.23fr_1fr] lg:gap-14'

@@ -147,7 +147,7 @@ function FamilySection({
   return (
     <section aria-labelledby={`family-${family.replace(/[^a-z]/gi, '')}`}>
       {/* Family header */}
-      <div className={`flex items-center justify-between border-b border-t px-5 py-5 sm:px-10 lg:px-14 ${meta.color}`}>
+      <div className={`flex items-center justify-between border-b border-t px-4 py-5 sm:px-10 lg:px-14 ${meta.color}`}>
         <div className="flex items-center gap-4">
           <h2
             id={`family-${family.replace(/[^a-z]/gi, '')}`}
@@ -170,7 +170,7 @@ function FamilySection({
       </div>
 
       {/* Communities within family */}
-      <div className="px-5 sm:px-10 lg:px-14">
+      <div className="px-4 sm:px-10 lg:px-14">
         {groups.map((group, i) => (
           <CommunitySection
             key={group.title}
