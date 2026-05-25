@@ -77,6 +77,20 @@ Open <http://localhost:3000/studio>. Sign in with the Google or GitHub account t
 
 > **Add team members:** [sanity.io/manage](https://sanity.io/manage) → project → **Members** → **Invite member**.
 
+### Seed Sanity with the current website content (developer-only, one-time)
+
+Four idempotent migration scripts seed the dataset from the existing static files. They are safe to re-run — they use `createOrReplace` and content-addressed image uploads, so duplicates are not created.
+
+```bash
+# Requires SANITY_API_WRITE_TOKEN in .env.local (Editor token from Sanity Manage)
+npm run migrate:site-settings      # contact info, nav labels, footer
+npm run migrate:homepage           # homepage hero, sections, news rail
+npm run migrate:news               # all news articles
+npm run migrate:about-pages        # About / Team / Board / Path / Values / Jobs + 16 images
+```
+
+After seeding, every editor walkthrough below (Tests A through K) works against real, populated documents.
+
 ---
 
 ## 3. CORS configuration
@@ -169,6 +183,58 @@ Use this checklist to verify the Studio → live site flow is working correctly.
 - [ ] Edit the **Dek** (short tagline) field. The preview pane updates without publishing.
 - [ ] Click the dek text in the preview pane → Studio jumps to the dek field.
 - [ ] Click **Exit preview** to leave draft mode.
+
+### Test F: About page — edit the hero headline
+
+- [ ] Open Studio → **About pages → About**.
+- [ ] In the **Hero** group, change **Hero headline (EN)** to something clearly different.
+- [ ] Click **Publish**.
+- [ ] Open `https://mayanleague.vercel.app/about` and wait ~60 seconds.
+- [ ] The new headline appears at the top of the page.
+- [ ] Restore the headline and **Publish** again.
+
+### Test G: Team — reorder a member
+
+- [ ] Open Studio → **Team members**.
+- [ ] Open the first member in the list (e.g. **Juanita**).
+- [ ] Change **Sort order** from `10` to `15`.
+- [ ] Click **Publish**.
+- [ ] Open Studio → **Team members** list again — the row that previously sat at `Sort order 20` should now appear above Juanita.
+- [ ] Open `https://mayanleague.vercel.app/team` and wait ~60 seconds — the order on the live site matches Studio.
+- [ ] Restore Juanita's sort order to `10` and **Publish** again.
+
+### Test H: Board of Directors — add a member
+
+- [ ] Open Studio → **About pages → Board of Directors**.
+- [ ] Under **Board members → Add item**, fill in **Name** (e.g. `Test`), **Board role** (e.g. `Director`), **Heritage** (e.g. `Maya Mam`), and one **Bio paragraph**.
+- [ ] Click **Publish**.
+- [ ] Open `https://mayanleague.vercel.app/board-of-directors` and wait ~60 seconds — the new member appears at the bottom of the list.
+- [ ] Delete the test row in Studio and **Publish** again to restore the original board.
+
+### Test I: Our Path — swap a section image
+
+- [ ] Open Studio → **About pages → Our Path → Sections**.
+- [ ] On the **Vision** section, click the existing image, then **Replace** and upload a different image.
+- [ ] Click **Publish**.
+- [ ] Open `https://mayanleague.vercel.app/our-path` and wait ~60 seconds — the Vision section shows the new image.
+- [ ] Replace the image back to the original and **Publish** again.
+
+### Test J: Core Values — edit a value statement
+
+- [ ] Open Studio → **About pages → Our Core Values → Core values**.
+- [ ] Open the first value (the Mother Earth value).
+- [ ] Change **Value statement (EN)** to something different.
+- [ ] Click **Publish**.
+- [ ] Open `https://mayanleague.vercel.app/our-core-values` and wait ~60 seconds — the value headline updates.
+- [ ] Restore the original statement and **Publish** again.
+
+### Test K: Job Opportunities — add a listing
+
+- [ ] Open Studio → **About pages → Job Opportunities → Open positions → Add item**.
+- [ ] Fill in **Kicker** (e.g. `Part-time · Communications`), **Job title** (e.g. `Communications Assistant`), and one **Description paragraph**.
+- [ ] Click **Publish**.
+- [ ] Open `https://mayanleague.vercel.app/job-opportunities` and wait ~60 seconds — the new listing appears with a working **Apply** button that opens an email to `info@mayanleague.org` pre-filled with the job title.
+- [ ] Delete the test listing in Studio and **Publish** again.
 
 ---
 

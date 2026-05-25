@@ -1,14 +1,24 @@
 import type { Metadata } from 'next'
-import AboutDetailContent from '../[slug]/AboutDetailContent'
+
 import { aboutPages } from '@/lib/aboutPages'
+import { getOurPathContent } from '@/lib/aboutPagesRepository'
 
-const page = aboutPages['our-path']
+import AboutDetailContent from '../[slug]/AboutDetailContent'
 
-export const metadata: Metadata = {
-  title: `${page.label} | International Mayan League`,
-  description: page.intro || page.sections[0]?.body[0],
+export const revalidate = 60
+
+const staticPage = aboutPages['our-path']
+
+export async function generateMetadata(): Promise<Metadata> {
+  const content = await getOurPathContent()
+  const en = content?.en
+  return {
+    title: `${en?.label || staticPage.label} | International Mayan League`,
+    description: en?.intro || staticPage.intro || staticPage.sections[0]?.body[0],
+  }
 }
 
-export default function OurPathPage() {
-  return <AboutDetailContent page={page} />
+export default async function OurPathPage() {
+  const content = await getOurPathContent()
+  return <AboutDetailContent page={staticPage} content={content} />
 }

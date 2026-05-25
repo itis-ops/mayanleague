@@ -8,6 +8,11 @@ import Footer from '@/components/layout/Footer'
 import { useLanguage } from '@/hooks/useLanguage'
 import { localizedAboutPages, type AboutPageSection } from '@/lib/aboutPages'
 import { collectionArticleSectionClass } from '@/lib/editorialLayout'
+import type { AboutCollectionContent } from '@/sanity/lib/mapAboutPages'
+
+interface CoreValuesContentProps {
+  content?: AboutCollectionContent | null
+}
 
 function CoreValueIcon({ section, index }: { section: AboutPageSection; index: number }) {
   if (!section.image) return null
@@ -23,9 +28,9 @@ function CoreValueIcon({ section, index }: { section: AboutPageSection; index: n
   )
 }
 
-export default function CoreValuesContent() {
+export default function CoreValuesContent({ content }: CoreValuesContentProps) {
   const { lang } = useLanguage()
-  const page = localizedAboutPages[lang]['our-core-values']
+  const page = content?.[lang] ?? localizedAboutPages[lang]['our-core-values']
   const jumpLabel = lang === 'es' ? 'Saltar a un valor' : 'Jump to a value'
 
   return (

@@ -8,7 +8,11 @@
     "dev:status": "node scripts/dev-status.mjs",
     "dev:raw": "next dev -p 3000",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "migrate:homepage": "node scripts/migrate-homepage-to-sanity.mjs",
+    "migrate:news": "node scripts/migrate-news-to-sanity.mjs",
+    "migrate:site-settings": "node scripts/migrate-site-settings-to-sanity.mjs",
+    "migrate:about-pages": "node scripts/migrate-about-pages-to-sanity.mjs"
   },
   "dependencies": {
     "@sanity/image-url": "^2.1.1",

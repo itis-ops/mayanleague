@@ -8,10 +8,15 @@ import Footer from '@/components/layout/Footer'
 import { useLanguage } from '@/hooks/useLanguage'
 import { localizedAboutPages } from '@/lib/aboutPages'
 import { parseAboutPersonTitle } from '@/lib/parseAboutPersonTitle'
+import type { AboutCollectionContent } from '@/sanity/lib/mapAboutPages'
 
-export default function BoardOfDirectorsContent() {
+interface BoardOfDirectorsContentProps {
+  content?: AboutCollectionContent | null
+}
+
+export default function BoardOfDirectorsContent({ content }: BoardOfDirectorsContentProps) {
   const { lang } = useLanguage()
-  const page = localizedAboutPages[lang]['board-of-directors']
+  const page = content?.[lang] ?? localizedAboutPages[lang]['board-of-directors']
 
   return (
     <>

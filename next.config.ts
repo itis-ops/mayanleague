@@ -9,6 +9,17 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: projectRoot,
   },
+  // Sanity CDN serves images uploaded from Studio (team portraits, page heroes,
+  // core-value icons, etc.). Allow next/image to optimize those URLs.
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'cdn.sanity.io',
+        pathname: '/images/**',
+      },
+    ],
+  },
 }
 
 export default nextConfig

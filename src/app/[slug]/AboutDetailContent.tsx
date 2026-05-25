@@ -8,20 +8,22 @@ import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import { useLanguage } from '@/hooks/useLanguage'
 import { localizedAboutPages, type AboutPageData } from '@/lib/aboutPages'
+import type { AboutCollectionContent } from '@/sanity/lib/mapAboutPages'
 
 interface Props {
   page: AboutPageData
+  content?: AboutCollectionContent | null
 }
 
 function usesPathLayout(slug: AboutPageData['slug']) {
   return slug === 'job-opportunities' || slug === 'our-path'
 }
 
-export default function AboutDetailContent({ page }: Props) {
+export default function AboutDetailContent({ page, content }: Props) {
   const { lang, t } = useLanguage()
-  const currentPage = localizedAboutPages[lang][page.slug]
-  const pathLayout = usesPathLayout(currentPage.slug)
-  const isOurPath = currentPage.slug === 'our-path'
+  const currentPage = content?.[lang] ?? localizedAboutPages[lang][page.slug]
+  const pathLayout = usesPathLayout(page.slug)
+  const isOurPath = page.slug === 'our-path'
   const heroIntro =
     currentPage.intro ??
     (isOurPath
@@ -34,13 +36,13 @@ export default function AboutDetailContent({ page }: Props) {
     <>
       <Navbar />
       <AboutCollectionShell
-        activeHref={`/${currentPage.slug}`}
+        activeHref={`/${page.slug}`}
         heroTitle={currentPage.title}
         heroIntro={heroIntro}
       >
         {currentPage.sections.map((section, index) => (
           <AboutEditorialSection
-            key={`${section.title || section.kicker || currentPage.slug}-${index}`}
+            key={`${section.title || section.kicker || page.slug}-${index}`}
             index={index + 1}
             railLabel={section.kicker}
             title={pathLayout ? section.kicker : section.title}
@@ -50,9 +52,9 @@ export default function AboutDetailContent({ page }: Props) {
             variant="white"
             leadFirstBody={isOurPath && index === 0}
             layout={pathLayout ? 'path' : 'editorial'}
-            wideTitle={currentPage.slug === 'job-opportunities'}
+            wideTitle={page.slug === 'job-opportunities'}
           >
-            {currentPage.slug === 'job-opportunities' && section.title ? (
+            {page.slug === 'job-opportunities' && section.title ? (
               <JobApplyButton jobTitle={section.title} />
             ) : null}
           </AboutEditorialSection>

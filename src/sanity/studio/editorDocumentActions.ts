@@ -4,7 +4,15 @@ import type {
   TemplateItem,
 } from 'sanity'
 
-const SINGLETON_TYPES = new Set(['homepage', 'siteSettings'])
+const SINGLETON_TYPES = new Set([
+  'homepage',
+  'siteSettings',
+  'aboutPage',
+  'boardOfDirectorsPage',
+  'ourPathPage',
+  'coreValuesPage',
+  'jobOpportunitiesPage',
+])
 
 /** Hide scheduling / release actions — editors publish directly. */
 function withoutSchedulingActions(actions: DocumentActionComponent[]) {
@@ -35,10 +43,7 @@ export function resolveNewDocumentOptions(
   context: NewDocumentOptionsContext,
 ) {
   if (context.creationContext.type === 'global') {
-    return prev.filter(
-      (template) =>
-        template.templateId !== 'homepage' && template.templateId !== 'siteSettings',
-    )
+    return prev.filter((template) => !SINGLETON_TYPES.has(template.templateId))
   }
   return prev
 }

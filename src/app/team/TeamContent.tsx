@@ -6,9 +6,15 @@ import AboutPersonStickyStack from '@/components/about/AboutPersonStickyStack'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import { useLanguage } from '@/hooks/useLanguage'
+import type { TeamMembersContent } from '@/sanity/lib/mapAboutPages'
 
-export default function TeamContent() {
-  const { t } = useLanguage()
+interface TeamContentProps {
+  members?: TeamMembersContent | null
+}
+
+export default function TeamContent({ members }: TeamContentProps) {
+  const { lang, t } = useLanguage()
+  const list = members?.[lang] ?? t.teamPage.members
 
   return (
     <>
@@ -20,9 +26,9 @@ export default function TeamContent() {
         animateContent={false}
       >
         <AboutPersonStickyStack label={t.teamPage.membersSectionLabel}>
-          {t.teamPage.members.map((member, index) => (
+          {list.map((member, index) => (
             <AboutPersonRow
-              key={member.name}
+              key={`${member.name}-${index}`}
               index={index}
               name={member.name}
               role={member.role}
@@ -30,7 +36,7 @@ export default function TeamContent() {
               body={member.bio}
               layout="sticky"
               compact
-              isLast={index === t.teamPage.members.length - 1}
+              isLast={index === list.length - 1}
             />
           ))}
         </AboutPersonStickyStack>

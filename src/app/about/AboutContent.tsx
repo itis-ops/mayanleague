@@ -7,10 +7,19 @@ import Footer from '@/components/layout/Footer'
 import MayaNumber from '@/components/ui/MayaNumber'
 import { useLanguage } from '@/hooks/useLanguage'
 import { collectionArticleSectionClass } from '@/lib/editorialLayout'
+import type { AboutPageContent } from '@/sanity/lib/mapAboutPages'
+import type { MissionSlice } from '@/sanity/lib/mapHomepage'
 
-export default function AboutContent() {
-  const { t } = useLanguage()
-  const { aboutPage, mission } = t
+interface AboutContentProps {
+  aboutContent?: AboutPageContent | null
+  missionContent?: { en: MissionSlice; es: MissionSlice } | null
+}
+
+export default function AboutContent({ aboutContent, missionContent }: AboutContentProps) {
+  const { lang, t } = useLanguage()
+
+  const aboutPage = aboutContent?.[lang] ?? t.aboutPage
+  const mission = missionContent?.[lang] ?? t.mission
 
   return (
     <>
@@ -26,7 +35,7 @@ export default function AboutContent() {
         >
           <div className="grid grid-cols-1 gap-10 lg:grid-cols-[0.32fr_1fr] lg:gap-16">
             <div>
-              <p className="type-kicker mb-4 text-earth-red">{aboutPage.label}</p>
+              <p className="type-kicker mb-4 text-earth-red">{t.aboutPage.label}</p>
               <p className="font-display text-5xl font-bold leading-none tracking-[-0.05em] text-earth-red">
                 {aboutPage.whoWeAreLabel}
               </p>

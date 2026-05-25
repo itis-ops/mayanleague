@@ -43,5 +43,50 @@ export const resolve: PresentationPluginOptions['resolve'] = {
         ],
       }),
     }),
+
+    aboutPage: defineLocations({
+      select: {},
+      resolve: () => ({
+        locations: [{ title: 'About', href: '/about' }],
+      }),
+    }),
+
+    boardOfDirectorsPage: defineLocations({
+      select: {},
+      resolve: () => ({
+        locations: [{ title: 'Board of Directors', href: '/board-of-directors' }],
+      }),
+    }),
+
+    ourPathPage: defineLocations({
+      select: {},
+      resolve: () => ({
+        locations: [{ title: 'Our Path', href: '/our-path' }],
+      }),
+    }),
+
+    coreValuesPage: defineLocations({
+      select: {},
+      resolve: () => ({
+        locations: [{ title: 'Our Core Values', href: '/our-core-values' }],
+      }),
+    }),
+
+    jobOpportunitiesPage: defineLocations({
+      select: {},
+      resolve: () => ({
+        locations: [{ title: 'Job Opportunities', href: '/job-opportunities' }],
+      }),
+    }),
+
+    teamMember: defineLocations({
+      select: { name: 'name' },
+      resolve: (doc) => ({
+        locations: [
+          { title: 'Team', href: '/team' },
+          ...(doc?.name ? [{ title: `Team \u2014 ${doc.name}`, href: '/team' }] : []),
+        ],
+      }),
+    }),
   },
 }

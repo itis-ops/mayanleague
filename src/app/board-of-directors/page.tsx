@@ -1,14 +1,24 @@
 import type { Metadata } from 'next'
-import BoardOfDirectorsContent from './BoardOfDirectorsContent'
+
 import { aboutPages } from '@/lib/aboutPages'
+import { getBoardOfDirectorsContent } from '@/lib/aboutPagesRepository'
 
-const page = aboutPages['board-of-directors']
+import BoardOfDirectorsContent from './BoardOfDirectorsContent'
 
-export const metadata: Metadata = {
-  title: `${page.label} | International Mayan League`,
-  description: page.intro || page.sections[0]?.body[0],
+export const revalidate = 60
+
+const staticPage = aboutPages['board-of-directors']
+
+export async function generateMetadata(): Promise<Metadata> {
+  const content = await getBoardOfDirectorsContent()
+  const en = content?.en
+  return {
+    title: `${en?.label || staticPage.label} | International Mayan League`,
+    description: en?.intro || staticPage.intro || staticPage.sections[0]?.body[0],
+  }
 }
 
-export default function BoardOfDirectorsPage() {
-  return <BoardOfDirectorsContent />
+export default async function BoardOfDirectorsPage() {
+  const content = await getBoardOfDirectorsContent()
+  return <BoardOfDirectorsContent content={content} />
 }

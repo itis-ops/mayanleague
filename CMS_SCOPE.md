@@ -48,7 +48,24 @@ All seven homepage sections are editable. Changes go live within 60 seconds.
 
 ---
 
-### 3. Site settings (`siteSettings` singleton)
+### 3. About pages + team
+
+All five About-family pages plus the Team roster are now editable in Studio. Changes go live within 60 seconds.
+
+| Document | Page | What you can change |
+|---|---|---|
+| `aboutPage` (singleton) | `/about` | Hero headline & intro, Who-we-are / How-we-work labels, 4 body paragraphs, 4 guiding principles, ancestral quote + source. (The board statement at the bottom is shared with **Homepage → Mission** — edit it there.) |
+| `boardOfDirectorsPage` (singleton) | `/board-of-directors` | Page title, eyebrow, intro paragraph, hero image, ordered list of board members (name, role, heritage, bio paragraphs). |
+| `ourPathPage` (singleton) | `/our-path` | Title, eyebrow, intro line, ordered Mission / Vision sections (kicker, body paragraphs, image). |
+| `coreValuesPage` (singleton) | `/our-core-values` | Title, eyebrow, intro, hero image, exactly 7 values (each with a statement, icon image, and body paragraphs). |
+| `jobOpportunitiesPage` (singleton) | `/job-opportunities` | Title, eyebrow, intro, list of open positions (kicker, job title, body paragraphs). The Apply button auto-emails `info@…` with the job title in the subject. |
+| `teamMember` (multi-doc) | `/team` | One document per staff member: name, role, portrait, bio paragraphs, sort order. Reorder by editing the **Sort order** field (10 / 20 / 30 → leaves room to insert in between). |
+
+> **Known content TODO:** Spanish translations for team-member bios were not yet provided by the client. The English copy is stored in both EN and ES slots; Studio shows a yellow warning ("Spanish translation recommended") on each `es` field until a translation is filled in. Visitors using the Spanish toggle see the English copy as a fallback in the meantime.
+
+---
+
+### 4. Site settings (`siteSettings` singleton)
 
 Global values used across every page. Changes go live within 60 seconds.
 
@@ -74,11 +91,9 @@ These pages read from TypeScript files (`src/lib/`) and need a developer to upda
 
 | Content | Why not in CMS yet |
 |---|---|
-| **Program detail pages** (Maya Cosmovision, Human Rights, Environmental Protection, Immigration, Maya Women Delegation, Gathering of Ancestral Wisdom) | Six pages with highly structured, culturally specific copy including custom art blocks. Phase 2 migration. |
-| **About collection** (Board of Directors, Our Path, Core Values, Job Opportunities) | Four pages sharing a common schema; need `aboutPage` document type first. Phase 2. |
-| **Team page** | Staff roster and bios; need `teamMember` documents. Phase 2. |
-| **Resource collection pages** (`/indigenous-language-resources`, `/land-rights`, `/lgbtqia2s`, etc.) | Specialized legal/cultural documents, some in Maya Mam. Require `resourceCollection` schema. Phase 3. |
-| **Contact page copy** (hero, newsletter section) | Rarely changes; labels in Site Settings cover the live contact info. Phase 3. |
+| **Program detail pages** (Maya Cosmovision, Human Rights, Environmental Protection, Immigration, Maya Women Delegation, Gathering of Ancestral Wisdom) | Six pages with highly structured, culturally specific copy including custom art blocks. Phase 3 — redesigned alongside Resources into a persona-based experience that needs client collaboration before schema is finalized. |
+| **Resource collection pages** (`/indigenous-language-resources`, `/land-rights`, `/lgbtqia2s`, etc.) | Specialized legal / cultural documents, some in Maya Mam. Phase 3 — paired with the Programs redesign so the schema can serve both audiences cleanly. |
+| **Contact page copy** (hero, newsletter section) | Rarely changes; labels in Site Settings cover the live contact info. Phase 4. |
 | **Navigation routes** | Paths like `/about`, `/programs` are in code; only the *labels* are editable in Site Settings. |
 | **UI accessibility strings** | Skip-link text, ARIA labels — these are developer concerns, not content. |
 
@@ -88,12 +103,13 @@ These pages read from TypeScript files (`src/lib/`) and need a developer to upda
 
 Each phase is independent — the site never breaks between phases.
 
-| Phase | Work |
-|---|---|
-| **Phase 2** | Programs, About, Team — define document types, migrate content, delete static files. |
-| **Phase 3** | Resource collection pages (indigenous language resources, thematic resource hubs). Contact page copy. |
-| **Phase 4** | Instant ISR revalidation via Sanity webhook → `revalidateTag`. Currently the site caches for 60 seconds. |
-| **Phase 5** | Full i18n parity — any remaining hardcoded strings surfaced in Site Settings. |
+| Phase | Work | Status |
+|---|---|---|
+| **Phase 1** | Homepage + News + Site settings into Sanity. | Shipped |
+| **Phase 2** | About, Board of Directors, Our Path, Our Core Values, Job Opportunities, Team into Sanity. | Shipped |
+| **Phase 3** | Programs + Resources redesigned into a persona-based experience and migrated to Sanity. Requires client workshop to define personas and IA before schema design. | Pending client collaboration |
+| **Phase 4** | Contact page copy + remaining hardcoded strings into Site Settings / dedicated singletons. | Future |
+| **Phase 5** | Instant ISR revalidation via Sanity webhook → `revalidateTag`. Currently the site caches for 60 seconds. | Future |
 
 ---
 
@@ -122,22 +138,30 @@ mayanleague/
 │   │   ├── mapHomepage.ts                   Sanity doc → per-locale section slices
 │   │   ├── mapSiteSettings.ts               Sanity doc → contact, nav, footer slices
 │   │   ├── mapNewsArticle.ts                Sanity doc → NewsArticle interface
-│   │   └── fieldDescriptions.ts            Shared field description strings
+│   │   ├── mapAboutPages.ts                 Sanity docs → About / Team / Board / Path / Values / Jobs slices
+│   │   └── fieldDescriptions.ts             Shared field description strings
 │   ├── queries/
 │   │   ├── news.ts                          GROQ: news article queries
 │   │   ├── homepage.ts                      GROQ: homepage singleton
-│   │   └── siteSettings.ts                  GROQ: site settings singleton
+│   │   ├── siteSettings.ts                  GROQ: site settings singleton
+│   │   └── aboutPages.ts                    GROQ: About / Team / Board / Path / Values / Jobs
 │   ├── presentation/
 │   │   └── resolve.ts                       Presentation Tool URL mapping
-│   ├── structure.ts                         Desk sidebar (singletons pinned at top)
+│   ├── structure.ts                         Desk sidebar (singletons pinned at top, About pages grouped)
 │   └── schemas/
-│       ├── objects/  (localizedString, localizedText, inlineImage, seoFields …)
-│       └── documents/ (newsArticle, homepage, siteSettings)
+│       ├── objects/  (localizedString, localizedText, inlineImage, seoFields, sanityImage …)
+│       └── documents/ (newsArticle, homepage, siteSettings, aboutPage, boardOfDirectorsPage, ourPathPage, coreValuesPage, jobOpportunitiesPage, teamMember)
 ├── src/lib/
 │   ├── newsRepository.ts                    News data: Sanity-first, static fallback
 │   ├── homepageRepository.ts                Homepage data: Sanity-first, static fallback
 │   ├── siteSettingsRepository.ts            Site settings: Sanity-first, static fallback
+│   ├── aboutPagesRepository.ts              About / Team / Board / Path / Values / Jobs: Sanity-first, static fallback
 │   └── mergeSiteSettings.ts                 Merges Sanity settings into i18n translation set
+├── scripts/
+│   ├── migrate-news-to-sanity.mjs           One-shot migration: news.ts → Sanity
+│   ├── migrate-homepage-to-sanity.mjs       One-shot migration: i18n.ts homepage → Sanity
+│   ├── migrate-site-settings-to-sanity.mjs  One-shot migration: i18n.ts site settings → Sanity
+│   └── migrate-about-pages-to-sanity.mjs    One-shot migration: About pages + team + 16 images → Sanity
 └── src/app/
     ├── api/draft-mode/enable/route.ts       Draft Mode enable (Presentation Tool)
     ├── api/draft-mode/disable/route.ts      Draft Mode disable (Exit preview)
