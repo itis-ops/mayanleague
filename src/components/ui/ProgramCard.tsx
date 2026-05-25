@@ -103,7 +103,7 @@ export default function ProgramCard({
         className={[
           'flex h-full flex-col bg-white',
           onCream ? '' : 'group-hover:bg-cream',
-          rail ? 'min-h-[16.5rem] gap-4 p-5' : 'min-h-96 gap-6 p-7',
+          rail ? 'min-h-[16.5rem] gap-4 p-5' : 'min-h-96 gap-6 p-5 sm:p-7',
         ].join(' ')}
       >
         <div className="flex items-start justify-between gap-3">

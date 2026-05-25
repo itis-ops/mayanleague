@@ -19,7 +19,7 @@ export default function CollectionIntroSection({
 
   return (
     <section
-      className={`grid grid-cols-1 gap-10 border-b border-cream-dark px-7 sm:px-10 lg:grid-cols-[0.32fr_1fr] lg:gap-16 lg:px-14 ${
+      className={`grid grid-cols-1 gap-10 border-b border-cream-dark px-5 sm:px-10 lg:grid-cols-[0.32fr_1fr] lg:gap-16 lg:px-14 ${
         compact ? 'py-8 lg:py-10' : 'py-12 lg:py-16'
       }`}
     >

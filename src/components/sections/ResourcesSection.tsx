@@ -51,7 +51,7 @@ export default function ResourcesSection({ content }: ResourcesSectionProps) {
         <div className="motion-reveal border border-cream-dark bg-white p-1.5">
           <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,0.42fr)_minmax(0,1fr)] lg:divide-x lg:divide-cream-dark">
             {/* Spotlight */}
-            <div className="border-b border-cream-dark px-6 py-9 sm:px-10 sm:py-12 lg:border-b-0 lg:px-10 lg:py-12 xl:px-12 xl:py-14">
+            <div className="border-b border-cream-dark px-5 py-9 sm:px-10 sm:py-12 lg:border-b-0 lg:px-10 lg:py-12 xl:px-12 xl:py-14">
               <p className="type-kicker mb-3 text-earth-red">{r.spotlightEyebrow}</p>
               <h2 className="type-section mb-5 max-w-[18ch] text-[clamp(2rem,4.6vw,3.75rem)] leading-[0.95] text-ink">
                 {r.spotlightHeading}
@@ -86,7 +86,7 @@ export default function ResourcesSection({ content }: ResourcesSectionProps) {
             </div>
 
             {/* Featured videos */}
-            <div className="px-6 py-9 sm:px-10 sm:py-12 lg:px-10 lg:py-12 xl:px-12 xl:py-14">
+            <div className="px-5 py-9 sm:px-10 sm:py-12 lg:px-10 lg:py-12 xl:px-12 xl:py-14">
               <div className="mb-6 border-b border-cream-dark pb-5 sm:mb-7 sm:pb-6">
                 <p className="type-kicker mb-2 text-earth-red">{r.featuredLabel}</p>
                 <h3 className="type-section max-w-[18ch] text-[clamp(1.6rem,2.8vw,2.35rem)] leading-[1.02] text-ink">

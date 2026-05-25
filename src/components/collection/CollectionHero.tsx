@@ -52,7 +52,7 @@ export default function CollectionHero({
           </div>
         </div>
       ) : (
-        <div className="flex min-h-[320px] flex-col justify-end p-7 sm:p-10 lg:min-h-[480px] lg:p-14">
+        <div className="flex min-h-[320px] flex-col justify-end p-5 sm:p-10 lg:min-h-[480px] lg:p-14">
           {toolbar}
           <div className={contentClass}>
             <h1 className="type-display max-w-4xl text-[clamp(3rem,7vw,7rem)] text-ink">

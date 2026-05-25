@@ -124,7 +124,7 @@ export default async function NewsPage() {
                   </a>
                 ) : null}
 
-                <div className="flex flex-1 flex-col gap-6 px-7 py-9 sm:px-10 sm:py-11 lg:px-12 lg:py-14">
+                <div className="flex flex-1 flex-col gap-6 px-5 py-9 sm:px-10 sm:py-11 lg:px-12 lg:py-14">
                   <div className="flex flex-wrap items-center gap-3">
                     <span className="type-kicker text-earth-red"><LocalizedText en="Featured" es="Destacado" /></span>
                     <span className="h-px w-8 bg-earth-red/40" aria-hidden="true" />
@@ -187,7 +187,7 @@ export default async function NewsPage() {
                         </div>
                       ) : null}
 
-                      <div className="flex flex-1 flex-col gap-3 px-6 py-7 lg:px-7 lg:py-8">
+                      <div className="flex flex-1 flex-col gap-3 px-5 py-7 lg:px-7 lg:py-8">
                         <p className="type-kicker text-earth-red"><LocalizedNewsText article={article} field="category" /></p>
                         <h3 className="type-section text-[clamp(1.2rem,1.6vw,1.6rem)] leading-[1.12] text-ink transition-colors duration-300 group-hover:text-earth-red">
                           <LocalizedNewsText article={article} field="title" />
@@ -237,7 +237,7 @@ export default async function NewsPage() {
                         <span id={dateArchive.find((group) => group.firstSlug === article.slug)?.id} className="absolute -top-32 xl:-top-48" aria-hidden="true" />
                       ) : null}
 
-                      <div className="grid grid-cols-1 gap-6 px-7 py-8 sm:px-10 sm:py-10 lg:grid-cols-[220px_1fr_auto] lg:items-center lg:gap-10 lg:px-12 lg:py-12">
+                      <div className="grid grid-cols-1 gap-6 px-5 py-8 sm:px-10 sm:py-10 lg:grid-cols-[220px_1fr_auto] lg:items-center lg:gap-10 lg:px-12 lg:py-12">
                         {article.mainImage ? (
                           <div className="relative aspect-[4/3] overflow-hidden bg-ink lg:aspect-[5/4] lg:w-[220px]">
                             <img

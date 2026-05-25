@@ -111,7 +111,7 @@ function PageHero({
 }) {
   return (
     <section className="grid grid-cols-1 border-b border-cream-dark bg-white lg:grid-cols-[0.66fr_0.34fr]">
-      <div className="flex min-h-[360px] flex-col justify-between p-7 sm:p-10 lg:min-h-[560px] lg:p-14">
+      <div className="flex min-h-[360px] flex-col justify-between p-5 sm:p-10 lg:min-h-[560px] lg:p-14">
         <div className="flex items-center justify-between border-y border-cream-dark py-3">
             <p className="type-kicker text-earth-red">
             {eyebrow}
@@ -160,7 +160,7 @@ export function MediaIndexContent({ slug }: { slug: keyof typeof mediaPages.en }
               <PageHero eyebrow={page.eyebrow} title={page.title} intro={page.intro} count={page.items.length} />
               <section className="grid grid-cols-1 border-t border-cream-dark md:grid-cols-2">
                 {page.items.map((item, index) => (
-                  <article key={`${item.title}-${index}`} className="flex min-h-80 flex-col border-b border-cream-dark p-7 sm:p-10 md:border-r md:last:border-r-0">
+                  <article key={`${item.title}-${index}`} className="flex min-h-80 flex-col border-b border-cream-dark p-5 sm:p-10 md:border-r md:last:border-r-0">
                     <div className="mb-8 flex items-start justify-between gap-6">
                       <p className="type-kicker text-earth-red">
                         {item.meta || page.label}
@@ -206,7 +206,7 @@ export function ResourceCollectionContent({ slug }: { slug: keyof typeof resourc
             <Sidebar label={copy.resources} activeHref={`/${slug}`} links={localizedResourceLinks(lang)} />
             <article className="bg-white">
               <PageHero eyebrow={page.eyebrow} title={page.title} intro={page.intro[0] || page.title} count={page.links.length} />
-              <section className="grid grid-cols-1 gap-10 border-b border-cream-dark px-7 py-12 sm:px-10 lg:grid-cols-[0.32fr_1fr] lg:gap-16 lg:px-14 lg:py-16">
+              <section className="grid grid-cols-1 gap-10 border-b border-cream-dark px-5 py-12 sm:px-10 lg:grid-cols-[0.32fr_1fr] lg:gap-16 lg:px-14 lg:py-16">
                 <div>
                   <p className="type-kicker mb-6 text-earth-red">
                     {copy.resources}
@@ -221,7 +221,7 @@ export function ResourceCollectionContent({ slug }: { slug: keyof typeof resourc
               </section>
               <section className="bg-white">
                 {page.links.map((link, index) => (
-                  <article key={`${link.label}-${index}`} className="grid grid-cols-1 gap-8 border-b border-cream-dark px-7 py-8 hover:bg-mist sm:px-10 lg:grid-cols-[0.14fr_1fr_0.18fr] lg:items-center lg:gap-12 lg:px-14">
+                  <article key={`${link.label}-${index}`} className="grid grid-cols-1 gap-8 border-b border-cream-dark px-5 py-8 hover:bg-mist sm:px-10 lg:grid-cols-[0.14fr_1fr_0.18fr] lg:items-center lg:gap-12 lg:px-14">
                     <p className="font-display text-5xl font-bold leading-none tracking-[-0.06em] text-earth-red">
                       {String(index + 1).padStart(2, '0')}
                     </p>
@@ -258,7 +258,7 @@ export function ResourcesIndexContent() {
           <PageHero eyebrow={copy.resources} title={title} intro={intro} count={resourceNav.length} />
           <div className="grid grid-cols-1 gap-4 bg-cream py-4 md:grid-cols-2 xl:grid-cols-4">
             {localizedResourceLinks(lang).map((item, index) => (
-              <article key={item.href} className="motion-card flex min-h-72 min-w-0 flex-col overflow-hidden border border-cream-dark bg-white p-7 hover:bg-cream">
+              <article key={item.href} className="motion-card flex min-h-72 min-w-0 flex-col overflow-hidden border border-cream-dark bg-white p-5 hover:bg-cream sm:p-7">
                 <div className="mb-8 flex justify-end">
                   <CardIndexMark value={index + 1} variant="lg" />
                 </div>
@@ -302,7 +302,7 @@ export function IndigenousLanguageResourcesContent() {
             <Sidebar label={copy.resources} activeHref="/indigenous-language-resources" links={localizedResourceLinks(lang)} />
             <article className="bg-white">
               <PageHero eyebrow={copy.resources} title={title} intro={intro[0]} count={indigenousLanguageResources.groups.length} />
-              <section className="grid grid-cols-1 gap-10 border-b border-cream-dark px-7 py-12 sm:px-10 lg:grid-cols-[0.32fr_1fr] lg:gap-16 lg:px-14 lg:py-16">
+              <section className="grid grid-cols-1 gap-10 border-b border-cream-dark px-5 py-12 sm:px-10 lg:grid-cols-[0.32fr_1fr] lg:gap-16 lg:px-14 lg:py-16">
                 <div>
                   <p className="type-kicker mb-6 text-earth-red">
                     KYR
@@ -320,7 +320,7 @@ export function IndigenousLanguageResourcesContent() {
               </section>
               <section>
                 {indigenousLanguageResources.groups.map((group, index) => (
-                  <article key={group.title} className="grid grid-cols-1 gap-8 border-b border-cream-dark px-7 py-10 hover:bg-mist sm:px-10 lg:grid-cols-[0.14fr_0.34fr_1fr] lg:gap-12 lg:px-14 lg:py-14">
+                  <article key={group.title} className="grid grid-cols-1 gap-8 border-b border-cream-dark px-5 py-10 hover:bg-mist sm:px-10 lg:grid-cols-[0.14fr_0.34fr_1fr] lg:gap-12 lg:px-14 lg:py-14">
                     <div className="flex justify-end lg:min-h-full lg:items-end">
                       <MayaNumber value={index + 1} className="shrink-0 scale-110 origin-bottom-right text-earth-red/82 lg:scale-125" />
                     </div>

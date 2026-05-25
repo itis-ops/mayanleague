@@ -44,7 +44,7 @@ export default function MissionSection({ content }: MissionSectionProps) {
           <div className="grid grid-cols-1 gap-5 lg:grid-cols-[1fr_minmax(260px,0.38fr)] lg:items-stretch">
             {/* Mission statement */}
             <div className="border border-cream-dark bg-white p-1.5">
-              <div className="bg-white px-7 py-10 sm:px-10 sm:py-12 lg:px-14 lg:py-16">
+              <div className="bg-white px-5 py-10 sm:px-10 sm:py-12 lg:px-14 lg:py-16">
                 <p className="type-kicker mb-5 text-earth-red sm:mb-8">{m.eyebrow}</p>
                 <h2 className="type-section mb-8 max-w-4xl text-[clamp(2.55rem,10vw,5.6rem)] text-ink sm:mb-10">
                   {m.heading}

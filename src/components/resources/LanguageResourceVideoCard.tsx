@@ -48,7 +48,7 @@ export default function LanguageResourceVideoCard({
         'group motion-card flex min-w-0 flex-col overflow-hidden border border-cream-dark bg-white transition-colors',
         'hover:border-earth-red/40 hover:bg-white hover:shadow-[0_14px_36px_rgba(36,36,36,0.09)]',
         'focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-gold',
-        compact ? 'gap-3 p-5 sm:p-6' : 'gap-4 p-6 sm:p-7 lg:p-8',
+        compact ? 'gap-3 p-5 sm:p-6' : 'gap-4 p-5 sm:p-7 lg:p-8',
       ].join(' ')}
     >
       <div className="flex items-start justify-between gap-3">

@@ -65,7 +65,7 @@ export default function ResourcesIndexPage() {
                     <a
                       key={item.href}
                       href={item.href}
-                      className="group flex min-h-72 min-w-0 flex-col overflow-hidden border border-cream-dark bg-white p-7 transition-colors hover:border-earth-red/40 hover:bg-earth-red/4 focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-gold"
+                      className="group flex min-h-72 min-w-0 flex-col overflow-hidden border border-cream-dark bg-white p-5 transition-colors hover:border-earth-red/40 hover:bg-earth-red/4 focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-gold sm:p-7"
                     >
                       <div className="mb-8 flex items-start justify-between gap-4">
                         <CardIndexMark value={index + 1} variant="lg" />
