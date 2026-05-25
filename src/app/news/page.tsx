@@ -91,11 +91,13 @@ export default async function NewsPage() {
     <>
       <Navbar />
       <main id="main-content" className={hubPageMainClass}>
-        <section className={`${hubPageSectionClass} border-t border-cream-dark pb-8 lg:pb-12`}>
-          <NewsroomStickyHero categories={categoryFilters} dates={dateFilters} dispatchCount={newsArticles.length} />
+        <div className="border-t border-cream-dark pb-8 lg:pb-12">
+          <div className={hubPageSectionClass}>
+            <NewsroomStickyHero categories={categoryFilters} dates={dateFilters} dispatchCount={newsArticles.length} />
+          </div>
 
-          {/* Featured section — lead + up to 3 supporting */}
-          <section className="relative mt-8 flex flex-col gap-6">
+          {/* Featured section — full-bleed, lead + up to 3 supporting */}
+          <section className="relative mt-8 flex flex-col gap-6 px-5 sm:px-8 lg:px-12">
             {/* Lead article */}
             <article
               id={featuredArticle.category.toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-')}
@@ -208,11 +210,11 @@ export default async function NewsPage() {
             ) : null}
           </section>
 
-          {/* Archive — sticky rail + image-led list */}
-          <section className="-mx-5 mt-10 bg-white sm:-mx-8 lg:-mx-12 lg:mt-14">
-            <div className="grid grid-cols-1 border-y border-cream-dark lg:grid-cols-[0.22fr_1fr]">
+          {/* Archive — full-width sticky rail + image-led list */}
+          <section className="mt-10 bg-white lg:mt-14">
+            <div className="grid grid-cols-1 border-y border-cream-dark lg:grid-cols-[minmax(260px,16rem)_1fr]">
               <aside className="hidden lg:block lg:border-r lg:border-cream-dark">
-                <div className="sticky top-[140px] px-8 py-12 xl:top-24 xl:px-12">
+                <div className="sticky top-[140px] px-8 py-12 xl:top-[210px] xl:px-12">
                   <p className="type-kicker mb-6 text-earth-red"><LocalizedText en="All dispatches" es="Todos los despachos" /></p>
                   <p className="type-body text-[0.9375rem] leading-[1.65] text-ink/68">
                     <LocalizedText
@@ -288,7 +290,7 @@ export default async function NewsPage() {
               </div>
             </div>
           </section>
-        </section>
+        </div>
       </main>
       <Footer />
     </>
