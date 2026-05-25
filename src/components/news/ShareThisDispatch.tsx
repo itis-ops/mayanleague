@@ -1,8 +1,15 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { hubArticleBleedClass, hubArticleBleedInnerClass } from '@/lib/editorialLayout'
 import { useLanguage } from '@/hooks/useLanguage'
+import {
+  getNewsArticleUrl,
+  getNewsInstagramStoryImageUrl,
+  getNewsShareImageUrl,
+  getNewsSocial,
+  type NewsArticle,
+} from '@/lib/news'
 import {
   copyTextToClipboard,
   getCachedShareFile,
@@ -19,12 +26,7 @@ import {
 import ShareToast from '@/components/news/ShareToast'
 
 interface ShareThisDispatchProps {
-  title: string
-  text: string
-  url: string
-  hashtags: string[]
-  shareImageUrl: string
-  storyImageUrl: string
+  article: NewsArticle
   className?: string
 }
 
@@ -33,8 +35,8 @@ interface IconProps {
 }
 
 const iconClass = 'h-4 w-4'
-const DISPATCH_CARD_FILENAME = 'iml-dispatch-card.png'
-const STORY_CARD_FILENAME = 'iml-dispatch-story.png'
+const DISPATCH_CARD_BASENAME = 'iml-dispatch-card'
+const STORY_CARD_BASENAME = 'iml-dispatch-story'
 
 function CopyIcon({ className = iconClass }: IconProps) {
   return (
@@ -108,15 +110,7 @@ function iconButtonClass(isActive = false, isLoading = false) {
   ].join(' ')
 }
 
-export default function ShareThisDispatch({
-  title,
-  text,
-  url,
-  hashtags,
-  shareImageUrl,
-  storyImageUrl,
-  className = '',
-}: ShareThisDispatchProps) {
+export default function ShareThisDispatch({ article, className = '' }: ShareThisDispatchProps) {
   const { lang } = useLanguage()
   const [copyState, setCopyState] = useState<'idle' | 'copied'>('idle')
   const [activeChannel, setActiveChannel] = useState<ShareChannel | null>(null)
@@ -128,6 +122,25 @@ export default function ShareThisDispatch({
   useEffect(() => {
     setIsMobile(isMobileWebShareContext())
   }, [])
+
+  // Recompute every share artifact whenever the reader's language changes.
+  // The article URL carries `?lang=es` so scrapers and recipients land on the
+  // Spanish version; the image routes carry the same param so the rendered
+  // card matches the language; the title/text/hashtags pull from the
+  // localized article.
+  const social = useMemo(() => getNewsSocial(article, lang), [article, lang])
+  const articleUrl = useMemo(() => getNewsArticleUrl(article.slug, lang), [article.slug, lang])
+  const shareImageUrl = useMemo(() => getNewsShareImageUrl(article.slug, lang), [article.slug, lang])
+  const storyImageUrl = useMemo(
+    () => getNewsInstagramStoryImageUrl(article.slug, lang),
+    [article.slug, lang],
+  )
+  const dispatchCardFilename = `${DISPATCH_CARD_BASENAME}${lang === 'es' ? '-es' : ''}.png`
+  const storyCardFilename = `${STORY_CARD_BASENAME}${lang === 'es' ? '-es' : ''}.png`
+
+  const title = social.title
+  const text = social.suggestedPostCopy
+  const hashtags = social.hashtags
 
   const copy =
     lang === 'es'
@@ -176,17 +189,17 @@ export default function ShareThisDispatch({
   > = {
     instagram: {
       imageUrl: storyImageUrl,
-      filename: STORY_CARD_FILENAME,
+      filename: storyCardFilename,
       chooseApp: copy.chooseInstagram,
     },
     x: {
       imageUrl: shareImageUrl,
-      filename: DISPATCH_CARD_FILENAME,
+      filename: dispatchCardFilename,
       chooseApp: copy.chooseX,
     },
     facebook: {
       imageUrl: shareImageUrl,
-      filename: DISPATCH_CARD_FILENAME,
+      filename: dispatchCardFilename,
       chooseApp: copy.chooseFacebook,
     },
   }
@@ -197,21 +210,21 @@ export default function ShareThisDispatch({
   }
 
   async function copyLink() {
-    await copyTextToClipboard(url)
+    await copyTextToClipboard(articleUrl)
     setCopyState('copied')
     showToast(copy.linkCopied)
     window.setTimeout(() => setCopyState('idle'), 1800)
   }
 
   useEffect(() => {
-    void preloadShareImage(storyImageUrl, STORY_CARD_FILENAME).catch(() => {})
-    void preloadShareImage(shareImageUrl, DISPATCH_CARD_FILENAME).catch(() => {})
-  }, [storyImageUrl, shareImageUrl])
+    void preloadShareImage(storyImageUrl, storyCardFilename).catch(() => {})
+    void preloadShareImage(shareImageUrl, dispatchCardFilename).catch(() => {})
+  }, [storyImageUrl, shareImageUrl, storyCardFilename, dispatchCardFilename])
 
   async function nativeShare() {
     try {
       if (shouldPreferNativeShareSheet()) {
-        await navigator.share({ title, text, url })
+        await navigator.share({ title, text, url: articleUrl })
         return
       }
       await copyLink()
@@ -226,11 +239,11 @@ export default function ShareThisDispatch({
     // On desktop, open web-based share URLs directly — no card download needed.
     if (!isMobile) {
       if (channel === 'x') {
-        window.open(getXShareUrl(text, url, hashtags), '_blank', 'noopener,noreferrer')
+        window.open(getXShareUrl(text, articleUrl, hashtags), '_blank', 'noopener,noreferrer')
         return
       }
       if (channel === 'facebook') {
-        window.open(getFacebookShareUrl(url), '_blank', 'noopener,noreferrer')
+        window.open(getFacebookShareUrl(articleUrl), '_blank', 'noopener,noreferrer')
         return
       }
       if (channel === 'instagram') {
@@ -250,7 +263,7 @@ export default function ShareThisDispatch({
       const result = await shareCardImage(config.imageUrl, config.filename, cachedFile, {
         title,
         text,
-        url,
+        url: articleUrl,
       })
 
       if (result === 'shared') {
@@ -318,7 +331,7 @@ export default function ShareThisDispatch({
 
               {/* WhatsApp */}
               <a
-                href={getWhatsAppShareUrl(text, url)}
+                href={getWhatsAppShareUrl(text, articleUrl)}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={copy.shareWhatsApp}
@@ -330,7 +343,7 @@ export default function ShareThisDispatch({
 
               {/* Email */}
               <a
-                href={getEmailShareUrl(title, text, url)}
+                href={getEmailShareUrl(title, text, articleUrl)}
                 aria-label={copy.shareEmail}
                 title={copy.shareEmail}
                 className={iconButtonClass()}

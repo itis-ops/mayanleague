@@ -11,13 +11,19 @@ import NewsRelatedDispatches from '@/components/news/NewsRelatedDispatches'
 import ShareThisDispatch from '@/components/news/ShareThisDispatch'
 import ArticleDonationModule from '@/components/news/ArticleDonationModule'
 import { hubArticleBleedClass, hubArticleBleedInnerClass, hubPageMainClass, hubPageSectionClass } from '@/lib/editorialLayout'
-import { getNewsArticleUrl, getNewsInstagramStoryImageUrl, getNewsShareImageAbsoluteUrl, getNewsShareImageUrl, getNewsSocial } from '@/lib/news'
+import {
+  getLocalizedNewsArticle,
+  getNewsArticleUrl,
+  getNewsShareImageAbsoluteUrl,
+  getNewsSocial,
+} from '@/lib/news'
 import { getNewsArticleBySlug, getNewsSlugs, getRelatedNewsArticles } from '@/lib/newsRepository'
 
 export const revalidate = 60
 
 interface PageProps {
   params: Promise<{ slug: string }>
+  searchParams: Promise<Record<string, string | string[] | undefined>>
 }
 
 export async function generateStaticParams() {
@@ -25,8 +31,13 @@ export async function generateStaticParams() {
   return slugs.map((slug) => ({ slug }))
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { slug } = await params
+function readLangParam(value: string | string[] | undefined): 'en' | 'es' {
+  const raw = Array.isArray(value) ? value[0] : value
+  return raw === 'es' ? 'es' : 'en'
+}
+
+export async function generateMetadata({ params, searchParams }: PageProps): Promise<Metadata> {
+  const [{ slug }, query] = await Promise.all([params, searchParams])
   const article = await getNewsArticleBySlug(slug)
 
   if (!article) {
@@ -35,25 +46,33 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     }
   }
 
-  const social = getNewsSocial(article)
-  const url = getNewsArticleUrl(article.slug)
-  const imageUrl = getNewsShareImageAbsoluteUrl(article.slug)
-  const imageAlt = article.mainImage?.alt || social.shareImageAlt
+  const lang = readLangParam(query.lang)
+  const localized = lang === 'es' ? getLocalizedNewsArticle(article, 'es') : article
+  const social = getNewsSocial(article, lang)
+  const url = getNewsArticleUrl(article.slug, lang)
+  const imageUrl = getNewsShareImageAbsoluteUrl(article.slug, lang)
+  const imageAlt = localized.mainImage?.alt || social.shareImageAlt
+  const siteName = lang === 'es' ? 'Liga Maya Internacional' : 'International Mayan League'
 
   return {
-    title: `${article.title} | International Mayan League`,
+    title: `${localized.title} | ${siteName}`,
     description: social.description,
     alternates: {
       canonical: url,
+      languages: {
+        en: getNewsArticleUrl(article.slug, 'en'),
+        es: getNewsArticleUrl(article.slug, 'es'),
+      },
     },
     openGraph: {
-      title: article.title,
+      title: localized.title,
       description: social.description,
       url,
-      siteName: 'International Mayan League',
+      siteName,
       type: 'article',
+      locale: lang === 'es' ? 'es_ES' : 'en_US',
       authors: article.author ? [article.author] : undefined,
-      tags: article.keywords,
+      tags: localized.keywords,
       images: [
         {
           url: imageUrl,
@@ -65,7 +84,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     },
     twitter: {
       card: 'summary_large_image',
-      title: article.title,
+      title: localized.title,
       description: social.description,
       images: [imageUrl],
     },
@@ -79,10 +98,6 @@ export default async function NewsDetailPage({ params }: PageProps) {
   if (!article) notFound()
 
   const relatedArticles = await getRelatedNewsArticles(article)
-  const articleUrl = getNewsArticleUrl(article.slug)
-  const shareImageUrl = getNewsShareImageUrl(article.slug)
-  const storyImageUrl = getNewsInstagramStoryImageUrl(article.slug)
-  const social = getNewsSocial(article)
 
   return (
     <>
@@ -129,15 +144,7 @@ export default async function NewsDetailPage({ params }: PageProps) {
                 <NewsArticleFile article={article} />
               </div>
 
-              <ShareThisDispatch
-                title={social.title}
-                text={social.suggestedPostCopy}
-                url={articleUrl}
-                hashtags={social.hashtags}
-                shareImageUrl={shareImageUrl}
-                storyImageUrl={storyImageUrl}
-                className="order-5"
-              />
+              <ShareThisDispatch article={article} className="order-5" />
             </div>
 
             <ArticleDonationModule />

@@ -1,3 +1,5 @@
+import type { Lang } from './i18n'
+
 export const newsCategories = [
   'Justice',
   'Land & Water',
@@ -655,40 +657,63 @@ export function getLocalizedNewsArticle(article: NewsArticle, lang: 'en' | 'es')
   }
 }
 
-export function getNewsArticleUrl(slug: string) {
-  return `${siteUrl}/news/${slug}`
+function withLangParam(url: string, lang: Lang | undefined, sep: '?' | '&' = '&'): string {
+  if (lang !== 'es') return url
+  return `${url}${sep}lang=es`
 }
 
-export function getNewsShareImageUrl(slug: string) {
-  return `/news/${slug}/opengraph-image?v=article-photo`
+export function getNewsArticleUrl(slug: string, lang?: Lang) {
+  const base = `${siteUrl}/news/${slug}`
+  return withLangParam(base, lang, '?')
 }
 
-export function getNewsInstagramStoryImageUrl(slug: string) {
-  return `/news/${slug}/instagram-story-image`
+export function getNewsShareImageUrl(slug: string, lang?: Lang) {
+  const base = `/news/${slug}/opengraph-image?v=article-photo`
+  return withLangParam(base, lang, '&')
 }
 
-export function getNewsShareImageAbsoluteUrl(slug: string) {
-  return `${siteUrl}/news/${slug}/opengraph-image?v=article-photo`
+export function getNewsInstagramStoryImageUrl(slug: string, lang?: Lang) {
+  const base = `/news/${slug}/instagram-story-image`
+  return withLangParam(base, lang, '?')
 }
 
-export function getNewsSocial(article: NewsArticle) {
-  const hashtags = article.hashtags || [
+export function getNewsShareImageAbsoluteUrl(slug: string, lang?: Lang) {
+  const base = `${siteUrl}/news/${slug}/opengraph-image?v=article-photo`
+  return withLangParam(base, lang, '&')
+}
+
+export function getNewsSocial(article: NewsArticle, lang: Lang = 'en') {
+  const localized = lang === 'es' ? getLocalizedNewsArticle(article, 'es') : article
+
+  const baseTags = article.hashtags || [
     'MayanLeague',
     article.category.replace(/[^a-zA-Z0-9]/g, ''),
     ...article.keywords.slice(0, 2).map((keyword) => keyword.replace(/[^a-zA-Z0-9]/g, '')),
   ]
 
+  const titleEn = article.socialTitle || article.title
+  const titleEs = localized.socialTitle || localized.title || titleEn
+  const descriptionEn = article.socialDescription || article.dek
+  const descriptionEs = localized.socialDescription || localized.dek || descriptionEn
+
+  const suggestedPostCopyEn =
+    article.suggestedPostCopy ||
+    `${article.dek}\n\nRead this dispatch from the International Mayan League archive.`
+  const suggestedPostCopyEs =
+    localized.suggestedPostCopy ||
+    `${localized.dek || article.dek}\n\nLee este despacho del archivo de la Liga Maya Internacional.`
+
   return {
-    title: article.socialTitle || article.title,
-    description: article.socialDescription || article.dek,
-    suggestedPostCopy:
-      article.suggestedPostCopy ||
-      `${article.dek}\n\nRead this dispatch from the International Mayan League archive.`,
-    hashtags,
-    shareImage: article.shareImage || getNewsShareImageAbsoluteUrl(article.slug),
-    shareImageAlt:
-      article.shareImageAlt ||
-      `Branded Mayan League share card for ${article.title}`,
+    title: lang === 'es' ? titleEs : titleEn,
+    description: lang === 'es' ? descriptionEs : descriptionEn,
+    suggestedPostCopy: lang === 'es' ? suggestedPostCopyEs : suggestedPostCopyEn,
+    hashtags: baseTags,
+    shareImage: article.shareImage || getNewsShareImageAbsoluteUrl(article.slug, lang),
+    shareImageAlt: lang === 'es'
+      ? (article.shareImageAlt
+          ? article.shareImageAlt.replace(/share card for/i, 'tarjeta para compartir de')
+          : `Tarjeta de la Liga Maya para ${titleEs}`)
+      : article.shareImageAlt || `Branded Mayan League share card for ${titleEn}`,
   }
 }
 

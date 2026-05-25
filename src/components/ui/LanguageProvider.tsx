@@ -32,11 +32,54 @@ export default function LanguageProvider({ children, siteSettings }: LanguagePro
   const [lang, setLangState] = useState<Lang>('en')
 
   useEffect(() => {
+    // URL param wins over stored preference so a Spanish-shared link
+    // (e.g. /news/<slug>?lang=es) lands the recipient in Spanish even if
+    // their last-saved choice was English.
+    let resolved: Lang | null = null
+
     try {
-      const stored = localStorage.getItem('ml-lang') as Lang | null
-      if (stored === 'en' || stored === 'es') setLangState(stored)
+      const params = new URLSearchParams(window.location.search)
+      const fromUrl = params.get('lang')
+      if (fromUrl === 'en' || fromUrl === 'es') {
+        resolved = fromUrl
+      }
     } catch {
-      // localStorage unavailable (e.g. iOS Private Browsing) — fall back to default
+      // window/URLSearchParams unavailable — fall through
+    }
+
+    if (!resolved) {
+      try {
+        const stored = localStorage.getItem('ml-lang') as Lang | null
+        if (stored === 'en' || stored === 'es') resolved = stored
+      } catch {
+        // localStorage unavailable (e.g. iOS Private Browsing) — fall back to default
+      }
+    }
+
+    if (resolved && resolved !== 'en') {
+      setLangState(resolved)
+    }
+
+    if (resolved) {
+      try {
+        localStorage.setItem('ml-lang', resolved)
+      } catch {
+        // ignore
+      }
+    }
+
+    // Clean ?lang= out of the visible URL so a later in-session toggle to
+    // the other language isn't overridden when the user refreshes.
+    try {
+      const params = new URLSearchParams(window.location.search)
+      if (params.has('lang')) {
+        params.delete('lang')
+        const search = params.toString()
+        const cleanUrl = `${window.location.pathname}${search ? `?${search}` : ''}${window.location.hash}`
+        window.history.replaceState(null, '', cleanUrl)
+      }
+    } catch {
+      // ignore
     }
   }, [])
 

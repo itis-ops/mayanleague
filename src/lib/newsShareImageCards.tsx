@@ -1,10 +1,13 @@
 import { shareBrand, fitShareText } from '@/lib/shareImageRenderer'
 
+type ShareCardLocale = 'en' | 'es'
+
 interface StoryCardProps {
   logoSrc: string
   category: string
   title: string
   description: string
+  locale?: ShareCardLocale
 }
 
 interface OpenGraphCardProps {
@@ -12,12 +15,24 @@ interface OpenGraphCardProps {
   category: string
   title: string
   description: string
+  locale?: ShareCardLocale
 }
 
-export function NewsInstagramStoryCard({ logoSrc, category, title, description }: StoryCardProps) {
+const STORY_LABELS = {
+  en: { newsroom: 'Newsroom' },
+  es: { newsroom: 'Sala de prensa' },
+} as const
+
+const OG_LABELS = {
+  en: { dispatch: 'Newsroom dispatch' },
+  es: { dispatch: 'Despacho de la sala de prensa' },
+} as const
+
+export function NewsInstagramStoryCard({ logoSrc, category, title, description, locale = 'en' }: StoryCardProps) {
   const displayTitle = fitShareText(title, 110)
   const displayDescription = fitShareText(description, 170)
   const titleSize = displayTitle.length > 70 ? 72 : 84
+  const labels = STORY_LABELS[locale]
 
   return (
     <div
@@ -122,7 +137,7 @@ export function NewsInstagramStoryCard({ logoSrc, category, title, description }
               color: shareBrand.earthRed,
             }}
           >
-            Newsroom
+            {labels.newsroom}
           </div>
         </div>
       </div>
@@ -130,10 +145,11 @@ export function NewsInstagramStoryCard({ logoSrc, category, title, description }
   )
 }
 
-export function NewsOpenGraphCard({ logoSrc, category, title, description }: OpenGraphCardProps) {
+export function NewsOpenGraphCard({ logoSrc, category, title, description, locale = 'en' }: OpenGraphCardProps) {
   const displayTitle = fitShareText(title, 90)
   const displayDescription = fitShareText(description, 130)
   const titleSize = displayTitle.length > 58 ? 54 : 64
+  const labels = OG_LABELS[locale]
 
   return (
     <div
@@ -243,7 +259,7 @@ export function NewsOpenGraphCard({ logoSrc, category, title, description }: Ope
             textTransform: 'uppercase',
           }}
         >
-          Newsroom dispatch
+          {labels.dispatch}
         </div>
       </div>
     </div>
