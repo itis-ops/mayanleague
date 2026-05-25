@@ -19,13 +19,13 @@ interface OpenGraphCardProps {
 }
 
 const STORY_LABELS = {
-  en: { newsroom: 'Newsroom' },
-  es: { newsroom: 'Sala de prensa' },
+  en: { newsroom: 'Newsroom', org: 'International Mayan League' },
+  es: { newsroom: 'Sala de prensa', org: 'Liga Maya Internacional' },
 } as const
 
 const OG_LABELS = {
-  en: { dispatch: 'Newsroom dispatch' },
-  es: { dispatch: 'Despacho de la sala de prensa' },
+  en: { dispatch: 'Newsroom dispatch', org: 'International Mayan League' },
+  es: { dispatch: 'Despacho de la sala de prensa', org: 'Liga Maya Internacional' },
 } as const
 
 export function NewsInstagramStoryCard({ logoSrc, category, title, description, locale = 'en' }: StoryCardProps) {
@@ -124,7 +124,7 @@ export function NewsInstagramStoryCard({ logoSrc, category, title, description, 
               textTransform: 'uppercase',
             }}
           >
-            International Mayan League
+            {labels.org}
           </div>
           <div
             style={{
@@ -215,7 +215,7 @@ export function NewsOpenGraphCard({ logoSrc, category, title, description, local
               color: shareBrand.mist,
             }}
           >
-            International Mayan League
+            {labels.org}
           </div>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
