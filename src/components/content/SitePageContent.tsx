@@ -3,6 +3,7 @@
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import Button from '@/components/ui/Button'
+import CardIndexMark, { CardWesternIndex } from '@/components/ui/CardIndexMark'
 import MayaNumber from '@/components/ui/MayaNumber'
 import { CollectionNavDesktop } from '@/components/collection/CollectionNav'
 import PageLanguageCorner from '@/components/editorial/PageLanguageCorner'
@@ -257,18 +258,16 @@ export function ResourcesIndexContent() {
           <PageHero eyebrow={copy.resources} title={title} intro={intro} count={resourceNav.length} />
           <div className="grid grid-cols-1 gap-4 bg-cream py-4 md:grid-cols-2 xl:grid-cols-4">
             {localizedResourceLinks(lang).map((item, index) => (
-              <article key={item.href} className="motion-card flex min-h-72 flex-col border border-cream-dark bg-white p-7 hover:bg-cream">
-                <div className="mb-8 flex items-start justify-between gap-4">
-                  <p className="font-display text-5xl font-bold leading-none tracking-[-0.06em] text-earth-red">
-                    {String(index + 1).padStart(2, '0')}
-                  </p>
-                  <MayaNumber value={index + 1} className="shrink-0 scale-75 origin-top-right text-earth-red" />
+              <article key={item.href} className="motion-card flex min-h-72 min-w-0 flex-col overflow-hidden border border-cream-dark bg-white p-7 hover:bg-cream">
+                <div className="mb-8 flex justify-end">
+                  <CardIndexMark value={index + 1} variant="lg" />
                 </div>
                 <h2 className="type-section mb-6 text-[clamp(1.8rem,2.8vw,2.45rem)] text-ink">
                   {item.label}
                 </h2>
-                <div className="mt-auto border-t border-cream-dark pt-5">
+                <div className="mt-auto flex items-end justify-between gap-4 border-t border-cream-dark pt-5">
                   <TextLink link={item} label={copy.viewPage} />
+                  <CardWesternIndex value={index + 1} />
                 </div>
               </article>
             ))}

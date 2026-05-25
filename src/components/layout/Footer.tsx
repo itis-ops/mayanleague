@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import ThemeToggle from '@/components/ui/ThemeToggle'
 import { useLanguage } from '@/hooks/useLanguage'
 
 function SocialIcon({ platform }: { platform: string }) {
@@ -31,19 +32,24 @@ function SocialIcon({ platform }: { platform: string }) {
   return icons[platform] || null
 }
 
+const footerLinkClass =
+  'motion-link inline-flex py-1.5 font-body text-sm font-semibold leading-5 text-white underline-offset-4 hover:underline active:text-cream-dark focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-gold'
+
 function SocialLinks({
   platforms,
   socialUrls,
   socialLabel,
+  className = '',
 }: {
   platforms: string[]
   socialUrls: Record<string, string>
   socialLabel: string
+  className?: string
 }) {
   if (!platforms.length) return null
 
   return (
-    <div className="flex flex-wrap gap-3">
+    <div className={`flex flex-wrap gap-3 ${className}`.trim()}>
       {platforms.map((platform) => (
         <a
           key={platform}
@@ -55,6 +61,65 @@ function SocialLinks({
         </a>
       ))}
     </div>
+  )
+}
+
+function FooterLinkGroup({
+  title,
+  links,
+}: {
+  title: string
+  links: { label: string; href: string }[]
+}) {
+  return (
+    <div>
+      <h4 className="type-kicker mb-3 text-white/70 md:mb-4 md:text-white">{title}</h4>
+      <ul className="flex flex-col gap-0.5">
+        {links.map((link) => (
+          <li key={link.label}>
+            <a href={link.href} className={footerLinkClass}>
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
+function FooterContact({
+  addressLines,
+  addressFallback,
+  phone,
+  phoneHref,
+  email,
+}: {
+  addressLines: string[]
+  addressFallback: string
+  phone?: string
+  phoneHref?: string
+  email: string
+}) {
+  return (
+    <address className="not-italic font-body text-sm leading-6 text-white/90">
+      {addressLines.length > 0 ? (
+        addressLines.map((line) => <p key={line}>{line}</p>)
+      ) : (
+        <p>{addressFallback}</p>
+      )}
+      {phone ? (
+        <p className="mt-3">
+          <a href={phoneHref} className={footerLinkClass}>
+            {phone}
+          </a>
+        </p>
+      ) : null}
+      <p className="mt-2">
+        <a href={`mailto:${email}`} className={footerLinkClass}>
+          {email}
+        </a>
+      </p>
+    </address>
   )
 }
 
@@ -86,13 +151,62 @@ export default function Footer() {
     href: INVOLVED_LINK_PATHS[i] === null ? site.donateUrl : INVOLVED_LINK_PATHS[i]!,
   }))
 
-  const footerGridClass =
-    'grid grid-cols-1 gap-9 md:grid-cols-[1.15fr_0.85fr_0.85fr_0.85fr] md:items-start lg:gap-10'
-
   return (
     <footer id="contact" className="relative overflow-hidden bg-earth-red text-white">
-      <div className="relative mx-auto max-w-[1728px] px-5 py-14 sm:px-8 lg:px-12 lg:py-16">
-        <div className={footerGridClass}>
+      <div className="relative mx-auto max-w-[1728px] px-5 pb-8 pt-12 sm:px-8 md:py-16 lg:px-12">
+        {/* Mobile footer */}
+        <div className="flex flex-col md:hidden">
+          <div className="flex items-center gap-4 border-b border-white/15 pb-8">
+            <img src="/brand/mayan-league-logo.png" alt="" className="h-16 w-16 shrink-0 object-contain" />
+            <div className="min-w-0">
+              <span className="block font-display text-[1.75rem] font-bold uppercase leading-[0.92] tracking-[-0.035em] text-white">
+                {t.brand.full}
+              </span>
+            </div>
+          </div>
+
+          <p className="type-intro mt-8 max-w-[28ch] text-[1.125rem] leading-[1.2] text-white">
+            {t.footer.tagline}
+          </p>
+
+          <SocialLinks
+            platforms={socialPlatforms}
+            socialUrls={site.social}
+            socialLabel={t.footer.socialLabel}
+            className="mt-8"
+          />
+
+          <div className="mt-10 grid grid-cols-2 gap-x-6 gap-y-9 border-t border-white/15 pt-8">
+            <FooterLinkGroup title={t.footer.whoWeAre} links={whoLinks} />
+            <FooterLinkGroup title={t.footer.whatWeDo} links={quickLinks.slice(1, 5)} />
+            <div className="col-span-2">
+              <FooterLinkGroup title={t.footer.getInvolved} links={involvedLinks} />
+            </div>
+          </div>
+
+          <div className="mt-10 border-t border-white/15 pt-8">
+            <h4 className="type-kicker mb-4 text-white/70">{t.footer.contact}</h4>
+            <FooterContact
+              addressLines={site.addressLines}
+              addressFallback={t.footer.address}
+              phone={site.phone}
+              phoneHref={site.phoneHref}
+              email={site.email}
+            />
+          </div>
+
+          <div className="mt-10 border-t border-white/15 pt-8">
+            <h4 className="type-kicker mb-4 text-white/70">{t.footer.appearance}</h4>
+            <ThemeToggle className="grid w-full max-w-[20rem]" />
+          </div>
+
+          <p className="mt-10 border-t border-white/20 pt-6 font-body text-[0.6875rem] font-semibold uppercase leading-[1.55] tracking-[0.06em] text-white/55">
+            {t.footer.copyright}
+          </p>
+        </div>
+
+        {/* Desktop footer */}
+        <div className="hidden grid-cols-[1.15fr_0.85fr_0.85fr_0.85fr] items-start gap-9 md:grid lg:gap-10">
           <div className="flex items-start gap-4 md:row-start-1">
             <img src="/brand/mayan-league-logo.png" alt="" className="h-14 w-14 object-contain" />
             <span className="max-w-[12rem] font-display text-[1.65rem] font-bold uppercase leading-[0.94] tracking-[-0.035em] text-white">
@@ -110,84 +224,28 @@ export default function Footer() {
 
           <div className="md:row-start-2">
             <p className="type-intro max-w-xs text-lg text-white">{t.footer.tagline}</p>
-            <address className="mt-6 not-italic font-body text-sm leading-6 text-white">
-              {site.addressLines.length > 0 ? (
-                site.addressLines.map((line) => <p key={line}>{line}</p>)
-              ) : (
-                <p>{t.footer.address}</p>
-              )}
-              {site.phone ? (
-                <p className="mt-3">
-                  <a
-                    href={site.phoneHref}
-                    className="motion-link underline-offset-4 hover:underline active:text-cream-dark focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-gold"
-                  >
-                    {site.phone}
-                  </a>
-                </p>
-              ) : null}
-              <p className="mt-2">
-                <a
-                  href={`mailto:${site.email}`}
-                  className="motion-link underline-offset-4 hover:underline active:text-cream-dark focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-gold"
-                >
-                  {site.email}
-                </a>
-              </p>
-            </address>
-            <p className="mt-6 max-w-xs font-body text-xs font-semibold leading-5 text-white">
+            <div className="mt-6">
+              <FooterContact
+                addressLines={site.addressLines}
+                addressFallback={t.footer.address}
+                phone={site.phone}
+                phoneHref={site.phoneHref}
+                email={site.email}
+              />
+            </div>
+            <div className="mt-8">
+              <p className="type-kicker mb-3 text-white">{t.footer.appearance}</p>
+              <ThemeToggle />
+            </div>
+            <p className="mt-8 max-w-xs font-body text-xs font-semibold leading-5 text-white">
               {t.footer.copyright}
             </p>
           </div>
 
           <div className="grid grid-cols-1 gap-9 sm:grid-cols-3 md:col-span-3 md:col-start-2 md:row-start-2 lg:gap-10">
-            <div>
-              <h4 className="type-kicker mb-4 text-white">{t.footer.whoWeAre}</h4>
-              <ul className="flex flex-col gap-1">
-                {whoLinks.map((link) => (
-                  <li key={link.label}>
-                    <a
-                      href={link.href}
-                      className="motion-link inline-flex py-1.5 font-body text-sm font-semibold leading-5 text-white underline-offset-4 hover:underline active:text-cream-dark focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-gold"
-                    >
-                      {link.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="type-kicker mb-4 text-white">{t.footer.whatWeDo}</h4>
-              <ul className="flex flex-col gap-1">
-                {quickLinks.slice(1, 5).map((link) => (
-                  <li key={link.label}>
-                    <a
-                      href={link.href}
-                      className="motion-link inline-flex py-1.5 font-body text-sm font-semibold leading-5 text-white underline-offset-4 hover:underline active:text-cream-dark focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-gold"
-                    >
-                      {link.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="type-kicker mb-4 text-white">{t.footer.getInvolved}</h4>
-              <ul className="flex flex-col gap-1">
-                {involvedLinks.map((link) => (
-                  <li key={link.label}>
-                    <a
-                      href={link.href}
-                      className="motion-link inline-flex py-1.5 font-body text-sm font-semibold leading-5 text-white underline-offset-4 hover:underline active:text-cream-dark focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-gold"
-                    >
-                      {link.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <FooterLinkGroup title={t.footer.whoWeAre} links={whoLinks} />
+            <FooterLinkGroup title={t.footer.whatWeDo} links={quickLinks.slice(1, 5)} />
+            <FooterLinkGroup title={t.footer.getInvolved} links={involvedLinks} />
           </div>
         </div>
       </div>

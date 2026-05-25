@@ -58,7 +58,7 @@ export default function CoreValuesContent() {
             <article
               id={`value-${index + 1}`}
               key={section.title}
-              className={`scroll-mt-36 border-b border-cream-dark bg-white py-14 text-ink lg:grid lg:grid-cols-[minmax(11rem,14rem)_1fr] lg:gap-x-14 lg:py-20 ${collectionArticleSectionClass}`}
+              className={`scroll-mt-36 xl:scroll-mt-44 border-b border-cream-dark bg-white py-14 text-ink lg:grid lg:grid-cols-[minmax(11rem,14rem)_1fr] lg:gap-x-14 lg:py-20 ${collectionArticleSectionClass}`}
             >
               <header className="mb-10 flex flex-col items-center lg:mb-0 lg:items-start">
                 <div className="mb-8 flex h-36 w-36 items-center justify-center rounded-full border border-cream-dark bg-white p-5 sm:h-40 sm:w-40">

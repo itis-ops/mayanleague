@@ -27,8 +27,25 @@ These must be set in **Vercel → mayanleague → Settings → Environment Varia
 | `SANITY_API_VERSION` | ✅ Required | `2026-05-21` | Copy exactly as shown — do not change |
 | `SANITY_API_READ_TOKEN` | ✅ Required | `skAj...` | Sanity Manage → API → Tokens → Viewer role token |
 | `NEXT_PUBLIC_SITE_URL` | ✅ Required | `https://mayanleague.vercel.app` | Your production domain |
+| `PREVIEW_ACCESS_PASSWORD` | Optional | `your-shared-password` | Password you email to reviewers — only when the Vercel draft should be private |
+| `PREVIEW_ACCESS_TOKEN` | Optional | `64-char hex from openssl` | Server-only cookie secret — generate with `openssl rand -hex 32`; never share |
 
 > **`SANITY_API_WRITE_TOKEN`** is only needed locally when running migration scripts (`scripts/migrate-*.mjs`). Do not add it to Vercel — it grants write access.
+
+### Preview password gate (optional)
+
+When **both** `PREVIEW_ACCESS_PASSWORD` and `PREVIEW_ACCESS_TOKEN` are set on Vercel, visitors must sign in at `/preview-login` before viewing any page (including `/studio`). If either variable is missing, the gate is off — useful for local dev.
+
+1. Generate a token (keep this private):
+   ```bash
+   openssl rand -hex 32
+   ```
+2. Choose a password to share with Mayan League staff (e.g. a long random phrase).
+3. Add both variables in Vercel → **Production** (and Preview if you use branch deploys).
+4. **Redeploy**.
+5. In your outreach email, share only the **password** and the site URL — not the token.
+
+To clear your own session locally: `curl -X DELETE http://localhost:3000/api/preview-auth`
 
 ### How to add variables in Vercel
 

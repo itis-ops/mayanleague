@@ -7,13 +7,19 @@
  * post-launch without dragging the Studio runtime into the public bundle.
  */
 import { visionTool } from '@sanity/vision'
-import { defineConfig } from 'sanity'
+import { defineConfig, isDev } from 'sanity'
 import { presentationTool } from 'sanity/presentation'
 import { structureTool } from 'sanity/structure'
 
 import { apiVersion, dataset, projectId } from './src/sanity/env'
 import { resolve } from './src/sanity/presentation/resolve'
 import { schemaTypes } from './src/sanity/schemas'
+import {
+  resolveDocumentActions,
+  resolveNewDocumentOptions,
+} from './src/sanity/studio/editorDocumentActions'
+import { EditorToolMenu } from './src/sanity/studio/EditorToolMenu'
+import { mayanLeagueStudioTheme } from './src/sanity/studio/studioTheme'
 import { structure } from './src/sanity/structure'
 
 const siteUrl =
@@ -25,10 +31,21 @@ export default defineConfig({
   basePath: '/studio',
   projectId,
   dataset,
+  theme: mayanLeagueStudioTheme,
   schema: { types: schemaTypes },
+  releases: {
+    enabled: false,
+  },
+  scheduledPublishing: {
+    enabled: false,
+  },
   plugins: [
-    structureTool({ structure }),
+    structureTool({
+      structure,
+      title: 'Edit content',
+    }),
     presentationTool({
+      title: 'Live preview',
       resolve,
       previewUrl: {
         origin: siteUrl,
@@ -37,29 +54,20 @@ export default defineConfig({
         },
       },
     }),
-    visionTool({ defaultApiVersion: apiVersion }),
+    // Vision is a GROQ query IDE for developers — never show to content editors.
+    ...(isDev ? [visionTool({ defaultApiVersion: apiVersion })] : []),
   ],
+  tools: (prev) => {
+    const allowed = new Set(['structure', 'presentation', ...(isDev ? ['vision'] : [])])
+    return prev.filter((tool) => allowed.has(tool.name))
+  },
+  studio: {
+    components: {
+      toolMenu: EditorToolMenu,
+    },
+  },
   document: {
-    // Hide the "duplicate" action on singletons so editors don't accidentally
-    // create a second homepage / siteSettings document.
-    actions: (prev, { schemaType }) => {
-      const SINGLETONS = ['homepage', 'siteSettings']
-      if (!SINGLETONS.includes(schemaType)) return prev
-      return prev.filter(
-        ({ action }) =>
-          action !== 'duplicate' && action !== 'delete' && action !== 'unpublish',
-      )
-    },
-    // Don't show singletons in "create new" templates either.
-    newDocumentOptions: (prev, { creationContext }) => {
-      if (creationContext.type === 'global') {
-        return prev.filter(
-          (template) =>
-            template.templateId !== 'homepage' &&
-            template.templateId !== 'siteSettings',
-        )
-      }
-      return prev
-    },
+    actions: resolveDocumentActions,
+    newDocumentOptions: resolveNewDocumentOptions,
   },
 })

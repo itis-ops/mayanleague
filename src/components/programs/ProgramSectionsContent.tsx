@@ -3,7 +3,7 @@
 import AboutEditorialSection from '@/components/about/AboutEditorialSection'
 import ProgramSectionNav from '@/components/programs/ProgramSectionNav'
 import ProgramTextLink from '@/components/programs/ProgramTextLink'
-import { collectionArticleSectionClass } from '@/lib/editorialLayout'
+import { collectionArticleSectionClass, scrollAnchorProgramSectionClass } from '@/lib/editorialLayout'
 import type { NarrativeSection } from '@/lib/siteContent'
 
 interface ProgramSectionsContentProps {
@@ -59,7 +59,7 @@ export default function ProgramSectionsContent({
             leadFirstBody={false}
             wideTitle={section.title.trim().split(/\s+/).length > 5}
             className={
-              hasSectionNav ? 'scroll-mt-48 lg:scroll-mt-36 xl:scroll-mt-44' : undefined
+              hasSectionNav ? scrollAnchorProgramSectionClass : undefined
             }
           >
             {section.links?.length ? (

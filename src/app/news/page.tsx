@@ -4,10 +4,18 @@ import Footer from '@/components/layout/Footer'
 import Button from '@/components/ui/Button'
 import NewsroomStickyHero from '@/components/news/NewsroomStickyHero'
 import { hubPageMainClass, hubPageSectionClass } from '@/lib/editorialLayout'
-import NewsArchiveMobileBar from '@/components/news/NewsArchiveMobileBar'
 import { LocalizedNewsKeywords, LocalizedNewsText, LocalizedText } from '@/components/news/LocalizedNewsText'
 import { newsCategories } from '@/lib/news'
 import { getNewsArticles } from '@/lib/newsRepository'
+import NewsroomDonationInterstitial from '@/components/news/NewsroomDonationInterstitial'
+
+function ArrowIcon() {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-3.5 w-3.5 shrink-0">
+      <path d="M3 8h10M8 3l5 5-5 5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
 
 export const revalidate = 60
 
@@ -29,6 +37,21 @@ function getDateArchive(date: string) {
 
 export default async function NewsPage() {
   const newsArticles = await getNewsArticles()
+
+  if (!newsArticles.length) {
+    return (
+      <>
+        <Navbar />
+        <main id="main-content" className={hubPageMainClass}>
+          <section className={`${hubPageSectionClass} border-t border-cream-dark py-24`}>
+            <p className="type-body text-center text-ink/60">No dispatches available yet.</p>
+          </section>
+        </main>
+        <Footer />
+      </>
+    )
+  }
+
   const featuredArticles = newsArticles.filter((article) => article.featured)
   const featuredArticle = featuredArticles[0] || newsArticles[0]
   const supportingFeatured = featuredArticles.slice(1)
@@ -71,115 +94,196 @@ export default async function NewsPage() {
         <section className={`${hubPageSectionClass} border-t border-cream-dark pb-8 lg:pb-12`}>
           <NewsroomStickyHero categories={categoryFilters} dates={dateFilters} dispatchCount={newsArticles.length} />
 
-          <section className="relative mt-8 grid grid-cols-1 gap-5 lg:grid-cols-[1fr_0.42fr]">
-            <article id={featuredArticle.category.toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-')} className="group relative scroll-mt-32 border border-cream-dark bg-white p-1.5 xl:scroll-mt-48">
+          {/* Featured section — lead + up to 3 supporting */}
+          <section className="relative mt-8 flex flex-col gap-6">
+            {/* Lead article */}
+            <article
+              id={featuredArticle.category.toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-')}
+              className="group relative scroll-mt-32 overflow-hidden border border-cream-dark bg-white p-1.5 xl:scroll-mt-48"
+            >
               {dateArchive.find((group) => group.firstSlug === featuredArticle.slug) ? (
                 <span id={dateArchive.find((group) => group.firstSlug === featuredArticle.slug)?.id} className="absolute -top-32" aria-hidden="true" />
               ) : null}
-              <div className="flex min-h-0 flex-col bg-white p-6 sm:min-h-[420px] sm:p-10 lg:min-h-[520px] lg:p-12">
-                <div className="mb-6 flex items-start justify-between gap-6 sm:mb-10 sm:gap-8">
-                  <div>
-                    <p className="type-kicker mb-3 text-earth-red"><LocalizedNewsText article={featuredArticle} field="category" /></p>
-                    <p className="font-body text-sm font-bold uppercase tracking-[0.08em] text-ink/50">
-                      {featuredArticle.sourceName} / {featuredArticle.date}
+
+              <div className={`flex h-full flex-col bg-white ${featuredArticle.mainImage ? 'lg:grid lg:grid-cols-[1.1fr_0.9fr] lg:items-stretch' : ''}`}>
+                {featuredArticle.mainImage ? (
+                  <a
+                    href={`/news/${featuredArticle.slug}`}
+                    className="relative block aspect-[16/10] overflow-hidden bg-ink lg:aspect-auto lg:min-h-[480px]"
+                    aria-label={featuredArticle.title}
+                  >
+                    <img
+                      src={featuredArticle.mainImage.url}
+                      alt={featuredArticle.mainImage.alt}
+                      title={`Photo by ${featuredArticle.mainImage.photographerName} on ${featuredArticle.mainImage.sourceName}`}
+                      loading="eager"
+                      className="absolute inset-0 h-full w-full object-cover grayscale transition-[filter,transform] duration-[700ms] ease-[var(--ease-emil)] group-hover:scale-[1.015] group-hover:grayscale-0"
+                    />
+                  </a>
+                ) : null}
+
+                <div className="flex flex-1 flex-col gap-6 px-7 py-9 sm:px-10 sm:py-11 lg:px-12 lg:py-14">
+                  <div className="flex flex-wrap items-center gap-3">
+                    <span className="type-kicker text-earth-red"><LocalizedText en="Featured" es="Destacado" /></span>
+                    <span className="h-px w-8 bg-earth-red/40" aria-hidden="true" />
+                    <span className="type-kicker text-ink/55"><LocalizedNewsText article={featuredArticle} field="category" /></span>
+                  </div>
+
+                  <h2 className="type-section max-w-[22ch] text-[clamp(1.85rem,3.4vw,3.5rem)] leading-[0.96] text-ink transition-colors duration-300 group-hover:text-earth-red">
+                    <LocalizedNewsText article={featuredArticle} field="title" />
+                  </h2>
+
+                  {featuredArticle.summary || featuredArticle.dek ? (
+                    <p className="font-accent max-w-[58ch] text-[clamp(1.05rem,1.4vw,1.25rem)] leading-[1.55] tracking-[-0.01em] text-ink/80">
+                      <LocalizedNewsText article={featuredArticle} field={featuredArticle.summary ? 'summary' : 'dek'} />
                     </p>
+                  ) : null}
+
+                  <p className="font-body text-xs font-black uppercase tracking-[0.08em] text-ink/45">
+                    {featuredArticle.sourceName ? `${featuredArticle.sourceName} · ` : ''}{featuredArticle.date}
+                  </p>
+
+                  <div className="mt-auto flex flex-col gap-5 pt-2 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
+                    {featuredArticle.keywords.length > 0 ? (
+                      <div className="flex flex-wrap gap-2">
+                        <LocalizedNewsKeywords article={featuredArticle} limit={3} className="rounded-full border border-cream-dark px-3 py-1 font-body text-xs font-black uppercase tracking-[0.08em] text-ink/62" />
+                      </div>
+                    ) : <span aria-hidden="true" />}
+                    <Button href={`/news/${featuredArticle.slug}`} variant="primary" className="w-fit shrink-0">
+                      <LocalizedText en="Read dispatch" es="Leer despacho" />
+                    </Button>
                   </div>
-                  <p className="font-display text-4xl font-bold leading-none tracking-[-0.06em] text-earth-red sm:text-5xl">01</p>
-                </div>
-                <h2 className="type-section max-w-4xl text-[clamp(1.85rem,4.5vw,4.6rem)] text-ink group-hover:text-earth-red">
-                  <LocalizedNewsText article={featuredArticle} field="title" />
-                </h2>
-                <p className="type-body mt-6 max-w-[76ch] border-t border-cream-dark pt-5 text-ink/74 sm:mt-8 sm:pt-6">
-                  <LocalizedNewsText article={featuredArticle} field="summary" />
-                </p>
-                <div className="mt-auto flex flex-col gap-5 pt-8 sm:flex-row sm:items-end sm:justify-between sm:gap-6 sm:pt-10">
-                  <div className="flex flex-wrap gap-2">
-                    <LocalizedNewsKeywords article={featuredArticle} limit={4} className="rounded-full border border-cream-dark px-3 py-1 font-body text-xs font-black uppercase tracking-[0.08em] text-ink/62" />
-                  </div>
-                  <Button href={`/news/${featuredArticle.slug}`} variant="primary" className="w-fit shrink-0">
-                    <LocalizedText en="Read dispatch" es="Leer despacho" />
-                  </Button>
                 </div>
               </div>
             </article>
 
-            <div className="grid grid-cols-1 gap-5">
-              {supportingFeatured.map((article, index) => (
-                <article key={article.slug} className="group relative border border-cream-dark bg-white p-1.5 hover:bg-cream">
-                  {dateArchive.find((group) => group.firstSlug === article.slug) ? (
-                    <span id={dateArchive.find((group) => group.firstSlug === article.slug)?.id} className="absolute -top-32" aria-hidden="true" />
-                  ) : null}
-                  <div className="flex min-h-64 flex-col bg-white p-6 group-hover:bg-cream">
-                    <div className="mb-6 flex items-start justify-between gap-6">
-                      <p className="type-kicker text-earth-red"><LocalizedNewsText article={article} field="category" /></p>
-                      <p className="font-display text-4xl font-bold leading-none tracking-[-0.06em] text-earth-red">
-                        {String(index + 2).padStart(2, '0')}
-                      </p>
-                    </div>
-                    <h3 className="type-section text-[clamp(1.45rem,2.2vw,2.05rem)] text-ink group-hover:text-earth-red">
-                      <LocalizedNewsText article={article} field="title" />
-                    </h3>
-                    <p className="mt-5 border-t border-cream-dark pt-4 font-body text-sm font-semibold leading-6 text-ink/68"><LocalizedNewsText article={article} field="excerpt" /></p>
-                    <div className="mt-auto pt-6">
-                      <a
-                        href={`/news/${article.slug}`}
-                        className="motion-link type-kicker inline-flex min-h-10 items-center text-ink underline decoration-current decoration-2 underline-offset-4 hover:text-earth-red focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-gold"
-                      >
-                        <LocalizedText en="Read dispatch" es="Leer despacho" />
-                      </a>
-                    </div>
-                  </div>
-                </article>
-              ))}
-            </div>
-          </section>
-
-          <section className="mt-5 bg-white">
-            <NewsArchiveMobileBar categories={categoryFilters} dates={dateFilters} />
-            <div className="grid grid-cols-1 border-y border-cream-dark lg:grid-cols-[0.24fr_1fr]">
-              <div className="hidden lg:block lg:border-r lg:border-cream-dark lg:p-12">
-                <p className="type-kicker mb-8 text-earth-red"><LocalizedText en="All dispatches" es="Todos los despachos" /></p>
-                <p className="type-body text-ink/70">
-                  <LocalizedText
-                    en="Explore articles by topic, from land and water defense to migration, language access, culture, and justice."
-                    es="Explora artículos por tema, desde la defensa de la tierra y el agua hasta migración, acceso lingüístico, cultura y justicia."
-                  />
-                </p>
-              </div>
-              <div>
-                {archiveArticles.map(({ article, categoryId, shouldAnchor }, index) => (
+            {/* Supporting featured articles — 3-up grid */}
+            {supportingFeatured.length > 0 ? (
+              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                {supportingFeatured.slice(0, 3).map((article) => (
                   <article
-                    id={shouldAnchor ? categoryId : undefined}
                     key={article.slug}
-                    className="relative grid scroll-mt-32 grid-cols-1 gap-8 border-b border-cream-dark px-7 py-10 hover:bg-mist sm:px-10 xl:scroll-mt-48 lg:grid-cols-[0.12fr_0.22fr_1fr_0.2fr] lg:items-start lg:px-12"
+                    className="group relative border border-cream-dark bg-white p-1.5 transition-colors duration-300 hover:border-earth-red/35"
                   >
                     {dateArchive.find((group) => group.firstSlug === article.slug) ? (
-                      <span id={dateArchive.find((group) => group.firstSlug === article.slug)?.id} className="absolute -top-32 xl:-top-48" aria-hidden="true" />
+                      <span id={dateArchive.find((group) => group.firstSlug === article.slug)?.id} className="absolute -top-32" aria-hidden="true" />
                     ) : null}
-                    <p className="font-display text-5xl font-bold leading-none tracking-[-0.06em] text-earth-red">
-                      {String(index + 1).padStart(2, '0')}
-                    </p>
-                    <div>
-                      <p className="type-kicker mb-3 text-earth-red"><LocalizedNewsText article={article} field="category" /></p>
-                      <p className="font-body text-xs font-black uppercase leading-5 tracking-[0.08em] text-ink/50">
-                        {article.sourceName || <LocalizedText en="Original" es="Original" />} / {article.date}
-                      </p>
-                    </div>
-                    <div>
-                      <h2 className="type-section max-w-3xl text-[clamp(1.8rem,3vw,3.35rem)] text-ink">
-                        <LocalizedNewsText article={article} field="title" />
-                      </h2>
-                      <p className="type-body mt-5 max-w-[78ch] text-ink/72"><LocalizedNewsText article={article} field="summary" /></p>
-                      <div className="mt-6 flex flex-wrap gap-2">
-                        <LocalizedNewsKeywords article={article} limit={3} className="rounded-full bg-cream px-3 py-1 font-body text-xs font-black uppercase tracking-[0.08em] text-ink/58" />
+
+                    <a
+                      href={`/news/${article.slug}`}
+                      className="flex h-full flex-col bg-white focus-visible:outline-3 focus-visible:outline-offset-[-3px] focus-visible:outline-gold"
+                    >
+                      {article.mainImage ? (
+                        <div className="relative aspect-[4/3] overflow-hidden bg-ink">
+                          <img
+                            src={article.mainImage.url}
+                            alt={article.mainImage.alt}
+                            title={`Photo by ${article.mainImage.photographerName} on ${article.mainImage.sourceName}`}
+                            loading="lazy"
+                            className="absolute inset-0 h-full w-full object-cover grayscale transition-[filter,transform] duration-[600ms] ease-[var(--ease-emil)] group-hover:scale-[1.04] group-hover:grayscale-0"
+                          />
+                        </div>
+                      ) : null}
+
+                      <div className="flex flex-1 flex-col gap-3 px-6 py-7 lg:px-7 lg:py-8">
+                        <p className="type-kicker text-earth-red"><LocalizedNewsText article={article} field="category" /></p>
+                        <h3 className="type-section text-[clamp(1.2rem,1.6vw,1.6rem)] leading-[1.12] text-ink transition-colors duration-300 group-hover:text-earth-red">
+                          <LocalizedNewsText article={article} field="title" />
+                        </h3>
+                        {article.excerpt ? (
+                          <p className="line-clamp-3 font-body text-sm leading-6 text-ink/68">
+                            <LocalizedNewsText article={article} field="excerpt" />
+                          </p>
+                        ) : null}
+                        <p className="mt-auto pt-3 font-body text-[11px] font-black uppercase leading-5 tracking-[0.08em] text-ink/45">
+                          {article.sourceName || <LocalizedText en="Original" es="Original" />}
+                          <span aria-hidden="true"> · </span>
+                          {article.date}
+                        </p>
                       </div>
-                    </div>
-                    <div className="lg:flex lg:justify-end">
-                      <Button href={`/news/${article.slug}`} variant="secondary" className="w-fit shrink-0 whitespace-nowrap">
-                        <LocalizedText en="View article" es="Ver artículo" />
-                      </Button>
-                    </div>
+                    </a>
                   </article>
+                ))}
+              </div>
+            ) : null}
+          </section>
+
+          {/* Archive — sticky rail + image-led list */}
+          <section className="-mx-5 mt-10 bg-white sm:-mx-8 lg:-mx-12 lg:mt-14">
+            <div className="grid grid-cols-1 border-y border-cream-dark lg:grid-cols-[0.22fr_1fr]">
+              <aside className="hidden lg:block lg:border-r lg:border-cream-dark">
+                <div className="sticky top-[140px] px-8 py-12 xl:top-24 xl:px-12">
+                  <p className="type-kicker mb-6 text-earth-red"><LocalizedText en="All dispatches" es="Todos los despachos" /></p>
+                  <p className="type-body text-[0.9375rem] leading-[1.65] text-ink/68">
+                    <LocalizedText
+                      en="Explore articles by topic, from land and water defense to migration, language access, culture, and justice."
+                      es="Explora artículos por tema, desde la defensa de la tierra y el agua hasta migración, acceso lingüístico, cultura y justicia."
+                    />
+                  </p>
+                </div>
+              </aside>
+
+              <div>
+                {archiveArticles.map(({ article, categoryId, shouldAnchor }, index) => (
+                  <div key={article.slug}>
+                    {index === 3 && <NewsroomDonationInterstitial />}
+                    <article
+                      id={shouldAnchor ? categoryId : undefined}
+                      className="group relative scroll-mt-32 border-b border-cream-dark transition-colors duration-300 hover:bg-mist/50 xl:scroll-mt-48"
+                    >
+                      {dateArchive.find((group) => group.firstSlug === article.slug) ? (
+                        <span id={dateArchive.find((group) => group.firstSlug === article.slug)?.id} className="absolute -top-32 xl:-top-48" aria-hidden="true" />
+                      ) : null}
+
+                      <div className="grid grid-cols-1 gap-6 px-7 py-8 sm:px-10 sm:py-10 lg:grid-cols-[220px_1fr_auto] lg:items-center lg:gap-10 lg:px-12 lg:py-12">
+                        {article.mainImage ? (
+                          <div className="relative aspect-[4/3] overflow-hidden bg-ink lg:aspect-[5/4] lg:w-[220px]">
+                            <img
+                              src={article.mainImage.url}
+                              alt={article.mainImage.alt}
+                              title={`Photo by ${article.mainImage.photographerName} on ${article.mainImage.sourceName}`}
+                              loading="lazy"
+                              className="absolute inset-0 h-full w-full object-cover grayscale transition-[filter,transform] duration-[600ms] ease-[var(--ease-emil)] group-hover:scale-[1.04] group-hover:grayscale-0"
+                            />
+                          </div>
+                        ) : (
+                          <div className="hidden lg:block lg:w-[220px]" aria-hidden="true" />
+                        )}
+
+                        <div className="flex min-w-0 flex-col gap-3">
+                          <div className="flex flex-wrap items-center gap-2.5 type-kicker text-ink/45">
+                            <span className="text-earth-red"><LocalizedNewsText article={article} field="category" /></span>
+                            <span className="h-px w-4 bg-cream-dark" aria-hidden="true" />
+                            <span>{article.sourceName || <LocalizedText en="Original" es="Original" />}</span>
+                            <span aria-hidden="true">·</span>
+                            <span>{article.date}</span>
+                          </div>
+
+                          <h2 className="type-section max-w-[28ch] text-[clamp(1.5rem,2.4vw,2.4rem)] leading-[1.04] text-ink transition-colors duration-300 group-hover:text-earth-red">
+                            <a
+                              href={`/news/${article.slug}`}
+                              className="rounded-sm focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-gold after:absolute after:inset-0 after:content-['']"
+                            >
+                              <LocalizedNewsText article={article} field="title" />
+                            </a>
+                          </h2>
+
+                          {article.excerpt || article.summary ? (
+                            <p className="line-clamp-2 max-w-[62ch] font-body text-[0.9375rem] leading-[1.65] text-ink/68">
+                              <LocalizedNewsText article={article} field={article.excerpt ? 'excerpt' : 'summary'} />
+                            </p>
+                          ) : null}
+                        </div>
+
+                        <div
+                          aria-hidden="true"
+                          className="hidden h-9 w-9 shrink-0 items-center justify-center rounded-full border border-cream-dark text-ink/55 transition-all duration-300 group-hover:border-earth-red group-hover:bg-earth-red group-hover:text-white lg:flex"
+                        >
+                          <ArrowIcon />
+                        </div>
+                      </div>
+                    </article>
+                  </div>
                 ))}
               </div>
             </div>

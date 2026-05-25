@@ -22,6 +22,13 @@ const translations = {
       selectLanguage: 'Select language',
       switchToEnglish: 'Switch language to English',
       switchToSpanish: 'Switch language to Spanish',
+      selectTheme: 'Select appearance',
+      themeAuto: 'Auto',
+      themeLight: 'Light',
+      themeDark: 'Dark',
+      switchToAutoTheme: 'Use automatic light or dark mode',
+      switchToLightTheme: 'Switch to light mode',
+      switchToDarkTheme: 'Switch to dark mode',
     },
     hero: {
       eyebrow: 'International Mayan League',
@@ -40,6 +47,27 @@ const translations = {
       intro:
         'Know your rights in Maya Mam. If you have any contact with la Migra (ICE) or the police on the street, at home, in jail, at work or while driving.',
       explore: 'Explore',
+      spotlightEyebrow: 'Indigenous Language Resources',
+      spotlightHeading: 'Conozca sus derechos — Know Your Rights',
+      spotlightIntro:
+        'Audiovisual Know Your Rights resources in six Mayan languages — created for Maya refugees, asylum seekers, migrants, and families across Turtle Island who need information in their own languages, not only in Spanish or English.',
+      spotlightCredit: 'Recording and editing by International Mayan League/USA',
+      viewAllLanguage: 'Browse all language resources',
+      downloadKyr: 'Download KYR resources',
+      familiesLabel: 'Language families',
+      familiesHeading: 'Six Mayan languages. Ten communities.',
+      familiesIntro:
+        'Each family links to community-specific videos on ICE encounters, red cards, and family preparedness plans.',
+      featuredLabel: 'Featured videos',
+      featuredHeading: 'Start here if you need help now',
+      moreResourcesLabel: 'More resource areas',
+      moreResourcesHeading: 'Statements, guides, and solidarity resources',
+      browseAll: 'Browse all resources',
+      stats: {
+        families: 'language families',
+        videos: 'KYR videos',
+        communities: 'communities',
+      },
       items: [
         {
           title: 'Conozca sus derechos en Maya Mam. Know your Rights in Maya Mam.',
@@ -205,6 +233,7 @@ const translations = {
       whoLinks: ['Board of Directors', 'Team', 'Donors', 'Join the team'],
       involvedLinks: ['Donate', 'Partnerships', 'Campaigns'],
       socialLabel: 'Visit Mayan League on',
+      appearance: 'Appearance',
     },
     aboutPage: {
       label: 'About',
@@ -342,6 +371,13 @@ const translations = {
       selectLanguage: 'Seleccionar idioma',
       switchToEnglish: 'Cambiar idioma a inglés',
       switchToSpanish: 'Cambiar idioma a español',
+      selectTheme: 'Seleccionar apariencia',
+      themeAuto: 'Auto',
+      themeLight: 'Claro',
+      themeDark: 'Oscuro',
+      switchToAutoTheme: 'Usar modo claro u oscuro automático',
+      switchToLightTheme: 'Cambiar a modo claro',
+      switchToDarkTheme: 'Cambiar a modo oscuro',
     },
     hero: {
       eyebrow: 'Liga Maya Internacional',
@@ -360,6 +396,27 @@ const translations = {
       intro:
         'Si tiene cualquier contacto con la Migra (ICE) o la policía en la calle, en su casa, en la cárcel, en el trabajo o mientras maneja.',
       explore: 'Explorar',
+      spotlightEyebrow: 'Recursos en idiomas Indígenas',
+      spotlightHeading: 'Conozca sus derechos',
+      spotlightIntro:
+        'Recursos audiovisuales de Conozca sus Derechos en seis idiomas Mayas — creados para refugiados, solicitantes de asilo, migrantes y familias Maya en la Isla Tortuga que necesitan información en su propio idioma, no solo en español o inglés.',
+      spotlightCredit: 'Grabación y edición por la Liga Maya Internacional/USA',
+      viewAllLanguage: 'Ver todos los recursos de idiomas',
+      downloadKyr: 'Descargar recursos KYR',
+      familiesLabel: 'Familias lingüísticas',
+      familiesHeading: 'Seis idiomas Mayas. Diez comunidades.',
+      familiesIntro:
+        'Cada familia enlaza a videos comunitarios sobre encuentros con ICE, tarjetas rojas y planes de preparación familiar.',
+      featuredLabel: 'Videos destacados',
+      featuredHeading: 'Empiece aquí si necesita ayuda ahora',
+      moreResourcesLabel: 'Más áreas de recursos',
+      moreResourcesHeading: 'Declaraciones, guías y recursos de solidaridad',
+      browseAll: 'Ver todos los recursos',
+      stats: {
+        families: 'familias lingüísticas',
+        videos: 'videos KYR',
+        communities: 'comunidades',
+      },
       items: [
         {
           title: 'Conozca sus derechos en Maya Mam. Know your Rights in Maya Mam.',
@@ -525,6 +582,7 @@ const translations = {
       whoLinks: ['Junta Directiva', 'Equipo', 'Donantes', 'Únete al equipo'],
       involvedLinks: ['Donar', 'Alianzas', 'Campañas'],
       socialLabel: 'Visita a la Liga Maya en',
+      appearance: 'Apariencia',
     },
     aboutPage: {
       label: 'Acerca de nosotros',

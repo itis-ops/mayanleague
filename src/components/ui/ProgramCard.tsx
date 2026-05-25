@@ -1,4 +1,4 @@
-import MayaNumber from '@/components/ui/MayaNumber'
+import CardIndexMark, { CardWesternIndex } from '@/components/ui/CardIndexMark'
 import Button from '@/components/ui/Button'
 
 interface ProgramIcon {
@@ -70,17 +70,63 @@ interface Props {
   learnMore: string
   index: number
   href?: string
+  isActive?: boolean
+  layout?: 'default' | 'rail'
+  surface?: 'default' | 'cream'
 }
 
-export default function ProgramCard({ name, description, learnMore, index, href = '/programs' }: Props) {
+export default function ProgramCard({
+  name,
+  description,
+  learnMore,
+  index,
+  href = '/programs',
+  isActive = false,
+  layout = 'default',
+  surface = 'default',
+}: Props) {
+  const rail = layout === 'rail'
+  const onCream = surface === 'cream'
+
   return (
-    <article className="group motion-card h-full border border-cream-dark bg-white p-1.5 hover:bg-cream">
-      <div className="flex h-full min-h-96 flex-col gap-6 bg-white p-7 group-hover:bg-cream">
-        <div className="motion-control flex h-14 w-14 items-center justify-center rounded-full bg-earth-red text-white group-hover:bg-ink" aria-hidden="true">
-          <ProgramIcon index={index} />
+    <article
+      className={[
+        'group motion-card h-full min-w-0 overflow-hidden border border-cream-dark bg-white p-1.5',
+        onCream
+          ? 'hover:border-earth-red/35 hover:shadow-[0_14px_36px_rgba(36,36,36,0.1)]'
+          : 'hover:bg-cream',
+        'transition-transform duration-[420ms] ease-[var(--ease-emil)] will-change-transform',
+        isActive ? 'scale-[1.02] border-earth-red/25 shadow-[0_18px_44px_rgba(36,36,36,0.1)]' : 'scale-100',
+      ].join(' ')}
+    >
+      <div
+        className={[
+          'flex h-full flex-col bg-white',
+          onCream ? '' : 'group-hover:bg-cream',
+          rail ? 'min-h-[16.5rem] gap-4 p-5' : 'min-h-96 gap-6 p-7',
+        ].join(' ')}
+      >
+        <div className="flex items-start justify-between gap-3">
+          <div
+            className={[
+              'motion-control flex shrink-0 items-center justify-center rounded-full bg-earth-red text-white group-hover:bg-ink',
+              rail ? 'h-12 w-12' : 'h-14 w-14',
+            ].join(' ')}
+            aria-hidden="true"
+          >
+            <ProgramIcon index={index} />
+          </div>
+          <div className={isActive ? 'program-index-pulse' : undefined}>
+            <CardIndexMark value={index + 1} />
+          </div>
         </div>
         <div className="flex flex-1 flex-col">
-          <h3 className="type-section mb-5 text-[clamp(1.85rem,2.6vw,2.45rem)] text-ink group-hover:text-earth-red">
+          <h3
+            className={[
+              'type-section text-ink group-hover:text-earth-red',
+              rail ? 'mb-4 text-[clamp(1.75rem,2.4vw,2.25rem)]' : 'mb-5 text-[clamp(1.85rem,2.6vw,2.45rem)]',
+            ].join(' ')}
+          >
             {href === '/maya-cosmovision' ? (
               <a
                 href={href}
@@ -92,19 +138,24 @@ export default function ProgramCard({ name, description, learnMore, index, href 
               name
             )}
           </h3>
-          <p className="type-body flex-1 border-t border-cream-dark pt-5 text-[1.05rem] leading-8 text-ink/74">
+          <p
+            className={[
+              'type-body flex-1 border-t border-cream-dark text-ink/74',
+              rail ? 'line-clamp-3 pt-3 text-[0.9375rem] leading-6' : 'pt-5 text-[1.05rem] leading-8',
+            ].join(' ')}
+          >
             {description}
           </p>
-          <div className="mt-auto flex min-h-11 items-center justify-between gap-6 pt-8">
+          <div className={['mt-auto flex items-end justify-between gap-4', rail ? 'pt-5' : 'pt-8'].join(' ')}>
             <Button
               href={href}
               variant="secondary"
               ariaLabel={`${learnMore}: ${name}`}
-              className="w-fit shrink-0 whitespace-nowrap"
+              className="w-fit max-w-full shrink-0 whitespace-nowrap"
             >
               {learnMore}
             </Button>
-            <MayaNumber value={index + 1} className="shrink-0 scale-75 origin-bottom-right text-earth-red" />
+            <CardWesternIndex value={index + 1} />
           </div>
         </div>
       </div>

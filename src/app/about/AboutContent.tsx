@@ -22,7 +22,7 @@ export default function AboutContent() {
       >
         <section
           id="who-we-are"
-          className={`scroll-mt-36 border-b border-cream-dark py-8 lg:py-10 ${collectionArticleSectionClass}`}
+          className={`scroll-mt-36 xl:scroll-mt-44 border-b border-cream-dark py-8 lg:py-10 ${collectionArticleSectionClass}`}
         >
           <div className="grid grid-cols-1 gap-10 lg:grid-cols-[0.32fr_1fr] lg:gap-16">
             <div>
@@ -47,7 +47,7 @@ export default function AboutContent() {
           </div>
         </section>
 
-        <section id="how-we-work" className={`scroll-mt-36 border-b border-cream-dark py-12 lg:py-16 ${collectionArticleSectionClass}`}>
+        <section id="how-we-work" className={`scroll-mt-36 xl:scroll-mt-44 border-b border-cream-dark py-12 lg:py-16 ${collectionArticleSectionClass}`}>
           <div className="grid grid-cols-1 gap-10 lg:grid-cols-[0.32fr_1fr] lg:gap-16">
             <p className="type-kicker text-earth-red">{aboutPage.howWeWorkLabel}</p>
             <div className="grid grid-cols-1 gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,18rem)] lg:gap-16">

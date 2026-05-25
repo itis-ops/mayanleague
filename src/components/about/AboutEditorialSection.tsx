@@ -50,7 +50,7 @@ export default function AboutEditorialSection({
     return (
       <section
         id={id}
-        className={`relative scroll-mt-36 border-b border-cream-dark py-16 lg:py-20 ${collectionArticleSectionClass} bg-white ${className}`}
+        className={`relative scroll-mt-36 xl:scroll-mt-44 border-b border-cream-dark py-16 lg:py-20 ${collectionArticleSectionClass} bg-white ${className}`}
       >
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-12">
           <div className="lg:col-span-10 lg:col-start-1">
@@ -98,7 +98,7 @@ export default function AboutEditorialSection({
     return (
       <article
         id={id}
-        className={`relative scroll-mt-36 border-b border-cream-dark pb-14 pt-12 sm:pb-16 sm:pt-14 lg:pb-20 lg:pt-16 ${collectionArticleSectionClass} ${bgClass} ${className}`}
+        className={`relative scroll-mt-36 xl:scroll-mt-44 border-b border-cream-dark pb-14 pt-12 sm:pb-16 sm:pt-14 lg:pb-20 lg:pt-16 ${collectionArticleSectionClass} ${bgClass} ${className}`}
       >
         {heading ? (
           <header className="mb-8">
@@ -152,7 +152,7 @@ export default function AboutEditorialSection({
   return (
     <section
       id={id}
-      className={`relative scroll-mt-36 border-b border-cream-dark py-16 lg:py-20 ${collectionArticleSectionClass} ${bgClass} ${className}`}
+      className={`relative scroll-mt-36 xl:scroll-mt-44 border-b border-cream-dark py-16 lg:py-20 ${collectionArticleSectionClass} ${bgClass} ${className}`}
     >
       <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-x-14">
         <div className="flex flex-col gap-6 lg:col-span-3">

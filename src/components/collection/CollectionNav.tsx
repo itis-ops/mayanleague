@@ -1,7 +1,7 @@
 'use client'
 
 import type { CollectionNavLink } from '@/components/collection/CollectionNavSheet'
-import { collectionMetaRowClass } from '@/lib/editorialLayout'
+import { collectionMetaRowClass, collectionSidebarNavClass } from '@/lib/editorialLayout'
 
 interface CollectionNavDesktopProps {
   label: string
@@ -38,7 +38,7 @@ export function CollectionNavDesktop({ label, links, activeHref }: CollectionNav
       <div className={collectionMetaRowClass}>
         <p className="type-kicker text-earth-red">{label}</p>
       </div>
-      <nav className="flex flex-col gap-3 pt-4" aria-label={label}>
+      <nav className={collectionSidebarNavClass} aria-label={label}>
         {links.map((link) => (
           <NavLink key={link.href} link={link} isActive={link.href === activeHref} />
         ))}

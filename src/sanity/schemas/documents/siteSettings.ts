@@ -10,13 +10,15 @@ export const siteSettings = defineType({
   name: 'siteSettings',
   title: 'Site settings',
   type: 'document',
+  description:
+    'Contact info, footer, navigation labels, social links, and donate URL used across every page. Publish after editing.',
   groups: [
     { name: 'brand', title: 'Brand', default: true },
     { name: 'nav', title: 'Navigation' },
     { name: 'footer', title: 'Footer' },
     { name: 'contact', title: 'Contact' },
     { name: 'social', title: 'Social' },
-    { name: 'defaults', title: 'Defaults (OG, share)' },
+    { name: 'defaults', title: 'Search & sharing (optional)' },
   ],
   fields: [
     defineField({

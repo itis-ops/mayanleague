@@ -1,0 +1,13 @@
+/**
+ * Light Studio polish for non-technical editors — keeps focus on content, not chrome.
+ */
+
+/* Slightly warmer document canvas */
+[data-ui="PaneLayout"] [data-testid="document-panel-scroller"] {
+  background-color: #fbf7f6;
+}
+
+/* Make the desk list easier to scan */
+[data-testid="structure-tool-list"] [data-ui="Text"] {
+  letter-spacing: 0.01em;
+}

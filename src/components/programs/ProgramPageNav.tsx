@@ -5,6 +5,8 @@ import { useLanguage } from '@/hooks/useLanguage'
 import {
   editorialCompactNavClass,
   editorialCompactNavInnerClass,
+  hubCompactNavClass,
+  hubCompactNavInnerClass,
 } from '@/lib/editorialLayout'
 import { localizedProgramNavLinks } from '@/lib/programPages'
 import { uiCopy } from '@/lib/siteContent'
@@ -12,6 +14,8 @@ import { uiCopy } from '@/lib/siteContent'
 interface ProgramPageNavProps {
   activeHref: string
   variant?: 'mobile' | 'tablet' | 'compact' | 'desktop'
+  /** Hub pages use wider gutters (px-5); editorial pages use px-4. */
+  layout?: 'hub' | 'editorial'
 }
 
 interface NavLinkItem {
@@ -62,12 +66,20 @@ function ProgramPageNavDesktop({ activeHref }: { activeHref: string }) {
   )
 }
 
-function ProgramPageNavCompact({ activeHref }: { activeHref: string }) {
+function ProgramPageNavCompact({
+  activeHref,
+  layout = 'editorial',
+}: {
+  activeHref: string
+  layout?: 'hub' | 'editorial'
+}) {
   const { label, links, activeLink } = useProgramNavLinks(activeHref)
+  const navClass = layout === 'hub' ? hubCompactNavClass : editorialCompactNavClass
+  const innerClass = layout === 'hub' ? hubCompactNavInnerClass : editorialCompactNavInnerClass
 
   return (
-    <div className={editorialCompactNavClass}>
-      <div className={editorialCompactNavInnerClass}>
+    <div className={navClass}>
+      <div className={innerClass}>
         <div className="flex min-w-0 items-center gap-2 overflow-hidden">
           <span className="type-kicker shrink-0 text-earth-red">{label}</span>
           <span className="shrink-0 font-body text-xs font-black text-ink/25" aria-hidden="true">/</span>
@@ -91,9 +103,9 @@ function ProgramPageNavMobile({ activeHref }: { activeHref: string }) {
   return <ProgramPageNavCompact activeHref={activeHref} />
 }
 
-export default function ProgramPageNav({ activeHref, variant }: ProgramPageNavProps) {
+export default function ProgramPageNav({ activeHref, variant, layout = 'editorial' }: ProgramPageNavProps) {
   if (variant === 'compact' || variant === 'mobile' || variant === 'tablet') {
-    return <ProgramPageNavCompact activeHref={activeHref} />
+    return <ProgramPageNavCompact activeHref={activeHref} layout={layout} />
   }
 
   if (variant === 'desktop') {
@@ -102,7 +114,7 @@ export default function ProgramPageNav({ activeHref, variant }: ProgramPageNavPr
 
   return (
     <>
-      <ProgramPageNavCompact activeHref={activeHref} />
+      <ProgramPageNavCompact activeHref={activeHref} layout={layout} />
       <div className="hidden xl:block">
         <ProgramPageNavDesktop activeHref={activeHref} />
       </div>

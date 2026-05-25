@@ -24,11 +24,11 @@ export const newsArticle = defineType({
   type: 'document',
   description: NEWS_ARTICLE_DOC,
   groups: [
-    { name: 'content', title: 'Content', default: true },
-    { name: 'source', title: 'Source & attribution' },
-    { name: 'media', title: 'Image' },
-    { name: 'publishing', title: 'Publishing' },
-    { name: 'seo', title: 'SEO & social' },
+    { name: 'content', title: 'Story', default: true },
+    { name: 'source', title: 'Source credit' },
+    { name: 'media', title: 'Photo' },
+    { name: 'publishing', title: 'Publish date' },
+    { name: 'seo', title: 'Search & sharing (optional)' },
   ],
   fieldsets: [
     {
@@ -240,10 +240,11 @@ export const newsArticle = defineType({
       name: 'featured',
       title: 'Feature on homepage (fallback)',
       description:
-        'Only used when Homepage → News rail has no pinned articles. To feature on the homepage today, open Homepage → News rail → Featured articles and add this story (max 4).',
+        'Legacy fallback only. To show a story on the homepage, use Homepage → News on homepage → Featured articles.',
       type: 'boolean',
       group: 'publishing',
       initialValue: false,
+      hidden: () => true,
     }),
     defineField({
       name: 'publishedAt',

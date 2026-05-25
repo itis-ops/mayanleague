@@ -1,7 +1,22 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
+import { hubArticleBleedClass, hubArticleBleedInnerClass } from '@/lib/editorialLayout'
 import { useLanguage } from '@/hooks/useLanguage'
+import {
+  copyTextToClipboard,
+  getCachedShareFile,
+  getEmailShareUrl,
+  getFacebookShareUrl,
+  getWhatsAppShareUrl,
+  getXShareUrl,
+  isMobileWebShareContext,
+  preloadShareImage,
+  shareCardImage,
+  shouldPreferNativeShareSheet,
+  type ShareChannel,
+} from '@/lib/shareDispatch'
+import ShareToast from '@/components/news/ShareToast'
 
 interface ShareThisDispatchProps {
   title: string
@@ -13,15 +28,13 @@ interface ShareThisDispatchProps {
   className?: string
 }
 
-function encode(value: string) {
-  return encodeURIComponent(value)
-}
-
 interface IconProps {
   className?: string
 }
 
 const iconClass = 'h-4 w-4'
+const DISPATCH_CARD_FILENAME = 'iml-dispatch-card.png'
+const STORY_CARD_FILENAME = 'iml-dispatch-story.png'
 
 function CopyIcon({ className = iconClass }: IconProps) {
   return (
@@ -68,218 +81,303 @@ function InstagramIcon({ className = iconClass }: IconProps) {
   )
 }
 
-function DownloadIcon({ className = iconClass }: IconProps) {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true" className={className} fill="none" stroke="currentColor" strokeWidth="1.8">
-      <path d="M12 4v10" />
-      <path d="m7.8 10.2 4.2 4.2 4.2-4.2" />
-      <path d="M5 19h14" />
-    </svg>
-  )
-}
-
-function MoreIcon({ className = iconClass }: IconProps) {
+function WhatsAppIcon({ className = iconClass }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true" className={className} fill="currentColor">
-      <circle cx="5" cy="12" r="1.8" />
-      <circle cx="12" cy="12" r="1.8" />
-      <circle cx="19" cy="12" r="1.8" />
+      <path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.37 5.07L2 22l5.08-1.35A9.96 9.96 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2Zm4.93 13.57c-.2.56-.98 1.03-1.62 1.16-.43.09-.99.16-2.88-.62-2.42-.98-3.97-3.43-4.09-3.59-.12-.16-.97-1.3-.97-2.47 0-1.18.61-1.76.83-2 .22-.24.48-.3.64-.3h.46c.15 0 .35-.06.54.41.2.48.68 1.67.74 1.79.06.12.1.27.02.43-.08.17-.12.27-.24.41-.12.14-.25.31-.36.42-.12.12-.24.25-.1.49.14.24.62.99 1.33 1.6.91.8 1.68 1.05 1.92 1.17.24.12.38.1.52-.06.14-.16.6-.7.76-.94.16-.24.32-.2.54-.12.22.08 1.4.66 1.64.78.24.12.4.18.46.28.06.1.06.58-.14 1.14Z" />
     </svg>
   )
 }
 
-function iconButtonClass(isActive = false) {
+function EmailIcon({ className = iconClass }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className={className} fill="none" stroke="currentColor" strokeWidth="1.8">
+      <rect x="2.5" y="5.5" width="19" height="13" rx="2" />
+      <path d="m2.5 7 9.5 7 9.5-7" />
+    </svg>
+  )
+}
+
+function iconButtonClass(isActive = false, isLoading = false) {
   return [
-    'motion-control inline-flex h-11 w-11 items-center justify-center rounded-full border text-ink',
+    'motion-control inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border text-ink',
     'hover:border-earth-red hover:bg-earth-red hover:text-white active:border-[#a80a12] active:bg-[#a80a12]',
     'focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-gold',
-    isActive ? 'border-earth-red bg-earth-red text-white' : 'border-cream-dark bg-white',
+    'disabled:pointer-events-none disabled:opacity-60',
+    isActive || isLoading ? 'border-earth-red bg-earth-red text-white' : 'border-cream-dark bg-white',
   ].join(' ')
 }
 
-export default function ShareThisDispatch({ title, text, url, hashtags, shareImageUrl, storyImageUrl, className = '' }: ShareThisDispatchProps) {
+export default function ShareThisDispatch({
+  title,
+  text,
+  url,
+  hashtags,
+  shareImageUrl,
+  storyImageUrl,
+  className = '',
+}: ShareThisDispatchProps) {
   const { lang } = useLanguage()
   const [copyState, setCopyState] = useState<'idle' | 'copied'>('idle')
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const hashtagText = hashtags.map((tag) => tag.replace(/^#/, '')).join(',')
-  const copy = lang === 'es'
-    ? {
-        section: 'Comparte este despacho',
-        options: 'Opciones para compartir',
-        copyLink: 'Copiar enlace',
-        copied: 'Copiado',
-        linkCopied: 'Enlace copiado',
-        copiedLink: 'Enlace copiado',
-        nativeShare: 'Compartir desde este dispositivo',
-        shareOn: 'Compartir en',
-        instagramStory: 'Tarjeta para Instagram Stories',
-        downloadInstagramStory: 'Descargar tarjeta para Instagram Stories',
-        moreOptions: 'Más opciones para compartir',
-        more: 'Más',
-        downloadFeed: 'Descargar tarjeta para feed',
-      }
-    : {
-        section: 'Share this dispatch',
-        options: 'Share options',
-        copyLink: 'Copy link',
-        copied: 'Copied',
-        linkCopied: 'Link copied',
-        copiedLink: 'Copied link',
-        nativeShare: 'Share from this device',
-        shareOn: 'Share on',
-        instagramStory: 'Instagram Stories card',
-        downloadInstagramStory: 'Download Instagram Stories share card',
-        moreOptions: 'More share options',
-        more: 'More',
-        downloadFeed: 'Download feed card',
-      }
+  const [activeChannel, setActiveChannel] = useState<ShareChannel | null>(null)
+  const [statusMessage, setStatusMessage] = useState('')
+  const [toastMessage, setToastMessage] = useState<string | null>(null)
+  const [toastKey, setToastKey] = useState(0)
+  const [isMobile, setIsMobile] = useState(false)
 
-  const links = useMemo(
-    () => [
-      {
-        label: 'X / Twitter',
-        href: `https://twitter.com/intent/tweet?text=${encode(text)}&url=${encode(url)}&hashtags=${encode(hashtagText)}`,
-        icon: XIcon,
-      },
-      {
-        label: 'Facebook',
-        href: `https://www.facebook.com/sharer/sharer.php?u=${encode(url)}`,
-        icon: FacebookIcon,
-      },
-    ],
-    [hashtagText, text, url]
-  )
+  useEffect(() => {
+    setIsMobile(isMobileWebShareContext())
+  }, [])
+
+  const copy =
+    lang === 'es'
+      ? {
+          section: 'Comparte este despacho',
+          options: 'Opciones para compartir',
+          copyLink: 'Copiar enlace',
+          copied: 'Copiado',
+          linkCopied: 'Enlace copiado',
+          nativeShare: 'Compartir enlace desde este dispositivo',
+          shareOn: 'Compartir en',
+          shareCardOn: 'Compartir tarjeta en',
+          preparing: 'Preparando tarjeta…',
+          chooseInstagram: 'Elige Instagram en el menú para compartir en Stories.',
+          instagramDesktop: 'Abre Instagram en tu teléfono para compartir en Stories.',
+          chooseX: 'Publicando en X…',
+          chooseFacebook: 'Abriendo Facebook…',
+          downloaded: 'Tarjeta descargada. Adjúntala en la app para compartir.',
+          shareFailed: 'No se pudo compartir. Inténtalo de nuevo.',
+          shareWhatsApp: 'Compartir en WhatsApp',
+          shareEmail: 'Enviar por correo',
+        }
+      : {
+          section: 'Share this dispatch',
+          options: 'Share options',
+          copyLink: 'Copy link',
+          copied: 'Copied',
+          linkCopied: 'Link copied',
+          nativeShare: 'Share link from this device',
+          shareOn: 'Share on',
+          shareCardOn: 'Share card on',
+          preparing: 'Preparing card…',
+          chooseInstagram: 'Choose Instagram in the share menu to post to Stories.',
+          instagramDesktop: 'Open Instagram on your phone to share to Stories.',
+          chooseX: 'Opening X…',
+          chooseFacebook: 'Opening Facebook…',
+          downloaded: 'Card downloaded. Attach it in the app to share.',
+          shareFailed: 'Could not share. Try again.',
+          shareWhatsApp: 'Share on WhatsApp',
+          shareEmail: 'Share by email',
+        }
+
+  const channelConfig: Record<
+    ShareChannel,
+    { imageUrl: string; filename: string; chooseApp: string }
+  > = {
+    instagram: {
+      imageUrl: storyImageUrl,
+      filename: STORY_CARD_FILENAME,
+      chooseApp: copy.chooseInstagram,
+    },
+    x: {
+      imageUrl: shareImageUrl,
+      filename: DISPATCH_CARD_FILENAME,
+      chooseApp: copy.chooseX,
+    },
+    facebook: {
+      imageUrl: shareImageUrl,
+      filename: DISPATCH_CARD_FILENAME,
+      chooseApp: copy.chooseFacebook,
+    },
+  }
+
+  function showToast(message: string) {
+    setToastKey((current) => current + 1)
+    setToastMessage(message)
+  }
 
   async function copyLink() {
-    if (navigator.clipboard) {
-      await navigator.clipboard.writeText(url)
-    } else {
-      const textarea = document.createElement('textarea')
-      textarea.value = url
-      textarea.setAttribute('readonly', '')
-      textarea.style.position = 'absolute'
-      textarea.style.left = '-9999px'
-      document.body.appendChild(textarea)
-      textarea.select()
-      document.execCommand('copy')
-      document.body.removeChild(textarea)
-    }
-
+    await copyTextToClipboard(url)
     setCopyState('copied')
-    setIsMenuOpen(false)
+    showToast(copy.linkCopied)
     window.setTimeout(() => setCopyState('idle'), 1800)
   }
 
+  useEffect(() => {
+    void preloadShareImage(storyImageUrl, STORY_CARD_FILENAME).catch(() => {})
+    void preloadShareImage(shareImageUrl, DISPATCH_CARD_FILENAME).catch(() => {})
+  }, [storyImageUrl, shareImageUrl])
+
   async function nativeShare() {
     try {
-      if (navigator.share) {
+      if (shouldPreferNativeShareSheet()) {
         await navigator.share({ title, text, url })
         return
       }
-
       await copyLink()
     } catch {
-      // Browsers throw when a user cancels native share; the visible UI can stay unchanged.
+      // User cancelled native share.
+    }
+  }
+
+  async function shareCard(channel: ShareChannel) {
+    const config = channelConfig[channel]
+
+    // On desktop, open web-based share URLs directly — no card download needed.
+    if (!isMobile) {
+      if (channel === 'x') {
+        window.open(getXShareUrl(text, url, hashtags), '_blank', 'noopener,noreferrer')
+        return
+      }
+      if (channel === 'facebook') {
+        window.open(getFacebookShareUrl(url), '_blank', 'noopener,noreferrer')
+        return
+      }
+      if (channel === 'instagram') {
+        setStatusMessage(copy.instagramDesktop)
+        window.setTimeout(() => setStatusMessage(''), 4000)
+        return
+      }
+    }
+
+    setActiveChannel(channel)
+    try {
+      const cachedFile = getCachedShareFile(config.imageUrl, config.filename)
+      if (!cachedFile) {
+        setStatusMessage(copy.preparing)
+      }
+
+      const result = await shareCardImage(config.imageUrl, config.filename, cachedFile, {
+        title,
+        text,
+        url,
+      })
+
+      if (result === 'shared') {
+        setStatusMessage(config.chooseApp)
+        window.setTimeout(() => setStatusMessage(''), 3500)
+        return
+      }
+
+      if (result === 'downloaded') {
+        setStatusMessage(copy.downloaded)
+        window.setTimeout(() => setStatusMessage(''), 4000)
+        return
+      }
+
+      setStatusMessage('')
+    } catch {
+      setStatusMessage(copy.shareFailed)
+      window.setTimeout(() => setStatusMessage(''), 4000)
+    } finally {
+      setActiveChannel(null)
     }
   }
 
   return (
-    <section className={`bg-white ${className}`}>
-      <div className="relative flex flex-col items-center justify-center gap-4 border-y border-cream-dark px-5 py-4 sm:flex-row sm:justify-between sm:px-6">
-        <p className="type-kicker text-earth-red">{copy.section}</p>
+    <>
+      <section className={`bg-white ${hubArticleBleedClass} ${className}`} aria-label={copy.section}>
+        <div className={`border-y border-cream-dark py-4 ${hubArticleBleedInnerClass}`}>
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+              <p className="type-kicker text-earth-red">{copy.section}</p>
+              {statusMessage ? (
+                <p className="type-body mt-2 text-sm text-ink/62" aria-live="polite">
+                  {statusMessage}
+                </p>
+              ) : null}
+            </div>
 
-        <div className="flex max-w-full flex-wrap items-center justify-center gap-2" aria-label={copy.options}>
-          <button
-            type="button"
-            onClick={copyLink}
-            aria-label={copyState === 'copied' ? copy.linkCopied : copy.copyLink}
-            aria-live="polite"
-            title={copyState === 'copied' ? copy.copied : copy.copyLink}
-            className={iconButtonClass(copyState === 'copied')}
-          >
-            <CopyIcon />
-          </button>
-
-          <button
-            type="button"
-            onClick={nativeShare}
-            aria-label={copy.nativeShare}
-            title={copy.nativeShare}
-            className={iconButtonClass()}
-          >
-            <NativeShareIcon />
-          </button>
-
-          {links.map((link) => {
-            const Icon = link.icon
-            return (
-              <a
-                key={link.label}
-                href={link.href}
-                target="_blank"
-                rel="noreferrer"
-                aria-label={`${copy.shareOn} ${link.label}`}
-                title={link.label}
-                className={`${iconButtonClass()} hidden lg:inline-flex`}
-              >
-                <Icon />
-              </a>
-            )
-          })}
-
-          <a
-            href={storyImageUrl}
-            download
-            aria-label={copy.downloadInstagramStory}
-            title="Instagram Stories"
-            className={iconButtonClass()}
-          >
-            <InstagramIcon />
-          </a>
-
-          <div className="relative">
-            <button
-              type="button"
-              onClick={() => setIsMenuOpen((open) => !open)}
-              aria-label={copy.moreOptions}
-              aria-expanded={isMenuOpen}
-              title={copy.more}
-              className={iconButtonClass(isMenuOpen)}
+            <div
+              className="flex max-w-full items-center gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+              role="group"
+              aria-label={copy.options}
             >
-              <MoreIcon />
-            </button>
+              {/* Copy link */}
+              <button
+                type="button"
+                onClick={copyLink}
+                aria-label={copyState === 'copied' ? copy.linkCopied : copy.copyLink}
+                aria-live="polite"
+                title={copyState === 'copied' ? copy.copied : copy.copyLink}
+                className={iconButtonClass(copyState === 'copied')}
+              >
+                <CopyIcon />
+              </button>
 
-            {isMenuOpen ? (
-              <div className="absolute right-1/2 top-12 z-20 w-[min(16rem,calc(100vw-2rem))] translate-x-1/2 border border-cream-dark bg-white p-2 shadow-[0_18px_48px_rgba(36,36,36,0.14)] sm:right-0 sm:translate-x-0">
-                <button
-                  type="button"
-                  onClick={copyLink}
-                  className="flex w-full items-center gap-3 px-3 py-2.5 text-left font-body text-sm font-semibold text-ink hover:bg-cream focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-gold"
-                >
-                  <CopyIcon />
-                  {copyState === 'copied' ? copy.copiedLink : copy.copyLink}
-                </button>
-                <a
-                  href={storyImageUrl}
-                  download
-                  className="flex items-center gap-3 px-3 py-2.5 font-body text-sm font-semibold text-ink hover:bg-cream focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-gold"
-                >
-                  <InstagramIcon />
-                  {copy.instagramStory}
-                </a>
-                <a
-                  href={shareImageUrl}
-                  download
-                  className="flex items-center gap-3 px-3 py-2.5 font-body text-sm font-semibold text-ink hover:bg-cream focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-gold"
-                >
-                  <DownloadIcon />
-                  {copy.downloadFeed}
-                </a>
-              </div>
-            ) : null}
+              {/* Native share (mobile) */}
+              <button
+                type="button"
+                onClick={nativeShare}
+                aria-label={copy.nativeShare}
+                title={copy.nativeShare}
+                className={iconButtonClass()}
+              >
+                <NativeShareIcon />
+              </button>
+
+              {/* WhatsApp */}
+              <a
+                href={getWhatsAppShareUrl(text, url)}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={copy.shareWhatsApp}
+                title="WhatsApp"
+                className={iconButtonClass()}
+              >
+                <WhatsAppIcon />
+              </a>
+
+              {/* Email */}
+              <a
+                href={getEmailShareUrl(title, text, url)}
+                aria-label={copy.shareEmail}
+                title={copy.shareEmail}
+                className={iconButtonClass()}
+              >
+                <EmailIcon />
+              </a>
+
+              {/* Instagram */}
+              <button
+                type="button"
+                onClick={() => shareCard('instagram')}
+                disabled={activeChannel !== null}
+                aria-label={`${copy.shareCardOn} Instagram Stories`}
+                title="Instagram Stories"
+                className={iconButtonClass(false, activeChannel === 'instagram')}
+              >
+                <InstagramIcon />
+              </button>
+
+              {/* X / Twitter */}
+              <button
+                type="button"
+                onClick={() => shareCard('x')}
+                disabled={activeChannel !== null}
+                aria-label={`${copy.shareOn} X`}
+                title="X / Twitter"
+                className={iconButtonClass(false, activeChannel === 'x')}
+              >
+                <XIcon />
+              </button>
+
+              {/* Facebook */}
+              <button
+                type="button"
+                onClick={() => shareCard('facebook')}
+                disabled={activeChannel !== null}
+                aria-label={`${copy.shareOn} Facebook`}
+                title="Facebook"
+                className={iconButtonClass(false, activeChannel === 'facebook')}
+              >
+                <FacebookIcon />
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+      <ShareToast key={toastKey} message={toastMessage} />
+    </>
   )
 }

@@ -1,4 +1,4 @@
-import { collectionMetaRowClass } from '@/lib/editorialLayout'
+import { collectionMetaRowClass, collectionSidebarNavClass } from '@/lib/editorialLayout'
 
 export interface CollectionNavLink {
   label: string
@@ -21,7 +21,7 @@ export default function CollectionSidebar({ label, links, activeHref }: Collecti
       <div className={collectionMetaRowClass}>
         <p className="type-kicker text-earth-red">{label}</p>
       </div>
-      <nav className="flex flex-col gap-3 pt-4" aria-label={label}>
+      <nav className={collectionSidebarNavClass} aria-label={label}>
         {links.map((link) => {
           const active = link.href === activeHref
 

@@ -16,7 +16,8 @@ export default function HeroLanguageToggle({
 
   function buttonClass(isActive: boolean) {
     return [
-      'motion-control min-h-8 rounded-sm px-1 font-body text-[11px] font-bold uppercase tracking-[0.1em]',
+      'min-h-11 rounded-sm px-1.5 font-body text-[11px] font-bold uppercase tracking-[0.1em]',
+      'transition-colors duration-[var(--motion-base)] ease-[var(--ease-emil)]',
       'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold',
       isActive
         ? inverse

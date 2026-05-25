@@ -67,7 +67,7 @@ export default function NewsSection({ articles, content }: NewsSectionProps) {
             <div
               key={item.slug}
               className={[
-                'w-[min(82vw,300px)] shrink-0 snap-start sm:h-full sm:w-auto',
+                'min-w-0 w-[min(82vw,300px)] shrink-0 snap-start sm:h-full sm:w-auto',
                 `motion-delay-${Math.min(index + 1, 3)}`,
               ].join(' ')}
             >

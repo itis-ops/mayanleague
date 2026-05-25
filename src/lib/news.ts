@@ -658,11 +658,15 @@ export function getNewsArticleUrl(slug: string) {
 }
 
 export function getNewsShareImageUrl(slug: string) {
-  return `${siteUrl}/news/${slug}/opengraph-image?v=article-photo`
+  return `/news/${slug}/opengraph-image?v=article-photo`
 }
 
 export function getNewsInstagramStoryImageUrl(slug: string) {
-  return `${siteUrl}/news/${slug}/instagram-story-image`
+  return `/news/${slug}/instagram-story-image`
+}
+
+export function getNewsShareImageAbsoluteUrl(slug: string) {
+  return `${siteUrl}/news/${slug}/opengraph-image?v=article-photo`
 }
 
 export function getNewsSocial(article: NewsArticle) {
@@ -679,7 +683,7 @@ export function getNewsSocial(article: NewsArticle) {
       article.suggestedPostCopy ||
       `${article.dek}\n\nRead this dispatch from the International Mayan League archive.`,
     hashtags,
-    shareImage: article.shareImage || getNewsShareImageUrl(article.slug),
+    shareImage: article.shareImage || getNewsShareImageAbsoluteUrl(article.slug),
     shareImageAlt:
       article.shareImageAlt ||
       `Branded Mayan League share card for ${article.title}`,

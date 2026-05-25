@@ -1,4 +1,5 @@
 import type { Lang } from '@/lib/i18n'
+import { DONATE_URL as FALLBACK_DONATE_URL } from '@/lib/siteLinks'
 
 type LocalizedStr = { en?: string; es?: string } | null | undefined
 
@@ -123,7 +124,7 @@ export function mapSiteSettings(doc: SanitySiteSettingsDoc | null | undefined): 
     addressLines,
     addressDisplay,
     mapQuery: addressDisplay || '1201 K ST NW Washington DC 20005',
-    donateUrl: doc.donateUrl ?? '',
+    donateUrl: doc.donateUrl || FALLBACK_DONATE_URL,
     social: {
       facebook: social.facebook ?? '',
       instagram: social.instagram ?? '',

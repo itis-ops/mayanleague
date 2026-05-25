@@ -2,8 +2,11 @@ import type { Metadata } from 'next'
 import { Inter, Oswald, Source_Serif_4 } from 'next/font/google'
 import { draftMode } from 'next/headers'
 import { VisualEditing } from 'next-sanity/visual-editing'
+import ThemeScript from '@/components/ui/ThemeScript'
+import ThemeProvider from '@/components/ui/ThemeProvider'
 import LanguageProvider from '@/components/ui/LanguageProvider'
 import SkipLink from '@/components/ui/SkipLink'
+import ExitPreviewBanner from '@/components/ui/ExitPreviewBanner'
 import { getSiteSettings } from '@/lib/siteSettingsRepository'
 import { SanityLive } from '@/sanity/lib/live'
 import './globals.css'
@@ -56,12 +59,18 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html
       lang="en"
       className={`${oswald.variable} ${inter.variable} ${sourceSerif.variable}`}
+      suppressHydrationWarning
     >
+      <head>
+        <ThemeScript />
+      </head>
       <body>
-        <LanguageProvider siteSettings={siteSettings}>
-          <SkipLink />
-          {children}
-        </LanguageProvider>
+        <ThemeProvider>
+          <LanguageProvider siteSettings={siteSettings}>
+            <SkipLink />
+            {children}
+          </LanguageProvider>
+        </ThemeProvider>
 
         {/* Real-time content subscription — picks up Sanity mutations while
             Studio is open. Renders nothing visible; re-triggers RSC fetches. */}
@@ -72,28 +81,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         {isDraftMode && (
           <>
             <VisualEditing />
-            {/* Exit preview banner */}
-            <a
-              href={`/api/draft-mode/disable?redirect=${encodeURIComponent(typeof window !== 'undefined' ? window.location.pathname : '/')}`}
-              style={{
-                position: 'fixed',
-                bottom: '1rem',
-                right: '1rem',
-                zIndex: 9999,
-                background: '#b91c1c',
-                color: '#fff',
-                fontFamily: 'sans-serif',
-                fontSize: '0.75rem',
-                fontWeight: 700,
-                letterSpacing: '0.08em',
-                textTransform: 'uppercase',
-                padding: '0.5rem 1rem',
-                borderRadius: '0.25rem',
-                textDecoration: 'none',
-              }}
-            >
-              Exit preview
-            </a>
+            <ExitPreviewBanner />
           </>
         )}
       </body>

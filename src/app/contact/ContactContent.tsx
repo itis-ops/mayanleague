@@ -74,7 +74,7 @@ export default function ContactContent() {
             >
               <section
                 id="call-or-visit"
-                className={`scroll-mt-36 border-b border-cream-dark py-16 lg:py-24 ${collectionArticleSectionClass}`}
+                className={`scroll-mt-36 xl:scroll-mt-44 border-b border-cream-dark py-16 lg:py-24 ${collectionArticleSectionClass}`}
               >
                 <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-x-14">
                   <p className="type-kicker text-ink/55 lg:col-span-3 lg:pt-1">
@@ -141,7 +141,7 @@ export default function ContactContent() {
 
               <section
                 id="newsletter"
-                className={`scroll-mt-36 bg-mist py-16 lg:py-24 ${collectionArticleSectionClass}`}
+                className={`scroll-mt-36 xl:scroll-mt-44 bg-mist py-16 lg:py-24 ${collectionArticleSectionClass}`}
               >
                 <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-x-14">
                   <p className="type-kicker text-earth-red lg:col-span-3 lg:pt-1">

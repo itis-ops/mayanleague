@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --color-forest-dark: #242424;
   --color-forest: #4f4945;
@@ -49,6 +51,23 @@
   --motion-scroll: 480ms;
 }
 
+.dark {
+  --color-forest-dark: #f5efe9;
+  --color-forest: #c9bdb5;
+  --color-jade-light: #5a3f38;
+  --color-cream: #1c1816;
+  --color-cream-dark: #3a322e;
+  --color-ink: #f5efe9;
+  --color-mist: #121010;
+  --color-white: #1a1715;
+}
+
+/* Editorial dark bands keep a warm dark gray surface with light cream text. */
+.dark :is(.bg-ink, [class*='bg-ink/']) {
+  --color-ink: #2a2624;
+  --color-cream: #f8f2f2;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -88,12 +107,9 @@ body {
   text-rendering: optimizeLegibility;
   font-kerning: normal;
   font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
-}
-
-@media (max-width: 1023px) {
-  body {
-    padding-bottom: calc(5rem + env(safe-area-inset-bottom));
-  }
+  transition:
+    background-color var(--motion-base) var(--ease-emil),
+    color var(--motion-base) var(--ease-emil);
 }
 
 h1,
@@ -194,7 +210,7 @@ button:focus-visible {
   transform: translateY(-150%);
   border: 2px solid var(--color-ink);
   border-radius: 999px;
-  background: white;
+  background: var(--color-white);
   color: var(--color-ink);
   padding: 0.75rem 1rem;
   font-weight: 900;
@@ -312,6 +328,55 @@ button:focus-visible {
   .about-nav-swap {
     animation: about-nav-swap var(--motion-base) var(--ease-emil) both;
   }
+
+  .editorial-section-bar__line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 1px;
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 680ms var(--ease-emil);
+  }
+
+  .editorial-section-bar__line--top {
+    top: 0;
+  }
+
+  .editorial-section-bar__line--bottom {
+    bottom: 0;
+    transition-delay: 70ms;
+  }
+
+  .editorial-section-bar__label {
+    opacity: 0;
+    transform: translateY(6px);
+    transition:
+      opacity 460ms var(--ease-emil) 120ms,
+      transform 460ms var(--ease-emil) 120ms;
+  }
+
+  .editorial-section-bar__detail {
+    opacity: 0;
+    transform: translateX(14px);
+    transition:
+      opacity 460ms var(--ease-emil) 220ms,
+      transform 460ms var(--ease-emil) 220ms;
+  }
+
+  .editorial-section-bar--visible .editorial-section-bar__line {
+    transform: scaleX(1);
+  }
+
+  .editorial-section-bar--visible .editorial-section-bar__label,
+  .editorial-section-bar--visible .editorial-section-bar__detail {
+    opacity: 1;
+    transform: translate(0);
+  }
+
+  .program-index-pulse {
+    animation: program-index-pulse 1.5s var(--ease-emil) infinite;
+  }
 }
 
 @keyframes about-nav-swap {
@@ -323,5 +388,18 @@ button:focus-visible {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes program-index-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.72;
+    transform: scale(1.1);
   }
 }

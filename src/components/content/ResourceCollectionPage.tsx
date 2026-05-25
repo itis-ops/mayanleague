@@ -4,7 +4,7 @@ import AboutReveal, { AboutMotionStagger } from '@/components/about/AboutReveal'
 import CollectionShell from '@/components/collection/CollectionShell'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
-import MayaNumber from '@/components/ui/MayaNumber'
+import CardIndexMark, { CardWesternIndex } from '@/components/ui/CardIndexMark'
 import { useLanguage } from '@/hooks/useLanguage'
 import { collectionArticleSectionClass } from '@/lib/editorialLayout'
 import { localizedResourceNavLinks } from '@/lib/resourcePages'
@@ -84,30 +84,33 @@ function StatementCard({
       href={link.href}
       target={isLocalHref(link.href) ? undefined : '_blank'}
       rel={isLocalHref(link.href) ? undefined : 'noreferrer'}
-      className="group flex h-full flex-col gap-4 border border-cream-dark bg-white p-5 transition-colors hover:border-earth-red/40 focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-gold sm:p-6"
+      className="group flex h-full min-w-0 flex-col gap-4 overflow-hidden border border-cream-dark bg-white p-5 transition-colors hover:border-earth-red/40 focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-gold sm:p-6"
     >
-      <div className="flex items-center gap-2 text-earth-red">
-        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-earth-red/30 bg-earth-red/8 text-earth-red transition-colors group-hover:bg-earth-red group-hover:text-white">
-          <DocumentIcon />
-        </span>
-        <span className="type-kicker text-earth-red/70">
-          {isPdfLink(link.href) ? copy.pdfDocument : copy.webResource}
-        </span>
-        {statementLang ? (
-          <span className="type-kicker rounded-full border border-cream-dark px-2 py-0.5 text-ink/45">
-            {langLabel}
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex min-w-0 items-center gap-2 text-earth-red">
+          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-earth-red/30 bg-earth-red/8 text-earth-red transition-colors group-hover:bg-earth-red group-hover:text-white">
+            <DocumentIcon />
           </span>
-        ) : null}
+          <span className="type-kicker text-earth-red/70">
+            {isPdfLink(link.href) ? copy.pdfDocument : copy.webResource}
+          </span>
+          {statementLang ? (
+            <span className="type-kicker rounded-full border border-cream-dark px-2 py-0.5 text-ink/45">
+              {langLabel}
+            </span>
+          ) : null}
+        </div>
+        <CardIndexMark value={index + 1} />
       </div>
 
       <h3 className="flex-1 font-body text-sm font-semibold leading-snug text-ink">{title}</h3>
 
-      <div className="flex items-end justify-between gap-3">
+      <div className="flex items-end justify-between gap-4">
         <div className="flex items-center gap-1.5 text-earth-red/70 transition-colors group-hover:text-earth-red">
           <span className="font-body text-xs font-semibold uppercase tracking-wider">{copy.openStatement}</span>
           <ArrowIcon />
         </div>
-        <MayaNumber value={index + 1} className="shrink-0 scale-75 origin-bottom-right text-earth-red" />
+        <CardWesternIndex value={index + 1} />
       </div>
     </a>
   )

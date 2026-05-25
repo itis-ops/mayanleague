@@ -4,58 +4,21 @@ import CollectionShell from '@/components/collection/CollectionShell'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import Button from '@/components/ui/Button'
-import MayaNumber from '@/components/ui/MayaNumber'
+import CardIndexMark, { CardWesternIndex } from '@/components/ui/CardIndexMark'
 import { useLanguage } from '@/hooks/useLanguage'
 import { collectionArticleSectionClass } from '@/lib/editorialLayout'
 import { uiCopy, type ContentLink } from '@/lib/siteContent'
+import {
+  FAMILY_META,
+  familyAnchorId,
+  getLanguageFamilyMap,
+  getLanguageFamilyOrder,
+  parseCommunity,
+  splitBilingual,
+} from '@/lib/languageResources'
 import { indigenousLanguageResources, localizedResourceNavLinks } from '@/lib/resourcePages'
 
-// ─── Language family groupings ────────────────────────────────────────────────
-
-const FAMILY_META: Record<string, { color: string; glyph: string }> = {
-  Ixil:       { color: 'bg-earth-red/8 border-earth-red/20',   glyph: '01' },
-  Kaqchikel:  { color: 'bg-gold/8 border-gold/30',             glyph: '02' },
-  "K'iche'":  { color: 'bg-earth-red/8 border-earth-red/20',   glyph: '03' },
-  Mam:        { color: 'bg-gold/8 border-gold/30',             glyph: '04' },
-  "Q'anjob'al": { color: 'bg-earth-red/8 border-earth-red/20', glyph: '05' },
-  "Q'eqchi'": { color: 'bg-gold/8 border-gold/30',             glyph: '06' },
-}
-
-// Map each group title to its language family
-function detectFamily(title: string): string {
-  if (/ixil/i.test(title))     return 'Ixil'
-  if (/kaqchikel/i.test(title)) return 'Kaqchikel'
-  if (/k'iche'/i.test(title))  return "K'iche'"
-  if (/\bmam\b/i.test(title))  return 'Mam'
-  if (/q'anjob'al/i.test(title)) return "Q'anjob'al"
-  if (/q'eqchi'/i.test(title)) return "Q'eqchi'"
-  return 'Other'
-}
-
-// Parse community name from group title (remove "Maya X, " prefix)
-function parseCommunity(title: string): { language: string; community: string } {
-  // e.g. "Maya Ixil, Nebaj, department of Quiché"
-  const match = title.match(/^Maya\s+([^,]+),\s*(.+)$/i)
-  if (match) {
-    return { language: `Maya ${match[1].trim()}`, community: match[2].trim() }
-  }
-  return { language: title, community: '' }
-}
-
-// Split bilingual label on " / " into { es, en }
-function splitBilingual(label: string): { es: string; en: string } | null {
-  const idx = label.indexOf(' / ')
-  if (idx === -1) return null
-  return { es: label.slice(0, idx).trim(), en: label.slice(idx + 3).trim() }
-}
-
 // ─── Sub-components ───────────────────────────────────────────────────────────
-
-function isLocalHref(href: string) {
-  return href.startsWith('/')
-}
-
-// Play icon SVG
 function PlayIcon() {
   return (
     <svg
@@ -87,16 +50,18 @@ function ResourceCard({ link, lang, index }: { link: ContentLink; lang: 'en' | '
       href={link.href}
       target="_blank"
       rel="noreferrer"
-      className="group flex flex-col gap-3 rounded-none border border-cream-dark bg-white p-5 transition-colors hover:border-earth-red/40 hover:bg-earth-red/4 focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-gold sm:p-6"
+      className="group flex min-w-0 flex-col gap-3 overflow-hidden rounded-none border border-cream-dark bg-white p-5 transition-colors hover:border-earth-red/40 hover:bg-earth-red/4 focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-gold sm:p-6"
     >
-      {/* Play badge */}
-      <div className="flex items-center gap-2 text-earth-red">
-        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-earth-red/30 bg-earth-red/8 text-earth-red transition-colors group-hover:bg-earth-red group-hover:text-white">
-          <PlayIcon />
-        </span>
-        <span className="type-kicker text-earth-red/70">
-          {lang === 'es' ? 'Ver video' : 'Watch video'}
-        </span>
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex min-w-0 items-center gap-2 text-earth-red">
+          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-earth-red/30 bg-earth-red/8 text-earth-red transition-colors group-hover:bg-earth-red group-hover:text-white">
+            <PlayIcon />
+          </span>
+          <span className="type-kicker text-earth-red/70">
+            {lang === 'es' ? 'Ver video' : 'Watch video'}
+          </span>
+        </div>
+        <CardIndexMark value={index + 1} />
       </div>
 
       {/* Title */}
@@ -115,15 +80,14 @@ function ResourceCard({ link, lang, index }: { link: ContentLink; lang: 'en' | '
         </p>
       )}
 
-      {/* CTA */}
-      <div className="flex items-end justify-between gap-3">
+      <div className="flex items-end justify-between gap-4">
         <div className="flex items-center gap-1.5 text-earth-red/70 transition-colors group-hover:text-earth-red">
           <span className="font-body text-xs font-semibold uppercase tracking-wider">
             {lang === 'es' ? 'Abrir en Facebook' : 'Open on Facebook'}
           </span>
           <ArrowIcon />
         </div>
-        <MayaNumber value={index + 1} className="shrink-0 scale-75 origin-bottom-right text-earth-red" />
+        <CardWesternIndex value={index + 1} />
       </div>
     </a>
   )
@@ -231,26 +195,8 @@ export default function IndigenousLanguageResourcesPage() {
     ? 'Grabación y edición por la Liga Maya Internacional/USA'
     : indigenousLanguageResources.credit
 
-  // Group by language family, preserving order
-  type GroupEntry = { family: string; group: (typeof indigenousLanguageResources.groups)[number] }
-  const grouped: GroupEntry[] = indigenousLanguageResources.groups.map((g) => ({
-    family: detectFamily(g.title),
-    group: g,
-  }))
-
-  // Build ordered family list (deduplicated, preserving first occurrence order)
-  const familyOrder: string[] = []
-  for (const { family } of grouped) {
-    if (!familyOrder.includes(family)) familyOrder.push(family)
-  }
-
-  // Map family → groups
-  const familyMap = new Map<string, typeof indigenousLanguageResources.groups>()
-  for (const { family, group } of grouped) {
-    const arr = familyMap.get(family) ?? []
-    arr.push(group)
-    familyMap.set(family, arr)
-  }
+  const familyOrder = getLanguageFamilyOrder()
+  const familyMap = getLanguageFamilyMap()
 
   // Running index for community numbering
   let communityIndex = 0
@@ -301,7 +247,7 @@ export default function IndigenousLanguageResourcesPage() {
             {familyOrder.map((family) => (
               <a
                 key={family}
-                href={`#family-${family.replace(/[^a-z]/gi, '')}`}
+                href={`#${familyAnchorId(family)}`}
                 className="inline-flex items-center gap-1.5 rounded-full border border-cream-dark bg-white px-4 py-2 font-body text-sm font-semibold text-ink/70 transition-colors hover:border-earth-red/40 hover:text-earth-red focus-visible:outline-3 focus-visible:outline-gold"
               >
                 <span className="h-1.5 w-1.5 rounded-full bg-earth-red/50" />

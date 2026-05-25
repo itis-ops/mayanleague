@@ -22,7 +22,7 @@ export default function Button({ variant = 'primary', href, onClick, type = 'but
     secondary:
       'border-ink bg-white text-ink shadow-[0_1px_0_rgba(36,36,36,0.12)] hover:border-ink hover:bg-cream hover:text-ink active:border-black active:bg-black active:text-white',
     tertiary:
-      'border-transparent bg-transparent px-0 text-ink underline decoration-current decoration-2 underline-offset-4 hover:text-earth-red active:text-black',
+      'justify-start border-0 bg-transparent px-0 text-ink underline decoration-current decoration-2 underline-offset-4 hover:text-earth-red active:text-black',
   }
 
   const cls = `${base} ${variants[variant]} ${className}`

@@ -1,11 +1,13 @@
 'use client'
 
 import EditorialSectionBar from '@/components/editorial/EditorialSectionBar'
-import { useLanguage } from '@/hooks/useLanguage'
+import LanguageResourceVideoCard from '@/components/resources/LanguageResourceVideoCard'
 import Button from '@/components/ui/Button'
+import { useLanguage } from '@/hooks/useLanguage'
+import translations from '@/lib/i18n'
+import { getFeaturedLanguageVideos } from '@/lib/languageResources'
+import { indigenousLanguageResources } from '@/lib/resourcePages'
 import type { ResourcesSlice } from '@/sanity/lib/mapHomepage'
-
-const RESOURCE_HREFS = ['/indigenous-language-resources', '/resources', '/resources']
 
 interface ResourcesSectionProps {
   content?: { en: ResourcesSlice; es: ResourcesSlice }
@@ -13,89 +15,97 @@ interface ResourcesSectionProps {
 
 export default function ResourcesSection({ content }: ResourcesSectionProps) {
   const { lang, t } = useLanguage()
-  const r = content?.[lang] ?? t.resources
+  const r = { ...t.resources, ...(content?.[lang] ?? {}) }
+  const featuredVideos = getFeaturedLanguageVideos()
 
   return (
-    <section id="resources" className="bg-white px-5 py-12 sm:px-8 sm:py-14 lg:px-12 lg:py-20">
+    <section id="resources" className="bg-cream px-5 py-12 sm:px-8 sm:py-14 lg:px-12 lg:py-20">
       <div className="mx-auto max-w-[1728px]">
-        <EditorialSectionBar
-          hideDetailOnMobile
-          label={r.sectionLabel}
-          detail={r.sectionKicker}
-        />
+        <EditorialSectionBar hideDetailOnMobile label={r.sectionLabel} detail={r.sectionKicker} />
 
-        {/* Editorial image — heading anchored to bottom over gradient */}
-        <div className="motion-reveal mb-5 border border-cream-dark bg-cream p-1.5 sm:mb-6 lg:mb-8">
-          <div className="relative min-h-[64vw] overflow-hidden bg-ink sm:min-h-[360px] lg:min-h-[460px]">
-            <img
-              src="/site-images/maya-delegation.webp"
-              alt=""
-              aria-hidden="true"
-              className="absolute inset-0 h-full w-full object-cover grayscale"
-            />
-            {/* Deep gradient for heading legibility */}
-            <div
-              className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/30 to-transparent"
-              aria-hidden="true"
-            />
-            {/* Heading at image bottom — always visible, no frosted box */}
-            <div className="absolute inset-x-0 bottom-0 px-7 pb-8 sm:px-10 sm:pb-10 lg:px-14 lg:pb-12">
-              <p className="type-kicker mb-3 text-earth-red">{r.eyebrow}</p>
-              <h2 className="type-section max-w-4xl text-[clamp(1.9rem,4.8vw,4.9rem)] text-cream">
-                {r.heading}
+        <div className="motion-reveal border border-cream-dark bg-white p-1.5">
+          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,0.42fr)_minmax(0,1fr)] lg:divide-x lg:divide-cream-dark">
+            {/* Hero copy */}
+            <div className="border-b border-cream-dark px-7 py-10 sm:px-10 sm:py-12 lg:border-b-0 lg:px-10 lg:py-12 xl:px-12 xl:py-14">
+              <p className="type-kicker mb-4 text-earth-red">{r.spotlightEyebrow}</p>
+              <h2 className="type-section mb-5 max-w-[18ch] text-[clamp(2.1rem,4.6vw,3.75rem)] leading-[0.95] text-ink">
+                {r.spotlightHeading}
               </h2>
-            </div>
-          </div>
-        </div>
-
-        {/*
-          Cards — flat grid, no overlap.
-          Mobile (<sm): horizontal scroll, aligned to content margin
-          Tablet (sm): 3-col grid
-          Desktop (lg): 3-col grid with more padding
-        */}
-        <div className="relative">
-          {/* Scroll affordance — mobile only */}
-          <div className="pointer-events-none absolute inset-y-0 right-0 z-10 flex w-16 items-center justify-end sm:hidden" aria-hidden="true">
-            <div className="absolute inset-y-0 right-0 w-full bg-gradient-to-r from-transparent to-white" />
-            <svg className="relative mr-1 h-5 w-5 text-ink/40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-            </svg>
-          </div>
-        <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:grid sm:grid-cols-3 sm:overflow-visible sm:pb-0 sm:snap-none sm:gap-5">
-          {r.items.slice(0, 3).map((item, index) => (
-            <div
-              key={item.title}
-              className={[
-                'w-[min(82vw,360px)] shrink-0 snap-start sm:w-auto',
-                `motion-delay-${index + 1}`,
-              ].join(' ')}
-            >
-              <article className="motion-card group h-full border border-cream-dark bg-white p-1.5 hover:bg-cream">
-                <div className="flex h-full min-h-[280px] flex-col bg-white p-7 group-hover:bg-cream sm:min-h-[300px] sm:p-8 lg:min-h-[320px] lg:p-10">
-                  <p className="mb-6 font-display text-5xl font-bold leading-none tracking-[-0.06em] text-earth-red">
-                    {String(index + 1).padStart(2, '0')}
+              {lang === 'en' ? (
+                <div className="max-w-[42ch] space-y-3">
+                  <p className="type-body text-[1.0625rem] leading-[1.75] text-ink/72">
+                    {translations.es.resources.spotlightIntro}
                   </p>
-                  <h3 className="type-section mb-4 text-[clamp(1.45rem,2.4vw,2.1rem)] text-ink group-hover:text-earth-red">
-                    {item.title}
-                  </h3>
-                  <p className="mb-7 border-t border-cream-dark pt-5 type-body text-[1rem] leading-[1.75] text-ink/72">
-                    {item.description}
+                  <p className="type-body text-[1.0625rem] leading-[1.75] text-ink/45">
+                    {r.spotlightIntro}
                   </p>
-                  <div className="mt-auto">
-                    <Button
-                      href={RESOURCE_HREFS[index] ?? '/resources'}
-                      variant="tertiary"
-                      ariaLabel={`${r.explore}: ${item.title}`}
-                    >
-                      {r.explore}
-                    </Button>
-                  </div>
                 </div>
-              </article>
+              ) : (
+                <p className="max-w-[42ch] type-body text-[1.0625rem] leading-[1.75] text-ink/72">{r.spotlightIntro}</p>
+              )}
+              <p className="type-kicker mt-6 max-w-[36ch] text-ink/45">{r.spotlightCredit}</p>
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                <Button href="/indigenous-language-resources" variant="primary">
+                  {r.viewAllLanguage}
+                </Button>
+                <Button
+                  href={indigenousLanguageResources.download.href}
+                  variant="secondary"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {r.downloadKyr}
+                </Button>
+              </div>
             </div>
-          ))}
-        </div>
+
+            {/* Featured videos */}
+            <div className="px-7 py-10 sm:px-10 sm:py-12 lg:px-10 lg:py-12 xl:px-12 xl:py-14">
+              <div className="mb-6 flex flex-col gap-3 border-b border-cream-dark pb-6 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                  <p className="type-kicker mb-2 text-earth-red">{r.featuredLabel}</p>
+                  <h3 className="type-section max-w-[16ch] text-[clamp(1.65rem,2.8vw,2.35rem)] leading-[1.02] text-ink">
+                    {r.featuredHeading}
+                  </h3>
+                </div>
+                <Button href="/indigenous-language-resources" variant="tertiary" className="shrink-0 self-start sm:self-auto">
+                  {r.viewAllLanguage}
+                </Button>
+              </div>
+
+              <div className="relative">
+                <div
+                  className="pointer-events-none absolute inset-y-0 right-0 z-10 flex w-12 items-center justify-end lg:hidden"
+                  aria-hidden="true"
+                >
+                  <div className="absolute inset-y-0 right-0 w-full bg-gradient-to-r from-transparent to-white" />
+                  <svg className="relative mr-0.5 h-5 w-5 text-ink/40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                  </svg>
+                </div>
+                <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-1 [scrollbar-width:none] sm:grid sm:grid-cols-2 sm:overflow-visible sm:pb-0 sm:snap-none sm:gap-4 [&::-webkit-scrollbar]:hidden">
+                  {featuredVideos.map((video, index) => (
+                    <div
+                      key={video.href}
+                      className={[
+                        'w-[min(78vw,320px)] shrink-0 snap-start sm:w-auto',
+                        `motion-delay-${Math.min(index + 1, 3)}`,
+                      ].join(' ')}
+                    >
+                      <LanguageResourceVideoCard
+                        link={video}
+                        lang={lang}
+                        index={index}
+                        family={video.family}
+                        community={video.community}
+                        compact
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>

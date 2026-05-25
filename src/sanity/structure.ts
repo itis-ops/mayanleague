@@ -1,7 +1,8 @@
+import { CogIcon, DocumentsIcon, HomeIcon } from '@sanity/icons'
 import type { StructureResolver } from 'sanity/structure'
 
 /**
- * Desk / structure resolver — sidebar labels for non-technical editors.
+ * Desk structure for non-technical editors — flat list, no orphan types, no extra nesting.
  */
 
 const SINGLETON_TYPES = new Set(['homepage', 'siteSettings'])
@@ -12,6 +13,7 @@ export const structure: StructureResolver = (S) =>
     .items([
       S.listItem()
         .title('Homepage')
+        .icon(HomeIcon)
         .id('homepage')
         .child(
           S.document()
@@ -21,6 +23,7 @@ export const structure: StructureResolver = (S) =>
         ),
       S.listItem()
         .title('Site settings')
+        .icon(CogIcon)
         .id('siteSettings')
         .child(
           S.document()
@@ -29,25 +32,15 @@ export const structure: StructureResolver = (S) =>
             .title('Site settings'),
         ),
       S.divider(),
-      S.listItem()
-        .title('Newsroom')
+      S.documentTypeListItem('newsArticle')
+        .title('News articles')
+        .icon(DocumentsIcon)
         .child(
-          S.list()
-            .title('Newsroom')
-            .items([
-              S.documentTypeListItem('newsArticle')
-                .title('News articles')
-                .child(
-                  S.documentTypeList('newsArticle')
-                    .title('News articles')
-                    .defaultOrdering([{ field: 'publishedAt', direction: 'desc' }]),
-                ),
-            ]),
+          S.documentTypeList('newsArticle')
+            .title('News articles')
+            .defaultOrdering([{ field: 'publishedAt', direction: 'desc' }]),
         ),
-      S.divider(),
-      ...S.documentTypeListItems().filter((listItem) => {
-        const id = listItem.getId()
-        if (!id) return false
-        return !SINGLETON_TYPES.has(id) && id !== 'newsArticle'
-      }),
     ])
+
+/** Exported for tests / docs — types editors should never see in the desk. */
+export const HIDDEN_DESK_TYPES = SINGLETON_TYPES

@@ -34,8 +34,8 @@ export default function AboutPersonRow({
     <article
       className={
         useStickyStack
-          ? `relative border-b border-cream-dark bg-white lg:sticky lg:top-[72px] lg:scroll-mt-36 xl:top-[124px] ${collectionArticleSectionClass} ${sectionPadding}`
-          : `relative scroll-mt-36 border-b border-cream-dark bg-white ${collectionArticleSectionClass} ${sectionPadding}`
+          ? `relative overflow-hidden border-b border-cream-dark bg-white lg:sticky lg:top-[116px] lg:scroll-mt-36 xl:top-[168px] xl:scroll-mt-44 ${collectionArticleSectionClass} ${sectionPadding}`
+          : `relative overflow-hidden scroll-mt-36 border-b border-cream-dark bg-white xl:scroll-mt-44 ${collectionArticleSectionClass} ${sectionPadding}`
       }
     >
       <div

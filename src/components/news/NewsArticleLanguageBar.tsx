@@ -3,5 +3,5 @@
 import HubLanguageBar from '@/components/editorial/HubLanguageBar'
 
 export default function NewsArticleLanguageBar() {
-  return <HubLanguageBar />
+  return <HubLanguageBar desktopOnly={false} />
 }

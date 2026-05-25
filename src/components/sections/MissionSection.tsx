@@ -3,6 +3,7 @@
 import EditorialSectionBar from '@/components/editorial/EditorialSectionBar'
 import { useLanguage } from '@/hooks/useLanguage'
 import Button from '@/components/ui/Button'
+import MissionStat from '@/components/sections/MissionStat'
 import type { MissionSlice } from '@/sanity/lib/mapHomepage'
 
 interface MissionSectionProps {
@@ -74,23 +75,7 @@ export default function MissionSection({ content }: MissionSectionProps) {
             <div className="border border-cream-dark bg-white p-1.5">
               <div className="grid h-full grid-cols-3 divide-x divide-cream-dark lg:grid-cols-1 lg:grid-rows-3 lg:divide-x-0 lg:divide-y">
                 {t.mission.stats.map((stat) => (
-                  <div
-                    key={stat.label}
-                    className="flex flex-col items-center justify-center gap-2 px-3 py-7 text-center sm:py-8 lg:px-6 lg:py-8"
-                  >
-                    <p
-                      className="font-display font-black leading-none tracking-[-0.065em] text-earth-red tabular-nums text-[clamp(2rem,6vw,5.75rem)]"
-                      aria-hidden="true"
-                    >
-                      {stat.value}
-                    </p>
-                    <p className="type-kicker max-w-[12ch] text-ink/72 lg:max-w-[15ch]">
-                      {stat.label}
-                    </p>
-                    <span className="sr-only">
-                      {stat.value} {stat.label}
-                    </span>
-                  </div>
+                  <MissionStat key={stat.label} value={stat.value} label={stat.label} />
                 ))}
               </div>
             </div>

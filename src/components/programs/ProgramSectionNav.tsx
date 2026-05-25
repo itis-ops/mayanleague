@@ -17,7 +17,7 @@ export default function ProgramSectionNav({
   getSectionId,
 }: ProgramSectionNavProps) {
   return (
-    <div className="sticky top-[128px] z-20 -mx-7 border-b border-cream-dark bg-white/95 py-3 backdrop-blur-sm sm:-mx-10 lg:top-[72px] lg:-mx-14 xl:top-[124px]">
+    <div className="sticky top-[128px] z-20 -mx-7 border-b border-cream-dark bg-white/95 py-3 backdrop-blur-sm sm:-mx-10 lg:top-[116px] lg:-mx-14 xl:top-[168px]">
       <nav
         aria-label={ariaLabel}
         className="flex gap-2 overflow-x-auto overscroll-x-contain pb-0.5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"

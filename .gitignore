@@ -44,6 +44,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# local image-optimization scratch output
+/tmp
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

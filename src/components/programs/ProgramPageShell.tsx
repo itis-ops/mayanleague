@@ -39,7 +39,7 @@ export default function ProgramPageShell({ activeHref, children, hubHero }: Prog
             </aside>
 
             <div className={editorialMainClass}>
-              <ProgramPageNav activeHref={activeHref} variant="compact" />
+              <ProgramPageNav activeHref={activeHref} variant="compact" layout="hub" />
               <article>{children}</article>
             </div>
           </div>

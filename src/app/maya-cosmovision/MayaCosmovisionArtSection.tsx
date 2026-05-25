@@ -1,6 +1,6 @@
 import MayaNumber from '@/components/ui/MayaNumber'
 import LinkedMayaCosmovision from '@/components/ui/LinkedMayaCosmovision'
-import { collectionArticleSectionClass } from '@/lib/editorialLayout'
+import { collectionArticleSectionClass, scrollAnchorProgramSectionClass } from '@/lib/editorialLayout'
 
 interface MayaCosmovisionArtSectionProps {
   id: string
@@ -28,7 +28,7 @@ export default function MayaCosmovisionArtSection({
   return (
     <section
       id={id}
-      className={`relative scroll-mt-48 border-b border-cream-dark bg-white py-16 lg:scroll-mt-36 lg:py-20 xl:scroll-mt-44 ${collectionArticleSectionClass}`}
+      className={`relative ${scrollAnchorProgramSectionClass} border-b border-cream-dark bg-white py-16 lg:py-20 ${collectionArticleSectionClass}`}
     >
       <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-x-14">
         {/* Left rail — label only, matching all other sections */}

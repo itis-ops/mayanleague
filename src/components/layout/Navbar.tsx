@@ -86,11 +86,11 @@ export default function Navbar() {
 
   return (
     <header
-      className={`motion-surface fixed top-0 left-0 right-0 z-50 bg-white ${
+      className={`motion-surface fixed top-0 left-0 right-0 z-[60] bg-white ${
         scrolled ? 'shadow-[0_1px_0_rgba(36,36,36,0.1)]' : ''
       }`}
     >
-      <div className="mx-auto max-w-[1728px] px-4 sm:px-8 xl:px-24">
+      <div className="mx-auto max-w-[1728px] px-5 sm:px-8 xl:px-24">
         <div className="flex h-[72px] items-center justify-between xl:h-[124px]">
           <a
             href="/"
@@ -163,7 +163,7 @@ export default function Navbar() {
           tabIndex={-1}
           className="border-t border-cream-dark bg-white shadow-xl xl:hidden outline-none"
         >
-          <div className="flex flex-col gap-4 px-4 py-6">
+          <div className="flex flex-col gap-4 px-5 py-6 sm:px-8">
             {navLinks.map((link, index) => {
               if (link.href === '/about' && showAboutSectionLinks) {
                 return (

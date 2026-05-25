@@ -9,7 +9,7 @@ import ProgramSectionNav from '@/components/programs/ProgramSectionNav'
 import MayaCosmovisionArtSection from '@/app/maya-cosmovision/MayaCosmovisionArtSection'
 import MayaDirectionGrid from '@/app/maya-cosmovision/MayaDirectionGrid'
 import { useLanguage } from '@/hooks/useLanguage'
-import { collectionArticleSectionClass } from '@/lib/editorialLayout'
+import { collectionArticleSectionClass, scrollAnchorProgramSectionClass } from '@/lib/editorialLayout'
 import { getProgramPage, localizedProgramNavLinks } from '@/lib/programPages'
 import { uiCopy } from '@/lib/siteContent'
 
@@ -204,7 +204,7 @@ export default function MayaCosmovisionContent() {
               layout="editorial"
               leadFirstBody={index === 0}
               wideTitle={section.title.trim().split(/\s+/).length > 5}
-              className="scroll-mt-48 lg:scroll-mt-36 xl:scroll-mt-44"
+              className={scrollAnchorProgramSectionClass}
             >
               {index === 2 ? <MayaDirectionGrid directions={directions} /> : null}
             </AboutEditorialSection>

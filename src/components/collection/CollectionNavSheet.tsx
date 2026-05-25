@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useId, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { useLanguage } from '@/hooks/useLanguage'
 
 export interface CollectionNavLink {
@@ -32,6 +33,7 @@ export default function CollectionNavSheet({
   const sheetRef = useRef<HTMLDivElement>(null)
   const { lang } = useLanguage()
   const [open, setOpen] = useState(false)
+  const [mounted, setMounted] = useState(false)
 
   const copy =
     lang === 'es'
@@ -54,6 +56,10 @@ export default function CollectionNavSheet({
           fullWidth ? 'w-full justify-between' : 'shrink-0',
         ].join(' ')
       : 'motion-control flex shrink-0 items-center gap-1.5 rounded-full border border-cream-dark px-3 py-1.5 font-body text-xs font-black uppercase tracking-[0.08em] text-ink/70 hover:border-earth-red hover:text-earth-red focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-gold'
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
     if (!open) return
@@ -108,67 +114,72 @@ export default function CollectionNavSheet({
         ) : null}
       </button>
 
-      {open ? (
-        <div className="fixed inset-0 z-[80]" role="presentation">
-          <button
-            type="button"
-            className="absolute inset-0 bg-ink/35"
-            aria-label={copy.close}
-            onClick={closeSheet}
-          />
+      {mounted && open
+        ? createPortal(
+            <div className="fixed inset-0 z-[90]" role="presentation">
+              <button
+                type="button"
+                className="absolute inset-0 bg-ink/40 backdrop-blur-[2px]"
+                aria-label={copy.close}
+                onClick={closeSheet}
+              />
 
-          <div
-            ref={sheetRef}
-            id={sheetId}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby={`${sheetId}-title`}
-            tabIndex={-1}
-            className="absolute inset-x-0 bottom-0 max-h-[min(88vh,640px)] overflow-hidden rounded-t-2xl bg-white shadow-[0_-24px_60px_rgba(36,36,36,0.12)] outline-none"
-          >
-            <div className="flex max-h-[min(88vh,640px)] flex-col">
-              <div className="flex items-center justify-between px-6 pb-2 pt-5">
-                <p id={`${sheetId}-title`} className="type-kicker text-earth-red">
-                  {sheetTitle}
-                </p>
-                <button
-                  type="button"
-                  onClick={closeSheet}
-                  className="motion-control type-kicker text-ink/58 hover:text-earth-red focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-gold"
-                  aria-label={copy.close}
-                >
-                  {copy.close}
-                </button>
-              </div>
-
-              <nav
-                className="flex flex-col gap-5 overflow-y-auto px-6 py-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))]"
-                aria-label={sheetTitle}
+              <div
+                ref={sheetRef}
+                id={sheetId}
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby={`${sheetId}-title`}
+                tabIndex={-1}
+                className="absolute inset-x-0 bottom-0 flex max-h-[min(90vh,660px)] flex-col overflow-hidden rounded-t-[1.75rem] bg-white shadow-[0_-20px_60px_rgba(36,36,36,0.16)] outline-none animate-[slide-up-sheet_320ms_cubic-bezier(0.22,1,0.36,1)_both]"
               >
-                {links.map((link) => {
-                  const isActive = link.href === activeHref
+                <div className="flex items-center justify-center pt-3 pb-1" aria-hidden="true">
+                  <span className="h-[5px] w-10 rounded-full bg-cream-dark" />
+                </div>
 
-                  return (
-                    <a
-                      key={link.href}
-                      href={link.href}
-                      onClick={closeSheet}
-                      aria-current={isActive ? 'page' : undefined}
-                      className={[
-                        'motion-nav-link block font-body text-sm font-semibold leading-5 tracking-[-0.01em]',
-                        'focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-gold',
-                        isActive ? 'text-earth-red' : 'text-ink/58 hover:text-earth-red',
-                      ].join(' ')}
-                    >
-                      {link.label}
-                    </a>
-                  )
-                })}
-              </nav>
-            </div>
-          </div>
-        </div>
-      ) : null}
+                <div className="flex items-center justify-between gap-4 border-b border-cream-dark px-6 pb-4 pt-2">
+                  <p id={`${sheetId}-title`} className="type-kicker text-earth-red">
+                    {sheetTitle}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={closeSheet}
+                    className="motion-control shrink-0 font-body text-sm font-bold leading-none text-ink/50 hover:text-earth-red focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-gold"
+                    aria-label={copy.close}
+                  >
+                    {copy.close}
+                  </button>
+                </div>
+
+                <nav
+                  className="flex flex-col gap-5 overflow-y-auto px-6 py-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))]"
+                  aria-label={sheetTitle}
+                >
+                  {links.map((link) => {
+                    const isActive = link.href === activeHref
+
+                    return (
+                      <a
+                        key={link.href}
+                        href={link.href}
+                        onClick={closeSheet}
+                        aria-current={isActive ? 'page' : undefined}
+                        className={[
+                          'motion-nav-link block font-body text-sm font-semibold leading-5 tracking-[-0.01em]',
+                          'focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-gold',
+                          isActive ? 'text-earth-red' : 'text-ink/58 hover:text-earth-red',
+                        ].join(' ')}
+                      >
+                        {link.label}
+                      </a>
+                    )
+                  })}
+                </nav>
+              </div>
+            </div>,
+            document.body,
+          )
+        : null}
     </>
   )
 }

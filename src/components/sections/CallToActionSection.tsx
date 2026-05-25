@@ -29,17 +29,17 @@ export default function CallToActionSection({ content }: CallToActionSectionProp
               {cta.body}
             </p>
             {/* Primary: monthly donation; secondary: one-time as text link below */}
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-4">
               <Button
                 variant="secondary"
                 href={donateMonthlyUrl}
-                className="!border-white !bg-white !text-earth-red hover:!bg-cream"
+                className="w-fit shrink-0 whitespace-nowrap !border-white !bg-white !text-earth-red hover:!bg-cream"
               >
                 {cta.donate}
               </Button>
               <a
                 href={site.donateUrl}
-                className="font-body text-sm font-black uppercase leading-none tracking-[0.06em] text-white underline decoration-current decoration-2 underline-offset-4 hover:text-white/70 focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-white"
+                className="inline-flex min-h-11 shrink-0 items-center whitespace-nowrap font-body text-sm font-black uppercase leading-none tracking-[0.06em] text-white underline decoration-current decoration-2 underline-offset-4 hover:text-white/70 focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-white"
               >
                 {cta.donateOnce}
               </a>

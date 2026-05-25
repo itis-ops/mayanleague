@@ -7,7 +7,7 @@ import { BILINGUAL_EN, BILINGUAL_ES } from '../../lib/fieldDescriptions'
  */
 export const seoFields = defineType({
   name: 'seoFields',
-  title: 'SEO & social',
+  title: 'Search & sharing',
   type: 'object',
   description:
     'Optional. Controls how this page looks in Google search results and when someone shares a link on Facebook, X (Twitter), or messaging apps. If left blank, the site uses the main title and summary from the page.',

@@ -14,8 +14,8 @@ export const homepage = defineType({
     { name: 'programs', title: 'Programs spotlight' },
     { name: 'cta', title: 'Call to action' },
     { name: 'resources', title: 'Resources spotlight' },
-    { name: 'newsRail', title: 'News rail' },
-    { name: 'seo', title: 'SEO & social' },
+    { name: 'newsRail', title: 'News on homepage' },
+    { name: 'seo', title: 'Search & sharing (optional)' },
   ],
   fields: [
     defineField({
