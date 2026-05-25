@@ -58,8 +58,8 @@ const translations = {
       familiesHeading: 'Six Mayan languages. Ten communities.',
       familiesIntro:
         'Each family links to community-specific videos on ICE encounters, red cards, and family preparedness plans.',
-      featuredLabel: 'Featured videos',
-      featuredHeading: 'Start here if you need help now',
+      featuredLabel: 'Featured guides',
+      featuredHeading: 'Your rights, in your language.',
       moreResourcesLabel: 'More resource areas',
       moreResourcesHeading: 'Statements, guides, and solidarity resources',
       browseAll: 'Browse all resources',
@@ -407,8 +407,8 @@ const translations = {
       familiesHeading: 'Seis idiomas Mayas. Diez comunidades.',
       familiesIntro:
         'Cada familia enlaza a videos comunitarios sobre encuentros con ICE, tarjetas rojas y planes de preparación familiar.',
-      featuredLabel: 'Videos destacados',
-      featuredHeading: 'Empiece aquí si necesita ayuda ahora',
+      featuredLabel: 'Guías destacadas',
+      featuredHeading: 'Tus derechos, en tu idioma.',
       moreResourcesLabel: 'Más áreas de recursos',
       moreResourcesHeading: 'Declaraciones, guías y recursos de solidaridad',
       browseAll: 'Ver todos los recursos',

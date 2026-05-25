@@ -41,7 +41,7 @@ export default function ResourcesSection({ content }: ResourcesSectionProps) {
   const r = { ...t.resources, ...(content?.[lang] ?? {}) }
   const featuredVideos = getFeaturedLanguageVideos()
 
-  const browseAllLabel = lang === 'es' ? 'Explorar todos los recursos' : 'Explore all language resources'
+  const browseAllLabel = lang === 'es' ? 'Ver todos' : 'View all'
 
   return (
     <section id="resources" className="bg-cream px-5 py-12 sm:px-8 sm:py-14 lg:px-12 lg:py-20">
@@ -72,7 +72,7 @@ export default function ResourcesSection({ content }: ResourcesSectionProps) {
 
               <p className="type-kicker mt-5 max-w-[36ch] text-ink/45">{r.spotlightCredit}</p>
 
-              <div className="mt-7 flex flex-col items-start gap-4">
+              <div className="mt-7">
                 <Button
                   href={indigenousLanguageResources.download.href}
                   variant="primary"
@@ -82,14 +82,6 @@ export default function ResourcesSection({ content }: ResourcesSectionProps) {
                 >
                   {r.downloadKyr}
                 </Button>
-
-                <a
-                  href="/indigenous-language-resources"
-                  className="motion-link group/link inline-flex items-center gap-2 font-body text-sm font-black uppercase tracking-[0.06em] text-ink/72 hover:text-earth-red focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-gold"
-                >
-                  <span className="border-b-2 border-current pb-0.5">{browseAllLabel}</span>
-                  <ArrowIcon className="h-3.5 w-3.5 transition-transform duration-300 group-hover/link:translate-x-0.5" />
-                </a>
               </div>
             </div>
 
@@ -112,7 +104,7 @@ export default function ResourcesSection({ content }: ResourcesSectionProps) {
                         href={video.href}
                         target="_blank"
                         rel="noreferrer"
-                        className="group flex items-start gap-4 py-4 first:pt-0 last:pb-0 focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-gold"
+                        className="group flex items-start gap-4 py-7 first:pt-1 last:pb-1 focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-gold"
                       >
                         <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-earth-red/30 bg-earth-red/8 text-earth-red transition-colors group-hover:bg-earth-red group-hover:text-white">
                           <PlayIcon />
