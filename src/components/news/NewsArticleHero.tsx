@@ -1,5 +1,6 @@
 'use client'
 
+import Button from '@/components/ui/Button'
 import { LocalizedNewsKeywords, LocalizedNewsText, LocalizedText } from '@/components/news/LocalizedNewsText'
 import {
   hubArticleBleedClass,
@@ -41,29 +42,32 @@ function ArticleFileDetails({ article, compact = false }: { article: NewsArticle
           <dd className={valueClass}>{article.author}</dd>
         </div>
       ) : null}
-      <div className={compact ? 'col-span-2 sm:col-span-3' : undefined}>
-        <dt className={labelClass}>
-          <LocalizedText en="Keywords" es="Palabras clave" />
-        </dt>
-        <dd className="flex flex-wrap gap-2 pt-1">
-          <LocalizedNewsKeywords
-            article={article}
-            className="rounded-full border border-cream-dark px-3 py-1 font-body text-[10px] font-black uppercase tracking-[0.08em] text-ink/58 sm:text-xs"
-          />
-        </dd>
-      </div>
+      {article.keywords.length ? (
+        <div className={compact ? 'col-span-2 sm:col-span-3' : undefined}>
+          <dt className={labelClass}>
+            <LocalizedText en="Keywords" es="Palabras clave" />
+          </dt>
+          <dd className="flex flex-wrap gap-2 pt-1">
+            <LocalizedNewsKeywords
+              article={article}
+              className="rounded-full border border-cream-dark px-3 py-1 font-body text-[10px] font-black uppercase tracking-[0.08em] text-ink/58 sm:text-xs"
+            />
+          </dd>
+        </div>
+      ) : null}
     </dl>
   )
 }
 
 export default function NewsArticleHero({ article }: NewsArticleHeroProps) {
-  const sourceLine = `${article.sourceName || 'International Mayan League'} / ${article.date}`
-  const articleTypeLabel =
-    article.type === 'external' ? (
-      <LocalizedText en="External source" es="Fuente externa" />
-    ) : (
-      <LocalizedText en="Original article" es="Artículo original" />
-    )
+  const sourceName = article.sourceName || 'International Mayan League'
+  const sourceLine = `${sourceName} / ${article.date}`
+  const isExternal = article.type === 'external'
+  const articleTypeLabel = isExternal ? (
+    <LocalizedText en="External source" es="Fuente externa" />
+  ) : (
+    <LocalizedText en="Original article" es="Artículo original" />
+  )
 
   return (
     <>
@@ -94,12 +98,28 @@ export default function NewsArticleHero({ article }: NewsArticleHeroProps) {
               <LocalizedNewsText article={article} field="dek" />
             </p>
 
-            <div className="mt-8 border-t border-cream-dark pt-6 lg:hidden">
-              <p className="type-kicker mb-4 text-ink/55">
-                <LocalizedText en="Article file" es="Ficha del artículo" />
-              </p>
-              <ArticleFileDetails article={article} compact />
-            </div>
+            {isExternal && article.sourceUrl ? (
+              <div className="mt-7 sm:mt-8">
+                <Button
+                  href={article.sourceUrl}
+                  variant="primary"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="w-full sm:w-fit"
+                >
+                  <LocalizedText
+                    en={`Read at ${sourceName}`}
+                    es={`Leer en ${sourceName}`}
+                  />
+                </Button>
+                <p className="type-kicker mt-3 text-ink/52">
+                  <LocalizedText
+                    en="Opens the original article in a new tab."
+                    es="Abre el artículo original en una nueva pestaña."
+                  />
+                </p>
+              </div>
+            ) : null}
           </div>
 
           <aside className="hidden border-t border-cream-dark bg-mist/35 lg:block lg:border-l lg:border-t-0">

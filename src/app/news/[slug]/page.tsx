@@ -4,6 +4,7 @@ import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import { LocalizedText } from '@/components/news/LocalizedNewsText'
 import NewsArticleBody from '@/components/news/NewsArticleBody'
+import NewsArticleFile from '@/components/news/NewsArticleFile'
 import NewsArticleHero from '@/components/news/NewsArticleHero'
 import NewsArticleLanguageBar from '@/components/news/NewsArticleLanguageBar'
 import NewsRelatedDispatches from '@/components/news/NewsRelatedDispatches'
@@ -124,6 +125,10 @@ export default async function NewsDetailPage({ params }: PageProps) {
                 <NewsArticleBody article={article} />
               </div>
 
+              <div className="order-4">
+                <NewsArticleFile article={article} />
+              </div>
+
               <ShareThisDispatch
                 title={social.title}
                 text={social.suggestedPostCopy}
@@ -131,7 +136,7 @@ export default async function NewsDetailPage({ params }: PageProps) {
                 hashtags={social.hashtags}
                 shareImageUrl={shareImageUrl}
                 storyImageUrl={storyImageUrl}
-                className="order-4"
+                className="order-5"
               />
             </div>
 

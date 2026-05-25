@@ -14,9 +14,20 @@ const NEWS_CATEGORIES: { title: string; value: string }[] = [
 ]
 
 const ARTICLE_TYPE: { title: string; value: string }[] = [
-  { title: 'External — links out to the original source', value: 'external' },
-  { title: 'Internal — full body hosted on this site', value: 'internal' },
+  {
+    title: 'External — links out to the original source',
+    value: 'external',
+  },
+  {
+    title: 'Internal — written by the Mayan League and published here',
+    value: 'internal',
+  },
 ]
+
+const hideUnlessExternal = (document: { type?: string } | undefined) =>
+  document?.type !== 'external'
+const hideUnlessInternal = (document: { type?: string } | undefined) =>
+  document?.type !== 'internal'
 
 export const newsArticle = defineType({
   name: 'newsArticle',
@@ -46,12 +57,28 @@ export const newsArticle = defineType({
     },
   ],
   fields: [
+    // ── Article type (drives field visibility) ────────────────────────────
+    defineField({
+      name: 'type',
+      title: 'Article type',
+      description:
+        'Pick this first — it changes which fields below are required.\n' +
+        '• External: a story published elsewhere (e.g. Medill News, Remezcla). The site shows your title, summary, and a button that links to the original source. The full article body lives on the publisher\'s site.\n' +
+        '• Internal: a story written by the International Mayan League and hosted here. The full body text is required and renders on the article page.',
+      type: 'string',
+      group: 'content',
+      fieldset: 'publishRequired',
+      options: { list: ARTICLE_TYPE, layout: 'radio' },
+      initialValue: 'external',
+      validation: (rule) => rule.required(),
+    }),
+
     defineField({
       name: 'title',
       title: 'Title',
       description: onNews(
         'Newsroom list + Article page',
-        'main headline (large text at the top of the article; also the title in the news list)',
+        'main headline (large text at the top of the article; also the title in the news list). For External articles, copy the title from the original source word-for-word — don\'t paraphrase. For Internal articles, write the title in the Mayan League voice.',
       ),
       type: 'localizedString',
       group: 'content',
@@ -107,7 +134,7 @@ export const newsArticle = defineType({
       title: 'Dek (subtitle)',
       description: onNews(
         'Article page',
-        'one-sentence line directly under the main headline (not shown on the small homepage cards)',
+        'one-sentence line directly under the main headline (not shown on the small homepage cards). This is your secondary headline — make it pull readers in.',
       ),
       type: 'localizedText',
       group: 'content',
@@ -132,49 +159,64 @@ export const newsArticle = defineType({
           requireEnglish(value as { en?: string; es?: string } | undefined, 'Excerpt'),
         ),
     }),
+
+    // ── Internal-only: full article body ──────────────────────────────────
     defineField({
-      name: 'type',
-      title: 'Article type',
+      name: 'body',
+      title: 'Body (full article text)',
       description: onNews(
         'Article page',
-        'External = visitors click through to the original news site. Internal = full story text is written here in the Body field.',
+        'full story text — Internal articles only. Required for Internal type. External articles leave this blank and link out instead.',
       ),
-      type: 'string',
+      type: 'localizedBlockContent',
       group: 'content',
       fieldset: 'publishRequired',
-      options: { list: ARTICLE_TYPE, layout: 'radio' },
-      initialValue: 'external',
-      validation: (rule) => rule.required(),
+      hidden: ({ document }) => hideUnlessInternal(document as { type?: string } | undefined),
+      validation: (rule) =>
+        rule.custom((value, context) => {
+          const doc = context.document as { type?: string } | undefined
+          if (doc?.type !== 'internal') return true
+          const blocks = (value as { en?: unknown[] } | undefined)?.en ?? []
+          if (!Array.isArray(blocks) || blocks.length === 0) {
+            return 'Body (English) is required for Internal articles.'
+          }
+          return true
+        }),
+    }),
+
+    // ── External-only context fields ──────────────────────────────────────
+    defineField({
+      name: 'whyItMatters',
+      title: 'Why it matters',
+      description: onNews(
+        'Article page',
+        'mission context box explaining why this story matters to the Mayan League. Shown on External articles only — Internal articles use the body instead.',
+      ),
+      type: 'localizedText',
+      group: 'content',
+      fieldset: 'publishRecommended',
+      hidden: ({ document }) => hideUnlessExternal(document as { type?: string } | undefined),
     }),
 
     defineField({
       name: 'summary',
       title: 'Summary',
       description: onNews(
-        'Article page',
-        'longer overview paragraph in the main article body (optional at publish time)',
+        'Article page (External only)',
+        'longer overview paragraph used on External article pages (optional at publish time)',
       ),
       type: 'localizedText',
       group: 'content',
       fieldset: 'publishRecommended',
+      hidden: ({ document }) => hideUnlessExternal(document as { type?: string } | undefined),
     }),
-    defineField({
-      name: 'whyItMatters',
-      title: 'Why it matters',
-      description: onNews(
-        'Article page',
-        'mission context box explaining why this story matters to the Mayan League (optional at publish time)',
-      ),
-      type: 'localizedText',
-      group: 'content',
-      fieldset: 'publishRecommended',
-    }),
+
     defineField({
       name: 'keywords',
       title: 'Keywords',
       description: onNews(
-        'Article page sidebar + Related articles',
-        'topic tags (e.g. language access, Standing Rock) — used to suggest related stories at the bottom',
+        'Article page footer + Related articles',
+        'topic tags (e.g. language access, Standing Rock) — used to suggest related stories at the bottom and shown in the article file footer.',
       ),
       type: 'array',
       of: [{ type: 'string' }],
@@ -182,23 +224,15 @@ export const newsArticle = defineType({
       group: 'content',
       fieldset: 'publishRecommended',
     }),
-    defineField({
-      name: 'body',
-      title: 'Body (full article text)',
-      description: onNews(
-        'Article page',
-        'full story text — only for Internal articles. External articles leave this blank and link out instead.',
-      ),
-      type: 'localizedBlockContent',
-      group: 'content',
-      fieldset: 'publishRecommended',
-      hidden: ({ document }) => document?.type !== 'internal',
-    }),
 
+    // ── Source credit ─────────────────────────────────────────────────────
     defineField({
       name: 'author',
       title: 'Author',
-      description: onNews('Article page', 'byline name in the article sidebar (e.g. a staff or board member)'),
+      description: onNews(
+        'Article page',
+        'byline name shown on the article page. For Internal articles this is the Mayan League staff or board member who wrote the story. For External articles, this is the original article\'s reporter.',
+      ),
       type: 'string',
       group: 'source',
     }),
@@ -207,22 +241,40 @@ export const newsArticle = defineType({
       title: 'Publication / outlet name',
       description: onNews(
         'Newsroom list + Article page',
-        'outlet shown next to the date (e.g. Medill News Service, Remezcla)',
+        'For External: the outlet that published the original story (e.g. Medill News Service, Remezcla). For Internal: leave blank — the site will display "International Mayan League" automatically.',
       ),
       type: 'string',
       group: 'source',
+      validation: (rule) =>
+        rule.custom((value, context) => {
+          const doc = context.document as { type?: string } | undefined
+          if (doc?.type === 'external' && !value) {
+            return 'Source name is required for External articles.'
+          }
+          return true
+        }),
     }),
     defineField({
       name: 'sourceUrl',
       title: 'Original article URL',
       description: onNews(
         'Article page',
-        'link for the "Read original source" button (External articles only — must start with https://)',
+        'link for the "Read at <source>" button (External articles only — must start with https://). Required for External; hidden for Internal.',
       ),
       type: 'url',
       group: 'source',
+      hidden: ({ document }) => hideUnlessExternal(document as { type?: string } | undefined),
       validation: (rule) =>
-        rule.uri({ scheme: ['https', 'http'] }).error('URL must start with https:// or http://'),
+        rule
+          .uri({ scheme: ['https', 'http'] })
+          .error('URL must start with https:// or http://')
+          .custom((value, context) => {
+            const doc = context.document as { type?: string } | undefined
+            if (doc?.type === 'external' && !value) {
+              return 'Original article URL is required for External articles.'
+            }
+            return true
+          }),
     }),
 
     defineField({
@@ -276,14 +328,18 @@ export const newsArticle = defineType({
       titleEn: 'title.en',
       titleEs: 'title.es',
       category: 'category',
+      type: 'type',
       unsplashUrl: 'mainImage.unsplash.url',
       uploadAsset: 'mainImage.upload.asset',
     },
-    prepare({ titleEn, titleEs, category, unsplashUrl, uploadAsset }) {
+    prepare({ titleEn, titleEs, category, type, unsplashUrl, uploadAsset }) {
       const hasEs = Boolean(titleEs)
+      const typeLabel = type === 'internal' ? 'Internal' : 'External'
       return {
         title: titleEn || titleEs || 'Untitled article',
-        subtitle: [category, hasEs ? 'EN+ES' : 'EN only'].filter(Boolean).join(' · '),
+        subtitle: [typeLabel, category, hasEs ? 'EN+ES' : 'EN only']
+          .filter(Boolean)
+          .join(' · '),
         media: uploadAsset ?? undefined,
         imageUrl: uploadAsset ? undefined : unsplashUrl,
       }

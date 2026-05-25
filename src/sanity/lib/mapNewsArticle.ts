@@ -101,6 +101,9 @@ export function mapSanityNewsArticle(
   const mainImage = mapMainImage(doc.mainImage)
   const seo = doc.seo
 
+  const bodyEn = doc.type === 'internal' ? portableTextToParagraphs(doc.body?.en) : undefined
+  const bodyEs = doc.type === 'internal' ? portableTextToParagraphs(doc.body?.es) : undefined
+
   const i18n: NewsArticleI18n = {
     title: pickEs(doc.title),
     dek: pickEs(doc.dek),
@@ -111,6 +114,7 @@ export function mapSanityNewsArticle(
     socialDescription: pickEs(seo?.socialDescription),
     category: categoryLabelsEs[category],
     keywords: doc.keywords,
+    body: bodyEs,
     mainImage: mapMainImageI18n(doc.mainImage),
   }
 
@@ -130,10 +134,7 @@ export function mapSanityNewsArticle(
     sourceName: doc.sourceName,
     sourceUrl: doc.sourceUrl,
     type: doc.type,
-    body:
-      doc.type === 'internal'
-        ? portableTextToParagraphs(doc.body?.en)
-        : undefined,
+    body: bodyEn,
     featured: doc.featured,
     socialTitle: pickEn(seo?.socialTitle),
     socialDescription: pickEn(seo?.socialDescription),

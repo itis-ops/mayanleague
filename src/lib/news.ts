@@ -24,6 +24,8 @@ export interface NewsArticleI18n {
   suggestedPostCopy?: string
   category?: string
   keywords?: string[]
+  /** Spanish article body paragraphs (Internal articles only). */
+  body?: string[]
   mainImage?: {
     alt?: string
     caption?: string
