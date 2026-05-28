@@ -7,8 +7,6 @@ const copy = {
   en: {
     kicker: 'Private preview',
     title: 'Enter preview password',
-    description:
-      'This draft site is password-protected. Enter the password shared with you by the Mayan League preview team.',
     passwordLabel: 'Password',
     submit: 'Continue',
     submitting: 'Checking…',
@@ -18,8 +16,6 @@ const copy = {
   es: {
     kicker: 'Vista previa privada',
     title: 'Ingrese la contraseña de vista previa',
-    description:
-      'Este sitio borrador está protegido con contraseña. Ingrese la contraseña que le compartió el equipo de vista previa de la Liga Maya.',
     passwordLabel: 'Contraseña',
     submit: 'Continuar',
     submitting: 'Verificando…',
@@ -68,28 +64,38 @@ export default function PreviewLoginForm() {
   }
 
   return (
-    <div className="min-h-screen bg-mist px-6 py-16 text-ink">
-      <div className="mx-auto w-full max-w-md">
-        <div className="mb-8 flex items-center justify-between gap-4">
-          <p className="font-display text-xs font-semibold uppercase tracking-[0.2em] text-forest">
-            International Mayan League
-          </p>
+    <div className="min-h-screen bg-mist px-5 py-10 text-ink sm:px-8 sm:py-16">
+      <div className="mx-auto w-full max-w-[30rem]">
+        <div className="mb-7 flex items-start justify-between gap-4 sm:mb-8">
+          <div className="flex items-center gap-3">
+            <img
+              src="/brand/mayan-league-logo.png"
+              alt="The International Mayan League"
+              className="h-12 w-12 object-contain sm:h-14 sm:w-14"
+            />
+            <div>
+              <p className="font-display text-[0.65rem] font-semibold uppercase tracking-[0.22em] text-earth-red/75">
+                The International Mayan League
+              </p>
+              <p className="font-body text-xs text-ink/55">IML Secure Access</p>
+            </div>
+          </div>
           <div className="flex gap-2 text-sm">
             <button
               type="button"
               onClick={() => setLang('en')}
-              className={lang === 'en' ? 'font-semibold text-ink' : 'text-forest'}
+              className={lang === 'en' ? 'font-semibold text-ink' : 'text-ink/55'}
               aria-pressed={lang === 'en'}
             >
               EN
             </button>
-            <span className="text-cream-dark" aria-hidden>
+            <span className="text-ink/30" aria-hidden>
               |
             </span>
             <button
               type="button"
               onClick={() => setLang('es')}
-              className={lang === 'es' ? 'font-semibold text-ink' : 'text-forest'}
+              className={lang === 'es' ? 'font-semibold text-ink' : 'text-ink/55'}
               aria-pressed={lang === 'es'}
             >
               ES
@@ -97,16 +103,14 @@ export default function PreviewLoginForm() {
           </div>
         </div>
 
-        <div className="rounded-2xl border border-cream-dark bg-cream p-8 shadow-sm">
-          <p className="font-display text-xs font-semibold uppercase tracking-[0.18em] text-jade">
+        <div className="rounded-2xl border border-cream-dark/80 bg-white p-6 shadow-[0_12px_36px_rgba(36,36,36,0.08)] sm:p-8">
+          <p className="font-display text-xs font-semibold uppercase tracking-[0.18em] text-earth-red/70">
             {t.kicker}
           </p>
-          <h1 className="mt-3 font-display text-3xl font-semibold uppercase leading-tight text-ink">
+          <h1 className="mt-3 font-display text-[clamp(1.75rem,4.6vw,2.2rem)] font-semibold uppercase leading-[0.98] text-ink">
             {t.title}
           </h1>
-          <p className="mt-4 font-body text-sm leading-relaxed text-forest">{t.description}</p>
-
-          <form className="mt-8 space-y-4" onSubmit={handleSubmit}>
+          <form className="mt-7 space-y-4 border-t border-cream-dark pt-6" onSubmit={handleSubmit}>
             <label className="block">
               <span className="mb-2 block font-body text-sm font-medium text-ink">
                 {t.passwordLabel}
@@ -118,7 +122,7 @@ export default function PreviewLoginForm() {
                 required
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
-                className="w-full rounded-lg border border-cream-dark bg-white px-4 py-3 font-body text-base text-ink outline-none ring-gold/30 focus:ring-2"
+                className="w-full rounded-xl border border-cream-dark bg-white px-4 py-3 font-body text-base text-ink outline-none ring-earth-red/20 transition focus:border-earth-red/45 focus:ring-2"
               />
             </label>
 
@@ -131,12 +135,16 @@ export default function PreviewLoginForm() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full rounded-lg bg-gold px-4 py-3 font-display text-sm font-semibold uppercase tracking-wide text-ink transition hover:bg-gold-light disabled:cursor-not-allowed disabled:opacity-70"
+              className="w-full rounded-full bg-earth-red px-4 py-3 font-body text-sm font-black uppercase tracking-[0.08em] text-white transition hover:bg-[#a80a12] disabled:cursor-not-allowed disabled:opacity-70"
             >
               {isSubmitting ? t.submitting : t.submit}
             </button>
           </form>
         </div>
+
+        <p className="mt-5 text-right font-body text-[0.69rem] tracking-[0.03em] text-ink/42">
+          I am of service. Byron Escobar 2026. Chjonte
+        </p>
       </div>
     </div>
   )
